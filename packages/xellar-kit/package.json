@@ -13,7 +13,7 @@
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit",
     "build:packages": "tsup",
-    "build:packages:watch": "tsup --watch"
+    "dev": "tsup --watch"
   },
   "devDependencies": {
     "@turbo/gen": "^1.12.4",
