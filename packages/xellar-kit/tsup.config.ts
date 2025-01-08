@@ -1,4 +1,3 @@
-// tsup.config.ts
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
@@ -9,7 +8,13 @@ export default defineConfig({
   clean: true, // Clean the output folder before building
   minify: true,
   outDir: 'dist',
-  external: ['react', 'react-dom'], // Peer dependencies to exclude from the bundle
+  splitting: true,
+  esbuildOptions(options) {
+    options.banner = {
+      js: '"use client"' // Required for nextjs >= 13
+    };
+  },
+  external: ['react'], // Peer dependencies to exclude from the bundle
   target: 'es2020',
   tsconfig: 'tsconfig.json'
 });
