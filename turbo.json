@@ -2,6 +2,16 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
+    "build:packages": {
+      "dependsOn": ["^build:packages"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["packages/xellar-kit/dist/**"]
+    },
+    "build:packages:watch": {
+      "dependsOn": ["^build:packages:watch"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["packages/xellar-kit/dist/**"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],

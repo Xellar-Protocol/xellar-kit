@@ -1,7 +1,10 @@
 {
   "extends": "@xellar-protocol/typescript-config/react-library.json",
+
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "moduleResolution": "bundler",
+    "module": "ES2020"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

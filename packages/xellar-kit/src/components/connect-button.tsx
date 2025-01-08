@@ -16,7 +16,7 @@ export const ConnectButton = ({
   return (
     <button
       className={className}
-      onClick={() => alert(`Hello from your ${appName} app!`)}
+      onClick={() => alert(`Hello from your ${appName} app, yey!`)}
     >
       {children}
     </button>
