@@ -6,9 +6,11 @@
     "build:packages": "turbo build:packages",
     "dev": "turbo run dev",
     "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "eslint": "^9.18.0",
     "prettier": "^3.2.5",
     "turbo": "^2.3.3",
     "typescript": "5.5.4"
@@ -20,5 +22,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "viem": "^2.22.5",
+    "wagmi": "^2.14.7"
+  }
 }
