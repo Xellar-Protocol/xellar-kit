@@ -42,8 +42,11 @@ export function ConnectDialogContent() {
     (typeof walletconnectCompatibleWallets)[number] | null
   >(null);
 
+  const [timestamp, setTimestamp] = useState<string>(new Date().toISOString());
+
   const { uri, isConnecting } = useWalletConnectUri({
-    enabled: !!selectedWallet
+    enabled: !!selectedWallet,
+    timestamp
   });
 
   const handleConnectInjected = useCallback(
@@ -72,11 +75,13 @@ export function ConnectDialogContent() {
   const handleConnectWalletConnect = useCallback(
     async (wallet: (typeof walletconnectCompatibleWallets)[number]) => {
       if (isConnecting) return;
+      if (selectedWallet?.id === wallet.id) return;
       setSelectedWallet(wallet);
       setSelectedInjectedWalletId(null);
       setIsConnectingInjected(false);
+      setTimestamp(new Date().toISOString());
     },
-    [isConnecting]
+    [isConnecting, selectedWallet]
   );
 
   const renderIcon = useCallback((id: string, icon?: string) => {
@@ -143,6 +148,7 @@ export function ConnectDialogContent() {
           <Title>Scan With Your Phone</Title>
           <InnerQRCodeWrapper>
             <QRCode
+              blur={isConnecting}
               icon={
                 <IconWrapper size={48}>
                   <selectedWallet.Icon width={32} height={32} />

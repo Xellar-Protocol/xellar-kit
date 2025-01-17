@@ -30,6 +30,7 @@ type Props = {
   size?: number;
   uri: string;
   icon?: ReactElement;
+  blur?: boolean;
 };
 
 export function QRCode({
@@ -38,7 +39,8 @@ export function QRCode({
   logoSize = 50,
   icon,
   size: sizeProp = 200,
-  uri
+  uri,
+  blur = false
 }: Props) {
   const size = sizeProp - Number.parseInt('20', 10) * 2;
 
@@ -116,7 +118,15 @@ export function QRCode({
 
   return (
     <QRCodeWrapper>
-      <Box style={{ width: size, height: size, position: 'relative' }}>
+      <Box
+        style={{
+          width: size,
+          height: size,
+          position: 'relative',
+          filter: blur ? 'blur(2px)' : 'none',
+          transition: 'filter 0.2s ease-in-out'
+        }}
+      >
         <svg height={size} style={{ all: 'revert' }} width={size}>
           <title>QR Code</title>
           <defs>
@@ -130,9 +140,8 @@ export function QRCode({
           <rect fill="transparent" height={size} width={size} />
           {dots}
         </svg>
-
-        <IconContainer>{icon}</IconContainer>
       </Box>
+      <IconContainer>{icon}</IconContainer>
     </QRCodeWrapper>
   );
 }
@@ -142,6 +151,7 @@ const QRCodeWrapper = styled(motion.div)`
   padding: 20px;
   border-radius: 10px;
   aspect-ratio: 1;
+  position: relative;
 `;
 
 const Box = styled.div`

@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useConnect, useConnectors } from 'wagmi';
 import { Connector, useAccount } from 'wagmi';
 
 type Props = {
   enabled: boolean;
+  timestamp: string;
 };
 
 export function useWalletConnectUri(
-  { enabled }: Props = {
-    enabled: true
+  { enabled, timestamp }: Props = {
+    enabled: true,
+    timestamp: new Date().toISOString()
   }
 ) {
   const [uri, setUri] = useState<string | undefined>(undefined);
@@ -21,6 +23,8 @@ export function useWalletConnectUri(
 
   const { isConnected } = useAccount();
   const { connectAsync } = useConnect();
+
+  const lastTimestamp = useRef(timestamp);
 
   useEffect(() => {
     if (!enabled) return;
@@ -73,8 +77,9 @@ export function useWalletConnectUri(
     if (isConnected) {
       setUri(undefined);
     } else {
-      if (!connector || uri) return;
+      if (!connector || (uri && timestamp === lastTimestamp.current)) return;
       if (connector && !isConnected) {
+        lastTimestamp.current = timestamp;
         connectWalletConnect(connector);
         console.log('add wc listeners');
         connector.emitter.on('message', handleMessage);
@@ -86,7 +91,7 @@ export function useWalletConnectUri(
         };
       }
     }
-  }, [enabled, connector, isConnected, connectAsync, uri]);
+  }, [enabled, connector, isConnected, connectAsync, uri, timestamp]);
 
   return {
     uri,
