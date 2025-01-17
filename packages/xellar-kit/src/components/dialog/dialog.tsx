@@ -89,6 +89,8 @@ export function Dialog({
 }
 
 const Backdrop = styled(motion.div)`
+  --wcm-z-index: 1001;
+
   position: fixed;
   top: 0;
   left: 0;
@@ -104,11 +106,11 @@ const Backdrop = styled(motion.div)`
 
 const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
   position: ${({ $isMobile }) => ($isMobile ? 'fixed' : 'relative')};
-  min-width: 310px;
+  min-width: 280px;
   max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '90%')};
   max-height: ${({ $isMobile }) => ($isMobile ? '85vh' : '90vh')};
   margin-top: ${({ $isMobile }) => ($isMobile ? 'auto' : '0')};
-  padding: 24px;
+  padding: 18px;
   overflow-y: auto;
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
   border: 2px solid ${({ theme }) => theme.colors.BORDER};

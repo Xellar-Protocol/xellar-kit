@@ -1,6 +1,7 @@
 export const defaultTheme = {
   colors: {
     PRIMARY: '#006FEE',
+    PRIMARY_ACCENT: '#2AABEE',
     BACKGROUND: '#000000',
     TEXT: '#FFFFFF',
     SHADOW: '#475D81',

@@ -4,7 +4,6 @@ declare global {
     trustWallet: any;
     trustwallet: any;
     metaMask: any;
-    ethereum: any;
   }
 }
 

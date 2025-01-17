@@ -1,97 +1,166 @@
-import { motion } from 'motion/react';
-import styled from 'styled-components';
+import { useCallback, useState } from 'react';
+import { Connector, useConnect } from 'wagmi';
 
-import { MetaMaskIcon } from '@/assets/metamask';
+import { GenericWalletIcon } from '@/assets/generic-wallet';
+import { IndodaxIcon } from '@/assets/indodax';
+import { ReownLightIcon } from '@/assets/reown-light';
+import { SpinnerIcon } from '@/assets/spinner';
+import { WalletConnectIcon } from '@/assets/wallet-connect';
+import { XellarLight } from '@/assets/xellar-light';
+import { QRCode } from '@/components/qr-code/qr-code';
+import { useInjectedConnectors } from '@/hooks/connectors';
+import { useWalletConnectUri } from '@/hooks/wallet-connect';
+import { useXellarContext } from '@/providers/xellar-kit';
+
+import {
+  Container,
+  Description,
+  Icon,
+  IconWrapper,
+  InnerQRCodeWrapper,
+  QRCodeWrapper,
+  Separator,
+  Title,
+  TitleSpan,
+  WalletItem,
+  WalletName,
+  Wrapper
+} from './styled';
 
 export function ConnectDialogContent() {
-  return (
-    <Container>
-      <Title>Connect Wallet</Title>
+  const injectedConnectors = useInjectedConnectors();
+  const { setModalOpen } = useXellarContext();
 
-      <WalletItem role="button">
-        <IconWrapper>
-          <MetaMaskIcon />
-        </IconWrapper>
-        <WalletName>MetaMask</WalletName>
-      </WalletItem>
-      <WalletItem role="button">
-        <IconWrapper>
-          <MetaMaskIcon />
-        </IconWrapper>
-        <WalletName>MetaMask</WalletName>
-      </WalletItem>
-      <WalletItem role="button">
-        <IconWrapper>
-          <MetaMaskIcon />
-        </IconWrapper>
-        <WalletName>MetaMask</WalletName>
-      </WalletItem>
-      <WalletItem role="button">
-        <IconWrapper>
-          <MetaMaskIcon />
-        </IconWrapper>
-        <WalletName>MetaMask</WalletName>
-      </WalletItem>
-      <WalletItem role="button">
-        <IconWrapper>
-          <MetaMaskIcon />
-        </IconWrapper>
-        <WalletName>MetaMask</WalletName>
-      </WalletItem>
-      <WalletItem role="button">
-        <IconWrapper>
-          <MetaMaskIcon />
-        </IconWrapper>
-        <WalletName>MetaMask</WalletName>
-      </WalletItem>
-    </Container>
+  const { connectAsync } = useConnect();
+
+  const [isConnectingInjected, setIsConnectingInjected] = useState(false);
+  const [selectedInjectedWalletId, setSelectedInjectedWalletId] = useState<
+    string | null
+  >(null);
+
+  const [selectedWallet, setSelectedWallet] = useState<
+    (typeof walletconnectCompatibleWallets)[number] | null
+  >(null);
+
+  const { uri, isConnecting } = useWalletConnectUri({
+    enabled: !!selectedWallet
+  });
+
+  const handleConnectInjected = useCallback(
+    async (connector: Connector) => {
+      setIsConnectingInjected(true);
+      setSelectedInjectedWalletId(connector.uid);
+      setSelectedWallet(null);
+      await connectAsync(
+        { connector },
+        {
+          onSuccess: () => {
+            setIsConnectingInjected(false);
+            setSelectedInjectedWalletId(null);
+            setModalOpen(false);
+          },
+          onSettled: () => {
+            setIsConnectingInjected(false);
+            setSelectedInjectedWalletId(null);
+          }
+        }
+      );
+    },
+    [connectAsync, setModalOpen]
+  );
+
+  const handleConnectWalletConnect = useCallback(
+    async (wallet: (typeof walletconnectCompatibleWallets)[number]) => {
+      if (isConnecting) return;
+      setSelectedWallet(wallet);
+      setSelectedInjectedWalletId(null);
+      setIsConnectingInjected(false);
+    },
+    [isConnecting]
+  );
+
+  const renderIcon = useCallback((id: string, icon?: string) => {
+    if (icon) return <Icon src={icon} alt={id} />;
+    return <GenericWalletIcon />;
+  }, []);
+
+  return (
+    <Wrapper>
+      <Container>
+        <Title>
+          Connect <TitleSpan>Wallet</TitleSpan>
+        </Title>
+        <Separator />
+
+        <Description>
+          Wallets are used to send, receive, store, and display digital assets
+          like Ethereum and NFTs.
+        </Description>
+
+        {injectedConnectors.map(connector => (
+          <WalletItem
+            key={connector.uid}
+            onClick={() => handleConnectInjected(connector)}
+            selected={selectedInjectedWalletId === connector.uid}
+          >
+            <IconWrapper>
+              {renderIcon(connector.id, connector.icon)}
+            </IconWrapper>
+            <WalletName>{connector.name}</WalletName>
+            {selectedInjectedWalletId === connector.uid &&
+              isConnectingInjected && <SpinnerIcon />}
+          </WalletItem>
+        ))}
+
+        <WalletItem>
+          <IconWrapper>
+            <XellarLight />
+          </IconWrapper>
+          <WalletName>Xellar Passport</WalletName>
+        </WalletItem>
+
+        {walletconnectCompatibleWallets.map(wallet => (
+          <WalletItem
+            key={wallet.id}
+            selected={selectedWallet?.id === wallet.id}
+            onClick={() => {
+              handleConnectWalletConnect(wallet);
+            }}
+          >
+            <IconWrapper>
+              <wallet.Icon />
+            </IconWrapper>
+            <WalletName>{wallet.name}</WalletName>
+            {selectedWallet?.id === wallet.id && isConnecting && (
+              <SpinnerIcon />
+            )}
+          </WalletItem>
+        ))}
+      </Container>
+
+      {uri && selectedWallet && (
+        <QRCodeWrapper>
+          <Title>Scan With Your Phone</Title>
+          <InnerQRCodeWrapper>
+            <QRCode
+              icon={
+                <IconWrapper size={48}>
+                  <selectedWallet.Icon width={32} height={32} />
+                </IconWrapper>
+              }
+              size={320}
+              uri={uri}
+            />
+          </InnerQRCodeWrapper>
+        </QRCodeWrapper>
+      )}
+    </Wrapper>
   );
 }
 
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const Title = styled.h3`
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 24px;
-  letter-spacing: -0.02em;
-`;
-
-const WalletItem = styled(motion.div)`
-  height: 40px;
-  transition: background-color 0.15s ease-in-out;
-  border-radius: 8px;
-  display: flex;
-  padding: 0 8px;
-  gap: 8px;
-  flex-direction: row;
-  align-items: center;
-  cursor: pointer;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.BORDER};
-  }
-`;
-
-const WalletName = styled.div`
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  flex: 1;
-`;
-
-const IconWrapper = styled.div`
-  width: 28px;
-  height: 28px;
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const walletconnectCompatibleWallets = [
+  { id: 'xellar-mobile', name: 'Xellar Mobile', Icon: XellarLight },
+  { id: 'indodax', name: 'Indodax', Icon: IndodaxIcon },
+  { id: 'reown', name: 'Reown', Icon: ReownLightIcon },
+  { id: 'walletconnect', name: 'WalletConnect', Icon: WalletConnectIcon }
+];

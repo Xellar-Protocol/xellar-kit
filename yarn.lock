@@ -1985,6 +1985,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/qrcode@npm:^1":
+  version: 1.5.5
+  resolution: "@types/qrcode@npm:1.5.5"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/b8e6709905d1edb32dda414408acab18ac4aefcbe7bf96d9e32ba94218f45b99c8938ba7a09863ce82a67b226195099fd0f48881d16ee844899087b7f249955f
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:18.3.1":
   version: 18.3.1
   resolution: "@types/react-dom@npm:18.3.1"
@@ -2672,6 +2681,7 @@ __metadata:
   dependencies:
     "@turbo/gen": "npm:^1.12.4"
     "@types/node": "npm:^20.11.24"
+    "@types/qrcode": "npm:^1"
     "@types/react": "npm:18.3.0"
     "@types/react-dom": "npm:18.3.1"
     "@vitejs/plugin-react": "npm:^4.3.4"
@@ -2681,6 +2691,7 @@ __metadata:
     clsx: "npm:^2.1.1"
     esbuild-plugin-styled-components: "npm:^3.0.1"
     motion: "npm:^11.17.0"
+    qrcode: "npm:^1.5.4"
     react: "npm:18.3.0"
     react-dom: "npm:18.3.1"
     react-remove-scroll: "npm:^2.6.2"
@@ -2690,6 +2701,7 @@ __metadata:
     typescript-plugin-styled-components: "npm:^3.0.0"
     vite: "npm:^6.0.7"
     vite-plugin-dts: "npm:^4.5.0"
+    vite-plugin-externalize-deps: "npm:^0.8.0"
   peerDependencies:
     "@tanstack/react-query": ">=5.0.0"
     react: ">=17"
@@ -7443,6 +7455,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qrcode@npm:^1.5.4":
+  version: 1.5.4
+  resolution: "qrcode@npm:1.5.4"
+  dependencies:
+    dijkstrajs: "npm:^1.0.1"
+    pngjs: "npm:^5.0.0"
+    yargs: "npm:^15.3.1"
+  bin:
+    qrcode: bin/qrcode
+  checksum: 10c0/ae1d57c9cff6099639a590b432c71b15e3bd3905ce4353e6d00c95dee6bb769a8f773f6a7575ecc1b8ed476bf79c5138a4a65cb380c682de3b926d7205d34d10
+  languageName: node
+  linkType: hard
+
 "query-string@npm:7.1.3":
   version: 7.1.3
   resolution: "query-string@npm:7.1.3"
@@ -9406,6 +9431,15 @@ __metadata:
     vite:
       optional: true
   checksum: 10c0/3ff9eef0d2d8f19b859fdb6494405e4875b270104169c916ac17990393789cd27a74d1e070906175c4c037c54bd1f289177abdf17911a34ef99f82a80f45eebe
+  languageName: node
+  linkType: hard
+
+"vite-plugin-externalize-deps@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "vite-plugin-externalize-deps@npm:0.8.0"
+  peerDependencies:
+    vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+  checksum: 10c0/0ed0d2a85f96e6470b700c1a598de9e3b189b186f7a3d05e4e945c0381bb2717dce5a40de5d6b485ec8e30f31ff33b17d56d487f618395d7b55ad7ef74d35ca3
   languageName: node
   linkType: hard
 

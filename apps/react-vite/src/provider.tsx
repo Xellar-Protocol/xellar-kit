@@ -1,8 +1,8 @@
 import React from "react";
 
-import { WagmiProvider, createConfig } from "wagmi";
+import { CreateConnectorFn, WagmiProvider, createConfig } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { XellarKitProvider } from "@xellar-protocol/xellar-kit";
+import { XellarKitProvider, defaultConnectors } from "@xellar-protocol/xellar-kit";
 import { mainnet } from "viem/chains";
 import { http } from "viem";
 
@@ -11,6 +11,7 @@ const config = createConfig({
   transports: {
     [mainnet.id]: http(),
   },
+  connectors: defaultConnectors({}) as CreateConnectorFn[],
 });
 
 const queryClient = new QueryClient();
