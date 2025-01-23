@@ -25,5 +25,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src')
     }
   },
-  plugins: [dts(), externalizeDeps()]
+  plugins: [
+    dts(),
+    externalizeDeps({
+      include: ['@wagmi/connectors']
+    })
+  ]
 });
