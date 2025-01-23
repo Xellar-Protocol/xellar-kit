@@ -1,17 +1,20 @@
+import { motion } from 'motion/react';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: 12px;
+  overflow: hidden;
 `;
 
-export const QRCodeWrapper = styled.div`
+export const ConnectContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   padding-right: 8px;
+  width: 320px;
 `;
 
 export const InnerQRCodeWrapper = styled.div`
@@ -20,10 +23,11 @@ export const InnerQRCodeWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex: 1;
+  position: relative;
 `;
 
 export const Container = styled.div`
-  width: 100%;
+  width: 280px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -59,6 +63,27 @@ export const Description = styled.p`
   color: ${({ theme }) => theme.colors.BG_SECONDARY};
 `;
 
+export const EmptyStateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;
+
+export const AnimatedContainer = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
+
+AnimatedContainer.defaultProps = {
+  initial: { opacity: 0, x: 50 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -50 }
+};
+
 export const TitleSpan = styled.span`
   color: ${({ theme }) => theme.colors.PRIMARY_ACCENT};
 `;
@@ -93,12 +118,12 @@ export const WalletName = styled.div`
   flex: 1;
 `;
 
-export const IconWrapper = styled.div<{ size?: number }>`
+export const IconWrapper = styled.div<{ size?: number; borderRadius?: number }>`
   width: ${({ size }) => size || 28}px;
   height: ${({ size }) => size || 28}px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border-radius: 6px;
+  border-radius: ${({ borderRadius }) => borderRadius || 6}px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -17,7 +17,6 @@
     "lint:fix": "eslint . --fix --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit",
-    "build:packages": "tsup",
     "dev": "vite build --watch"
   },
   "devDependencies": {

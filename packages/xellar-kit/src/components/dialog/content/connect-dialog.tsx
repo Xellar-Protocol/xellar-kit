@@ -1,24 +1,26 @@
+import { AnimatePresence } from 'motion/react';
 import { useCallback, useState } from 'react';
 import { Connector, useConnect } from 'wagmi';
 
 import { GenericWalletIcon } from '@/assets/generic-wallet';
-import { IndodaxIcon } from '@/assets/indodax';
-import { ReownLightIcon } from '@/assets/reown-light';
 import { SpinnerIcon } from '@/assets/spinner';
-import { WalletConnectIcon } from '@/assets/wallet-connect';
 import { XellarLight } from '@/assets/xellar-light';
-import { QRCode } from '@/components/qr-code/qr-code';
+import {
+  WALLET_CONNECT_COMPATIBLE_WALLETS,
+  WalletConnectCompatibleWallet
+} from '@/constants/wallet';
 import { useInjectedConnectors } from '@/hooks/connectors';
 import { useWalletConnectUri } from '@/hooks/wallet-connect';
 import { useXellarContext } from '@/providers/xellar-kit';
 
+import PassportContent from './passport-content/passport-content';
 import {
+  ConnectContentWrapper,
   Container,
   Description,
+  EmptyStateWrapper,
   Icon,
   IconWrapper,
-  InnerQRCodeWrapper,
-  QRCodeWrapper,
   Separator,
   Title,
   TitleSpan,
@@ -26,10 +28,11 @@ import {
   WalletName,
   Wrapper
 } from './styled';
+import { WalletConnectModalContent } from './wallet-connect/wallet-connect';
 
 export function ConnectDialogContent() {
   const injectedConnectors = useInjectedConnectors();
-  const { setModalOpen } = useXellarContext();
+  const { closeModal } = useXellarContext();
 
   const { connectAsync } = useConnect();
 
@@ -38,9 +41,8 @@ export function ConnectDialogContent() {
     string | null
   >(null);
 
-  const [selectedWallet, setSelectedWallet] = useState<
-    (typeof walletconnectCompatibleWallets)[number] | null
-  >(null);
+  const [selectedWallet, setSelectedWallet] =
+    useState<WalletConnectCompatibleWallet | null>(null);
 
   const [timestamp, setTimestamp] = useState<string>(new Date().toISOString());
 
@@ -49,45 +51,76 @@ export function ConnectDialogContent() {
     timestamp
   });
 
+  const [showPassportContent, setShowPassportContent] = useState(false);
+
   const handleConnectInjected = useCallback(
     async (connector: Connector) => {
       setIsConnectingInjected(true);
       setSelectedInjectedWalletId(connector.uid);
       setSelectedWallet(null);
+      setShowPassportContent(false);
       await connectAsync(
         { connector },
         {
           onSuccess: () => {
             setIsConnectingInjected(false);
             setSelectedInjectedWalletId(null);
-            setModalOpen(false);
+            closeModal();
           },
           onSettled: () => {
+            setIsConnectingInjected(false);
+            setSelectedInjectedWalletId(null);
+          },
+          onError: () => {
             setIsConnectingInjected(false);
             setSelectedInjectedWalletId(null);
           }
         }
       );
     },
-    [connectAsync, setModalOpen]
+    [connectAsync, closeModal]
   );
 
   const handleConnectWalletConnect = useCallback(
-    async (wallet: (typeof walletconnectCompatibleWallets)[number]) => {
+    async (wallet: WalletConnectCompatibleWallet) => {
       if (isConnecting) return;
       if (selectedWallet?.id === wallet.id) return;
+      if (showPassportContent) {
+        setShowPassportContent(false);
+      }
       setSelectedWallet(wallet);
       setSelectedInjectedWalletId(null);
       setIsConnectingInjected(false);
       setTimestamp(new Date().toISOString());
     },
-    [isConnecting, selectedWallet]
+    [isConnecting, selectedWallet, showPassportContent]
   );
 
   const renderIcon = useCallback((id: string, icon?: string) => {
     if (icon) return <Icon src={icon} alt={id} />;
     return <GenericWalletIcon />;
   }, []);
+
+  const renderContent = useCallback(() => {
+    if (showPassportContent) return <PassportContent />;
+    if (uri && selectedWallet) {
+      return (
+        <WalletConnectModalContent
+          isConnecting={isConnecting}
+          wallet={selectedWallet}
+          uri={uri}
+        />
+      );
+    }
+    return (
+      <EmptyStateWrapper>
+        <Description style={{ textAlign: 'center' }}>
+          Choose a wallet on the left to get started. Wallets let you send,
+          receive, and store digital assets securely.
+        </Description>
+      </EmptyStateWrapper>
+    );
+  }, [showPassportContent, uri, selectedWallet, isConnecting]);
 
   return (
     <Wrapper>
@@ -117,14 +150,22 @@ export function ConnectDialogContent() {
           </WalletItem>
         ))}
 
-        <WalletItem>
+        <WalletItem
+          selected={showPassportContent}
+          onClick={() => {
+            setShowPassportContent(true);
+            setSelectedWallet(null);
+            setSelectedInjectedWalletId(null);
+            setIsConnectingInjected(false);
+          }}
+        >
           <IconWrapper>
             <XellarLight />
           </IconWrapper>
           <WalletName>Xellar Passport</WalletName>
         </WalletItem>
 
-        {walletconnectCompatibleWallets.map(wallet => (
+        {WALLET_CONNECT_COMPATIBLE_WALLETS.map(wallet => (
           <WalletItem
             key={wallet.id}
             selected={selectedWallet?.id === wallet.id}
@@ -143,30 +184,9 @@ export function ConnectDialogContent() {
         ))}
       </Container>
 
-      {uri && selectedWallet && (
-        <QRCodeWrapper>
-          <Title>Scan With Your Phone</Title>
-          <InnerQRCodeWrapper>
-            <QRCode
-              blur={isConnecting}
-              icon={
-                <IconWrapper size={48}>
-                  <selectedWallet.Icon width={32} height={32} />
-                </IconWrapper>
-              }
-              size={320}
-              uri={uri}
-            />
-          </InnerQRCodeWrapper>
-        </QRCodeWrapper>
-      )}
+      <ConnectContentWrapper>
+        <AnimatePresence>{renderContent()}</AnimatePresence>
+      </ConnectContentWrapper>
     </Wrapper>
   );
 }
-
-const walletconnectCompatibleWallets = [
-  { id: 'xellar-mobile', name: 'Xellar Mobile', Icon: XellarLight },
-  { id: 'indodax', name: 'Indodax', Icon: IndodaxIcon },
-  { id: 'reown', name: 'Reown', Icon: ReownLightIcon },
-  { id: 'walletconnect', name: 'WalletConnect', Icon: WalletConnectIcon }
-];

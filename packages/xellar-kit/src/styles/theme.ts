@@ -4,6 +4,7 @@ export const defaultTheme = {
     PRIMARY_ACCENT: '#2AABEE',
     BACKGROUND: '#000000',
     TEXT: '#FFFFFF',
+    TEXT_SECONDARY: '#9CA3AF',
     SHADOW: '#475D81',
     BORDER: '#27272A',
     BG_SECONDARY: '#3F3F46'
@@ -16,6 +17,7 @@ export const lightTheme = {
     ...defaultTheme.colors,
     BACKGROUND: '#FFFFFF',
     TEXT: '#000000',
+    TEXT_SECONDARY: '#9CA3AF',
     BG_SECONDARY: '#F9F9F9'
   }
 };

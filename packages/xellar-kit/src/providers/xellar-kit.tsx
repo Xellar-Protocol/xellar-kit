@@ -2,19 +2,22 @@ import React, {
   createContext,
   createElement,
   useContext,
+  useMemo,
   useState
 } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Reset } from 'styled-reset';
-import { WagmiContext } from 'wagmi';
+import { useAccountEffect, WagmiContext } from 'wagmi';
 
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
 import { Dialog } from '@/components/dialog/dialog';
+import { MODAL_TYPE, ModalType } from '@/constants/modal';
 import { defaultTheme } from '@/styles/theme';
 
 interface XellarKitContextType {
   modalOpen: boolean;
-  setModalOpen: (open: boolean) => void;
+  openModal: (type: ModalType) => void;
+  closeModal: () => void;
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -37,11 +40,43 @@ export function XellarKitProvider({
   }
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<ModalType | null>(null);
+  useAccountEffect({
+    onConnect: () => {
+      if (modalOpen) {
+        setModalOpen(false);
+      }
+    }
+  });
+
+  const handleOpenModal = (type: ModalType) => {
+    setModalType(type);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setModalType(null);
+  };
+
+  const modalContent = useMemo(() => {
+    switch (modalType) {
+      case MODAL_TYPE.CONNECT:
+        return <ConnectDialogContent />;
+      case null:
+        return null;
+      default: {
+        const _exhaustiveCheck: never = modalType;
+        throw new Error(`Unhandled modal type: ${_exhaustiveCheck}`);
+      }
+    }
+  }, [modalType]);
 
   const value = React.useMemo(
     () => ({
       modalOpen,
-      setModalOpen
+      openModal: handleOpenModal,
+      closeModal: handleCloseModal
     }),
     [modalOpen]
   );
@@ -53,8 +88,8 @@ export function XellarKitProvider({
       <Reset />
       <ThemeProvider theme={defaultTheme}>
         {children}
-        <Dialog isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-          <ConnectDialogContent />
+        <Dialog isOpen={modalOpen} onClose={handleCloseModal}>
+          {modalContent}
         </Dialog>
       </ThemeProvider>
     </>

@@ -77,7 +77,9 @@ export function Dialog({
               onClick={stopPropagation}
               $isMobile={isBottomSheet}
             >
-              {children}
+              <InnerDialogContent $isMobile={isBottomSheet} layout>
+                {children}
+              </InnerDialogContent>
             </DialogContent>
           </Backdrop>
         )}
@@ -89,8 +91,6 @@ export function Dialog({
 }
 
 const Backdrop = styled(motion.div)`
-  --wcm-z-index: 1001;
-
   position: fixed;
   top: 0;
   left: 0;
@@ -110,13 +110,6 @@ const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
   max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '90%')};
   max-height: ${({ $isMobile }) => ($isMobile ? '85vh' : '90vh')};
   margin-top: ${({ $isMobile }) => ($isMobile ? 'auto' : '0')};
-  padding: 18px;
-  overflow-y: auto;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border: 2px solid ${({ theme }) => theme.colors.BORDER};
-  border-radius: ${({ $isMobile }) => ($isMobile ? '20px 20px 0 0' : '20px')};
-  box-shadow: 0 4px 100px -19px ${({ theme }) => theme.colors.SHADOW};
-  color: ${({ theme }) => theme.colors.TEXT};
   ${({ $isMobile }) =>
     $isMobile &&
     `
@@ -124,6 +117,16 @@ const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
     left: 0;
     right: 0;
   `}
+`;
+
+const InnerDialogContent = styled(motion.div)<{ $isMobile: boolean }>`
+  padding: 18px;
+  overflow-y: auto;
+  background-color: ${({ theme }) => theme.colors.BACKGROUND};
+  border: 2px solid ${({ theme }) => theme.colors.BORDER};
+  border-radius: ${({ $isMobile }) => ($isMobile ? '20px 20px 0 0' : '20px')};
+  box-shadow: 0 4px 100px -19px ${({ theme }) => theme.colors.SHADOW};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const variants = {
