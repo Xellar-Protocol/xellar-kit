@@ -105,6 +105,18 @@ const Backdrop = styled(motion.div)`
 `;
 
 const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Open Sans',
+    'Helvetica Neue',
+    sans-serif;
   position: ${({ $isMobile }) => ($isMobile ? 'fixed' : 'relative')};
   min-width: 280px;
   max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '90%')};

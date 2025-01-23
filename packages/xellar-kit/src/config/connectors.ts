@@ -13,7 +13,7 @@ type DefaultConnectorsProps = {
     url?: string;
   };
   walletConnectProjectId?: string;
-  coinbaseWalletPreference?: CoinbaseWalletParameters<'4'>['preference'];
+  coinbaseWalletPreference?: CoinbaseWalletParameters;
 };
 
 export const defaultConnectors = (

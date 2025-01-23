@@ -1,6 +1,7 @@
 import React, {
   createContext,
   createElement,
+  PropsWithChildren,
   useContext,
   useMemo,
   useState
@@ -19,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    
   }
 `;
 
@@ -36,10 +38,7 @@ const XellarKitContext = createContext<XellarKitContextType>(
 export function XellarKitProvider({
   children,
   theme = 'dark'
-}: {
-  children?: React.ReactNode;
-  theme?: 'dark' | 'light';
-}) {
+}: PropsWithChildren<{ theme?: 'dark' | 'light' }>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
   }

@@ -2,29 +2,48 @@
   "name": "xellar-kit",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "build:packages": "turbo build:packages",
-    "dev": "turbo run dev",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
+    "build": "pnpm build",
+    "build:packages": "pnpm build:packages",
+    "dev": "pnpm --recursive --parallel dev",
+    "dev:kit": "pnpm --filter @xellar-protocol/xellar-kit dev",
+    "lint": "pnpm lint",
+    "lint:fix": "pnpm lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@tanstack/react-query": "^5.64.0",
+    "@types/node": "^20.14.8",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@wagmi/connectors": "^5.7.5",
+    "@wagmi/core": "^2.16.3",
+    "autoprefixer": "^10.4.16",
+    "dotenv": "^16.4.5",
+    "esbuild": "^0.20.2",
     "eslint": "^9.18.0",
+    "jsdom": "^25.0.0",
+    "next": "^15.1.4",
     "prettier": "^3.2.5",
-    "turbo": "^2.3.3",
-    "typescript": "5.5.4"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "5.5.4",
+    "viem": "2.21.55",
+    "vite": "^6.0.11",
+    "vite-plugin-dts": "^4.5.0",
+    "vite-plugin-externalize-deps": "^0.8.0",
+    "vitest": "2.0.5",
+    "wagmi": "^2.14.7"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "yarn@4.5.3",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "dependencies": {
-    "viem": "^2.22.5",
-    "wagmi": "^2.14.7"
-  }
+  "resolutions": {
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
 }
