@@ -5,19 +5,28 @@ import React, {
   useMemo,
   useState
 } from 'react';
-import { ThemeProvider } from 'styled-components';
-import { Reset } from 'styled-reset';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { reset } from 'styled-reset';
 import { useAccountEffect, WagmiContext } from 'wagmi';
 
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
 import { Dialog } from '@/components/dialog/dialog';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
-import { defaultTheme } from '@/styles/theme';
+import { defaultTheme, lightTheme } from '@/styles/theme';
+
+const GlobalStyle = createGlobalStyle`
+  ${reset}
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+`;
 
 interface XellarKitContextType {
   modalOpen: boolean;
   openModal: (type: ModalType) => void;
   closeModal: () => void;
+  theme: 'dark' | 'light';
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -25,9 +34,11 @@ const XellarKitContext = createContext<XellarKitContextType>(
 );
 
 export function XellarKitProvider({
-  children
+  children,
+  theme = 'dark'
 }: {
   children?: React.ReactNode;
+  theme?: 'dark' | 'light';
 }) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
@@ -76,17 +87,18 @@ export function XellarKitProvider({
     () => ({
       modalOpen,
       openModal: handleOpenModal,
-      closeModal: handleCloseModal
+      closeModal: handleCloseModal,
+      theme
     }),
-    [modalOpen]
+    [modalOpen, theme]
   );
 
   return createElement(
     XellarKitContext.Provider,
     { value },
     <>
-      <Reset />
-      <ThemeProvider theme={defaultTheme}>
+      <GlobalStyle />
+      <ThemeProvider theme={theme === 'dark' ? defaultTheme : lightTheme}>
         {children}
         <Dialog isOpen={modalOpen} onClose={handleCloseModal}>
           {modalContent}

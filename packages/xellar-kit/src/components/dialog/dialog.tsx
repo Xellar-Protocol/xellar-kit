@@ -96,7 +96,7 @@ const Backdrop = styled(motion.div)`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: ${({ theme }) => theme.colors.BACKGROUND_TRANSPARENT};
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;

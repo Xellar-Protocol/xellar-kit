@@ -1,10 +1,12 @@
 import {
+  AppleDarkIcon,
   AppleIcon,
   GoogleIcon,
   TelegramIcon,
   TwitterIcon,
   WhatsappIcon
 } from '@/assets/socials';
+import { useXellarContext } from '@/providers/xellar-kit';
 
 import { AnimatedContainer, IconWrapper } from '../styled';
 import {
@@ -18,7 +20,8 @@ import {
   TextInput
 } from './styled';
 
-export default function PassportContent() {
+export function PassportContent() {
+  const { theme } = useXellarContext();
   return (
     <AnimatedContainer>
       <PassportContainer>
@@ -36,7 +39,7 @@ export default function PassportContent() {
               <TelegramIcon />
             </IconWrapper>
             <IconWrapper size={48} borderRadius={12}>
-              <AppleIcon />
+              {theme === 'dark' ? <AppleIcon /> : <AppleDarkIcon />}
             </IconWrapper>
             <IconWrapper size={48} borderRadius={12}>
               <WhatsappIcon />

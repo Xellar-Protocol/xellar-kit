@@ -60,7 +60,7 @@ export const Description = styled.p`
   max-width: 250px;
   font-weight: 500;
   margin: 8px 0 8px 8px;
-  color: ${({ theme }) => theme.colors.BG_SECONDARY};
+  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
 `;
 
 export const EmptyStateWrapper = styled.div`
@@ -98,11 +98,12 @@ export const WalletItem = styled.div<{ selected?: boolean }>`
   flex-direction: row;
   align-items: center;
   cursor: pointer;
+  color: ${({ theme, selected }) => (selected ? '#fff' : theme.colors.TEXT)};
   background-color: ${({ theme, selected }) =>
     selected ? theme.colors.PRIMARY : 'transparent'};
   &:hover {
     background-color: ${({ theme, selected }) =>
-      selected ? theme.colors.PRIMARY : theme.colors.BORDER};
+      selected ? theme.colors.PRIMARY : theme.colors.BG_SECONDARY};
   }
 `;
 

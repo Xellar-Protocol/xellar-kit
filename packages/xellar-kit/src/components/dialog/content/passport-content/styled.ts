@@ -41,6 +41,7 @@ export const TextInput = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
   padding: 0 12px;
   display: block;
+  background-color: transparent;
 `;
 
 export const Separator = styled.div`

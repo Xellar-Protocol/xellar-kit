@@ -4,6 +4,7 @@ import { Connector, useConnect } from 'wagmi';
 
 import { GenericWalletIcon } from '@/assets/generic-wallet';
 import { SpinnerIcon } from '@/assets/spinner';
+import { XellarDark } from '@/assets/xellar-dark';
 import { XellarLight } from '@/assets/xellar-light';
 import {
   WALLET_CONNECT_COMPATIBLE_WALLETS,
@@ -13,7 +14,7 @@ import { useInjectedConnectors } from '@/hooks/connectors';
 import { useWalletConnectUri } from '@/hooks/wallet-connect';
 import { useXellarContext } from '@/providers/xellar-kit';
 
-import PassportContent from './passport-content/passport-content';
+import { PassportContent } from './passport-content/passport-content';
 import {
   ConnectContentWrapper,
   Container,
@@ -32,7 +33,7 @@ import { WalletConnectModalContent } from './wallet-connect/wallet-connect';
 
 export function ConnectDialogContent() {
   const injectedConnectors = useInjectedConnectors();
-  const { closeModal } = useXellarContext();
+  const { closeModal, theme } = useXellarContext();
 
   const { connectAsync } = useConnect();
 
@@ -160,7 +161,7 @@ export function ConnectDialogContent() {
           }}
         >
           <IconWrapper>
-            <XellarLight />
+            {theme === 'light' ? <XellarDark /> : <XellarLight />}
           </IconWrapper>
           <WalletName>Xellar Passport</WalletName>
         </WalletItem>
@@ -174,7 +175,7 @@ export function ConnectDialogContent() {
             }}
           >
             <IconWrapper>
-              <wallet.Icon />
+              {theme === 'light' ? <wallet.IconLight /> : <wallet.Icon />}
             </IconWrapper>
             <WalletName>{wallet.name}</WalletName>
             {selectedWallet?.id === wallet.id && isConnecting && (
