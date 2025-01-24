@@ -1,17 +1,12 @@
 import { AnimatePresence } from 'motion/react';
-import { useCallback, useState } from 'react';
-import { Connector, useConnect } from 'wagmi';
+import { useState } from 'react';
 
-import { GenericWalletIcon } from '@/assets/generic-wallet';
 import { SpinnerIcon } from '@/assets/spinner';
 import { XellarDark } from '@/assets/xellar-dark';
 import { XellarLight } from '@/assets/xellar-light';
-import {
-  WALLET_CONNECT_COMPATIBLE_WALLETS,
-  WalletConnectCompatibleWallet
-} from '@/constants/wallet';
-import { useInjectedConnectors } from '@/hooks/connectors';
-import { useWalletConnectUri } from '@/hooks/wallet-connect';
+import { useConnectors } from '@/hooks/connectors';
+import { useWalletConnection } from '@/hooks/use-wallet-connection';
+import { useWalletIcon } from '@/hooks/use-wallet-icon';
 import { useXellarContext } from '@/providers/xellar-kit';
 
 import { PassportContent } from './passport-content/passport-content';
@@ -20,7 +15,6 @@ import {
   Container,
   Description,
   EmptyStateWrapper,
-  Icon,
   IconWrapper,
   Separator,
   Title,
@@ -32,83 +26,21 @@ import {
 import { WalletConnectModalContent } from './wallet-connect/wallet-connect';
 
 export function ConnectDialogContent() {
-  const injectedConnectors = useInjectedConnectors();
-  const { closeModal, theme } = useXellarContext();
-
-  const { connectAsync } = useConnect();
-
-  const [isConnectingInjected, setIsConnectingInjected] = useState(false);
-  const [selectedInjectedWalletId, setSelectedInjectedWalletId] = useState<
-    string | null
-  >(null);
-
-  const [selectedWallet, setSelectedWallet] =
-    useState<WalletConnectCompatibleWallet | null>(null);
-
-  const [timestamp, setTimestamp] = useState<string>(new Date().toISOString());
-
-  const { uri, isConnecting } = useWalletConnectUri({
-    enabled: !!selectedWallet,
-    timestamp
-  });
+  const connectors = useConnectors();
+  const { theme } = useXellarContext();
+  const { selectedConnector, setSelectedConnector, uri, setUri, isConnecting } =
+    useWalletConnection();
+  const renderIcon = useWalletIcon(theme);
 
   const [showPassportContent, setShowPassportContent] = useState(false);
 
-  const handleConnectInjected = useCallback(
-    async (connector: Connector) => {
-      setIsConnectingInjected(true);
-      setSelectedInjectedWalletId(connector.uid);
-      setSelectedWallet(null);
-      setShowPassportContent(false);
-      await connectAsync(
-        { connector },
-        {
-          onSuccess: () => {
-            setIsConnectingInjected(false);
-            setSelectedInjectedWalletId(null);
-            closeModal();
-          },
-          onSettled: () => {
-            setIsConnectingInjected(false);
-            setSelectedInjectedWalletId(null);
-          },
-          onError: () => {
-            setIsConnectingInjected(false);
-            setSelectedInjectedWalletId(null);
-          }
-        }
-      );
-    },
-    [connectAsync, closeModal]
-  );
-
-  const handleConnectWalletConnect = useCallback(
-    async (wallet: WalletConnectCompatibleWallet) => {
-      if (isConnecting) return;
-      if (selectedWallet?.id === wallet.id) return;
-      if (showPassportContent) {
-        setShowPassportContent(false);
-      }
-      setSelectedWallet(wallet);
-      setSelectedInjectedWalletId(null);
-      setIsConnectingInjected(false);
-      setTimestamp(new Date().toISOString());
-    },
-    [isConnecting, selectedWallet, showPassportContent]
-  );
-
-  const renderIcon = useCallback((id: string, icon?: string) => {
-    if (icon) return <Icon src={icon} alt={id} />;
-    return <GenericWalletIcon />;
-  }, []);
-
-  const renderContent = useCallback(() => {
+  const renderContent = () => {
     if (showPassportContent) return <PassportContent />;
-    if (uri && selectedWallet) {
+    if (uri) {
       return (
         <WalletConnectModalContent
           isConnecting={isConnecting}
-          wallet={selectedWallet}
+          walletId={selectedConnector?.id ?? ''}
           uri={uri}
         />
       );
@@ -121,7 +53,7 @@ export function ConnectDialogContent() {
         </Description>
       </EmptyStateWrapper>
     );
-  }, [showPassportContent, uri, selectedWallet, isConnecting]);
+  };
 
   return (
     <Wrapper>
@@ -136,28 +68,11 @@ export function ConnectDialogContent() {
           like Ethereum and NFTs.
         </Description>
 
-        {injectedConnectors.map(connector => (
-          <WalletItem
-            key={connector.uid}
-            onClick={() => handleConnectInjected(connector)}
-            selected={selectedInjectedWalletId === connector.uid}
-          >
-            <IconWrapper>
-              {renderIcon(connector.id, connector.icon)}
-            </IconWrapper>
-            <WalletName>{connector.name}</WalletName>
-            {selectedInjectedWalletId === connector.uid &&
-              isConnectingInjected && <SpinnerIcon />}
-          </WalletItem>
-        ))}
-
         <WalletItem
           selected={showPassportContent}
           onClick={() => {
             setShowPassportContent(true);
-            setSelectedWallet(null);
-            setSelectedInjectedWalletId(null);
-            setIsConnectingInjected(false);
+            setUri(null);
           }}
         >
           <IconWrapper>
@@ -166,19 +81,19 @@ export function ConnectDialogContent() {
           <WalletName>Xellar Passport</WalletName>
         </WalletItem>
 
-        {WALLET_CONNECT_COMPATIBLE_WALLETS.map(wallet => (
+        {connectors.map(connector => (
           <WalletItem
-            key={wallet.id}
-            selected={selectedWallet?.id === wallet.id}
+            key={connector.uid}
             onClick={() => {
-              handleConnectWalletConnect(wallet);
+              setSelectedConnector(connector);
             }}
+            selected={selectedConnector?.id === connector.id}
           >
             <IconWrapper>
-              {theme === 'light' ? <wallet.IconLight /> : <wallet.Icon />}
+              {renderIcon(connector.id, connector.icon)}
             </IconWrapper>
-            <WalletName>{wallet.name}</WalletName>
-            {selectedWallet?.id === wallet.id && isConnecting && (
+            <WalletName>{connector.name}</WalletName>
+            {selectedConnector?.id === connector.id && isConnecting && (
               <SpinnerIcon />
             )}
           </WalletItem>
@@ -186,7 +101,7 @@ export function ConnectDialogContent() {
       </Container>
 
       <ConnectContentWrapper>
-        <AnimatePresence>{renderContent()}</AnimatePresence>
+        <AnimatePresence mode="wait">{renderContent()}</AnimatePresence>
       </ConnectContentWrapper>
     </Wrapper>
   );

@@ -35,15 +35,13 @@
     "qrcode": "^1.5.4",
     "react-remove-scroll": "^2.6.2",
     "styled-components": "^6.1.14",
-    "styled-reset": "^4.5.2",
-    "viem": "2.21.55",
-    "@wagmi/connectors": "^4.1.14"
+    "styled-reset": "^4.5.2"
   },
   "peerDependencies": {
     "@tanstack/react-query": ">=5.0.0",
     "react": ">=18",
     "react-dom": ">=18",
-    "viem": "2.x",
-    "wagmi": "^2.9.0"
+    "viem": "^2.22.x",
+    "wagmi": "^2.x"
   }
 }

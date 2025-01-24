@@ -74,6 +74,13 @@ export function Dialog({
               initial="initial"
               animate="animate"
               exit="exit"
+              transition={{
+                type: 'spring',
+                bounce: 0,
+                damping: 20,
+                mass: 0.5,
+                stiffness: 250
+              }}
               onClick={stopPropagation}
               $isMobile={isBottomSheet}
             >

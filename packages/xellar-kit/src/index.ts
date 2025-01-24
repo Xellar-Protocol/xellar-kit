@@ -1,3 +1,3 @@
 export { ConnectButton } from './components/connect-button/connect-button';
-export { defaultConnectors } from './config/connectors';
+export { defaultConfig } from './config/default-config';
 export { XellarKitProvider } from './providers/xellar-kit';

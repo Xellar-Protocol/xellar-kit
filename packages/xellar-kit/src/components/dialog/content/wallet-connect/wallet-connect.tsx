@@ -1,10 +1,11 @@
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 
 import { CopyIcon } from '@/assets/copy-icon';
 import { QRCode } from '@/components/qr-code/qr-code';
-import { WalletConnectCompatibleWallet } from '@/constants/wallet';
+import { WALLET_CONNECT_COMPATIBLE_WALLETS } from '@/constants/wallet';
+import { useXellarContext } from '@/providers/xellar-kit';
 
 import {
   AnimatedContainer,
@@ -15,15 +16,16 @@ import {
 
 interface WalletConnectModalContentProps {
   isConnecting: boolean;
-  wallet: WalletConnectCompatibleWallet;
+  walletId: string;
   uri: string;
 }
 
 export function WalletConnectModalContent({
   isConnecting,
-  wallet,
-  uri
+  uri,
+  walletId
 }: WalletConnectModalContentProps) {
+  const { theme: xTheme } = useXellarContext();
   const theme = useTheme();
   const [isCopied, setIsCopied] = useState(false);
   const handleCopy = async () => {
@@ -39,8 +41,27 @@ export function WalletConnectModalContent({
     }
   };
 
+  const renderIcon = () => {
+    const currentWallet = WALLET_CONNECT_COMPATIBLE_WALLETS.find(
+      wallet => wallet.id === walletId
+    )!;
+
+    const DarkIcon = currentWallet.Icon;
+    const LightIcon = currentWallet.IconLight;
+
+    return xTheme === 'light' ? (
+      <LightIcon width={32} height={32} />
+    ) : (
+      <DarkIcon width={32} height={32} />
+    );
+  };
+
   return (
-    <AnimatedContainer>
+    <AnimatedContainer
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+    >
       <TitleContainer>
         <StyledTitle>Scan With Your Phone</StyledTitle>
         <CopyIconWrapper onClick={handleCopy}>
@@ -51,25 +72,19 @@ export function WalletConnectModalContent({
       <InnerQRCodeWrapper>
         <QRCode
           blur={isConnecting}
-          icon={
-            <IconWrapper size={48}>
-              <wallet.Icon width={32} height={32} />
-            </IconWrapper>
-          }
+          icon={<IconWrapper $size={48}>{renderIcon()}</IconWrapper>}
           size={320}
           uri={uri}
         />
-        <AnimatePresence>
-          {isCopied && (
-            <CopiedText
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              Copied to clipboard
-            </CopiedText>
-          )}
-        </AnimatePresence>
+        {isCopied && (
+          <CopiedText
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            Copied to clipboard
+          </CopiedText>
+        )}
       </InnerQRCodeWrapper>
     </AnimatedContainer>
   );

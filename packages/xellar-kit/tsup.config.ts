@@ -1,5 +1,7 @@
 import { defineConfig } from 'tsup';
 
+import packageJson from './package.json';
+
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['esm', 'cjs'],
@@ -17,10 +19,7 @@ export default defineConfig({
   target: 'es2020',
   tsconfig: 'tsconfig.json',
   external: [
-    'react',
-    'react-dom',
-    'viem',
-    '@tanstack/react-query',
+    ...Object.keys(packageJson.peerDependencies || {}),
     '@wagmi/connectors'
   ]
 });

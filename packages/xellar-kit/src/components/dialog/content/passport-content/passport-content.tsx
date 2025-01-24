@@ -23,7 +23,11 @@ import {
 export function PassportContent() {
   const { theme } = useXellarContext();
   return (
-    <AnimatedContainer>
+    <AnimatedContainer
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+    >
       <PassportContainer>
         <PassportTitle style={{ textAlign: 'center' }}>
           The gateway to <span style={{ color: '#01CFEA' }}>manage</span>{' '}
@@ -32,19 +36,19 @@ export function PassportContent() {
 
         <InnerContainer>
           <IconsContainer>
-            <IconWrapper size={48} borderRadius={12}>
+            <IconWrapper $size={48} $br={12}>
               <GoogleIcon />
             </IconWrapper>
-            <IconWrapper size={48} borderRadius={12}>
+            <IconWrapper $size={48} $br={12}>
               <TelegramIcon />
             </IconWrapper>
-            <IconWrapper size={48} borderRadius={12}>
+            <IconWrapper $size={48} $br={12}>
               {theme === 'dark' ? <AppleIcon /> : <AppleDarkIcon />}
             </IconWrapper>
-            <IconWrapper size={48} borderRadius={12}>
+            <IconWrapper $size={48} $br={12}>
               <WhatsappIcon />
             </IconWrapper>
-            <IconWrapper size={48} borderRadius={12}>
+            <IconWrapper $size={48} $br={12}>
               <TwitterIcon />
             </IconWrapper>
           </IconsContainer>

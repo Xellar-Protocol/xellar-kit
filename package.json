@@ -4,7 +4,7 @@
   "scripts": {
     "build": "pnpm build",
     "build:packages": "pnpm build:packages",
-    "dev": "pnpm --recursive --parallel dev",
+    "dev": "pnpm --recursive --parallel --filter @xellar-protocol/xellar-kit --filter example-* dev",
     "dev:kit": "pnpm --filter @xellar-protocol/xellar-kit dev",
     "lint": "pnpm lint",
     "lint:fix": "pnpm lint:fix",
@@ -16,7 +16,6 @@
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
-    "@wagmi/connectors": "^5.7.5",
     "@wagmi/core": "^2.16.3",
     "autoprefixer": "^10.4.16",
     "dotenv": "^16.4.5",
@@ -29,12 +28,8 @@
     "react-dom": "^19.0.0",
     "tsup": "^8.3.5",
     "typescript": "5.5.4",
-    "viem": "2.21.55",
-    "vite": "^6.0.11",
-    "vite-plugin-dts": "^4.5.0",
-    "vite-plugin-externalize-deps": "^0.8.0",
-    "vitest": "2.0.5",
-    "wagmi": "^2.14.7"
+    "wagmi": "^2.14.7",
+    "viem": "^2.22.12"
   },
   "engines": {
     "node": ">=18"

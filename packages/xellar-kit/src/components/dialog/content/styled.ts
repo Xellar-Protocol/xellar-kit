@@ -78,12 +78,6 @@ export const AnimatedContainer = styled(motion.div)`
   height: 100%;
 `;
 
-AnimatedContainer.defaultProps = {
-  initial: { opacity: 0, x: 50 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: -50 }
-};
-
 export const TitleSpan = styled.span`
   color: ${({ theme }) => theme.colors.PRIMARY_ACCENT};
 `;
@@ -119,12 +113,12 @@ export const WalletName = styled.div`
   flex: 1;
 `;
 
-export const IconWrapper = styled.div<{ size?: number; borderRadius?: number }>`
-  width: ${({ size }) => size || 28}px;
-  height: ${({ size }) => size || 28}px;
+export const IconWrapper = styled.div<{ $size?: number; $br?: number }>`
+  width: ${({ $size }) => $size || 28}px;
+  height: ${({ $size }) => $size || 28}px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border-radius: ${({ borderRadius }) => borderRadius || 6}px;
+  border-radius: ${({ $br }) => $br || 6}px;
   display: flex;
   align-items: center;
   justify-content: center;

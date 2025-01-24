@@ -3,7 +3,21 @@ import { Connector, useConnectors as useWagmiConnectors } from 'wagmi';
 export function useConnectors() {
   const connectors = useWagmiConnectors();
 
-  return connectors || [];
+  return (connectors || [])
+    .filter(
+      (wallet, index, self) =>
+        !(
+          (wallet.id === 'metaMaskSDK' || wallet.id === 'metaMask') &&
+          self.find(
+            w => w.id === 'io.metamask' || w.id === 'io.metamask.mobile'
+          )
+        )
+    )
+    .sort((a, b) => {
+      if (a.type === 'injected' && b.type !== 'injected') return -1;
+      if (a.type !== 'injected' && b.type === 'injected') return 1;
+      return 0;
+    });
 }
 
 export function useConnector(id: string, uuid?: string) {
