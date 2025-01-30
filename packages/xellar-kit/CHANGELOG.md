@@ -1,5 +1,11 @@
 # @xellar-protocol/xellar-kit
 
+## 1.0.1
+
+### Patch Changes
+
+- 383baa4: Fix Deploy
+
 ## 1.0.0
 
 ### Major Changes
