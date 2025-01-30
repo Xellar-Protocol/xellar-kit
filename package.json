@@ -10,7 +10,7 @@
     "lint:fix": "pnpm lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "release": "changeset publish --tag latest",
-    "ci:publish": "pnpm --recursive --no-git-checks --filter=@xellar-protocol/xellar-kit publish",
+    "ci:publish": "changeset publish --tag latest",
     "changeset": "changeset"
   },
   "devDependencies": {

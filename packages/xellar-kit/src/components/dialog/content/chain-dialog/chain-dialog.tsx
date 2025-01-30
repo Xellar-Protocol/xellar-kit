@@ -47,7 +47,7 @@ const Wrapper = styled.div`
   width: 280px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 `;
 
 export const ChainItem = styled.div<{ selected?: boolean }>`
