@@ -1,5 +1,11 @@
 # @xellar-protocol/xellar-kit
 
+## 1.0.2
+
+### Patch Changes
+
+- d98779b: Fix auto close dialog connect
+
 ## 1.0.1
 
 ### Patch Changes
