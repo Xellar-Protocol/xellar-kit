@@ -1,6 +1,6 @@
 {
   "name": "@xellar-protocol/xellar-kit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "exports": {
     "import": "./dist/index.js",
