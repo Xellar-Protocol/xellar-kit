@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { reset } from 'styled-reset';
-import { useAccountEffect, WagmiContext } from 'wagmi';
+import { WagmiContext } from 'wagmi';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
@@ -53,12 +53,6 @@ export function XellarKitProvider({
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<ModalType | null>(null);
-  useAccountEffect({
-    onConnect: () => {
-      setModalOpen(false);
-      setModalType(null);
-    }
-  });
 
   const handleOpenModal = (type: ModalType) => {
     setModalType(type);
@@ -87,15 +81,12 @@ export function XellarKitProvider({
     }
   }, [modalType]);
 
-  const value = React.useMemo(
-    () => ({
-      modalOpen,
-      openModal: handleOpenModal,
-      closeModal: handleCloseModal,
-      theme
-    }),
-    [modalOpen, theme]
-  );
+  const value = {
+    modalOpen,
+    openModal: handleOpenModal,
+    closeModal: handleCloseModal,
+    theme
+  };
 
   return createElement(
     XellarKitContext.Provider,

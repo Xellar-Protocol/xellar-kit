@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Connector } from 'wagmi';
 
+import { useXellarContext } from '@/providers/xellar-kit';
+
 export function useWalletConnection() {
+  const { closeModal } = useXellarContext();
   const [selectedConnector, setSelectedConnector] = useState<Connector | null>(
     null
   );
@@ -36,11 +39,20 @@ export function useWalletConnection() {
     }
 
     setIsConnecting(true);
-    connector.connect().catch(error => {
-      console.error(error);
-      setIsConnecting(false);
-      setSelectedConnector(null);
-    });
+    connector
+      .connect()
+      .then(acccount => {
+        if (acccount.accounts.length > 0) {
+          setIsConnecting(false);
+          setSelectedConnector(null);
+          closeModal();
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        setIsConnecting(false);
+        setSelectedConnector(null);
+      });
   };
 
   const selectConnectorRef = useRef(selectConnector);
