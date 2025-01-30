@@ -2,15 +2,18 @@
   "name": "xellar-kit",
   "private": true,
   "scripts": {
-    "build": "pnpm build",
+    "build": "pnpm --recursive --parallel --filter=@xellar-protocol/xellar-kit build",
     "build:packages": "pnpm build:packages",
     "dev": "pnpm --recursive --parallel --filter @xellar-protocol/xellar-kit --filter example-* dev",
     "dev:kit": "pnpm --filter @xellar-protocol/xellar-kit dev",
     "lint": "pnpm lint",
     "lint:fix": "pnpm lint:fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "release": "changeset publish --tag latest",
+    "changeset": "changeset"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.12",
     "@tanstack/react-query": "^5.64.0",
     "@types/node": "^20.14.8",
     "@types/react": "^19.0.6",
@@ -28,8 +31,8 @@
     "react-dom": "^19.0.0",
     "tsup": "^8.3.5",
     "typescript": "5.5.4",
-    "wagmi": "^2.14.7",
-    "viem": "^2.22.12"
+    "viem": "^2.22.12",
+    "wagmi": "^2.14.7"
   },
   "engines": {
     "node": ">=18"
