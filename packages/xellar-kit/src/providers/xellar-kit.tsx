@@ -10,7 +10,9 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { reset } from 'styled-reset';
 import { useAccountEffect, WagmiContext } from 'wagmi';
 
+import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
+import { ProfileDialogContent } from '@/components/dialog/content/profile-dialog/profile-dialog';
 import { Dialog } from '@/components/dialog/dialog';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
 import { defaultTheme, lightTheme } from '@/styles/theme';
@@ -53,9 +55,8 @@ export function XellarKitProvider({
   const [modalType, setModalType] = useState<ModalType | null>(null);
   useAccountEffect({
     onConnect: () => {
-      if (modalOpen) {
-        setModalOpen(false);
-      }
+      setModalOpen(false);
+      setModalType(null);
     }
   });
 
@@ -73,6 +74,10 @@ export function XellarKitProvider({
     switch (modalType) {
       case MODAL_TYPE.CONNECT:
         return <ConnectDialogContent />;
+      case MODAL_TYPE.CHAIN:
+        return <ChainDialogContent />;
+      case MODAL_TYPE.PROFILE:
+        return <ProfileDialogContent />;
       case null:
         return null;
       default: {

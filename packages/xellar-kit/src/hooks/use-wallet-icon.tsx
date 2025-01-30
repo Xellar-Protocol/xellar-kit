@@ -14,7 +14,9 @@ interface IconProps {
   alt: string;
 }
 
-const Icon: React.FC<IconProps> = ({ src, alt }) => <img src={src} alt={alt} />;
+const Icon: React.FC<IconProps> = ({ src, alt }) => (
+  <img src={src} alt={alt} style={{ width: 18, height: 18 }} />
+);
 
 export function useWalletIcon(theme: 'light' | 'dark') {
   const renderIcon = useCallback(

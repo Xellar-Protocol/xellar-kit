@@ -1,31 +1,52 @@
-import { useAccount, useDisconnect } from 'wagmi';
+import styled from 'styled-components';
 
-import { MODAL_TYPE } from '@/constants/modal';
-import { useXellarContext } from '@/providers/xellar-kit';
 import { truncateAddress } from '@/utils/string';
 
 import { StyledButton } from '../ui/button';
+import { abbreviateETHBalance } from './abbreviate-balance';
+import { ConnectButtonRenderer } from './connect-button-renderer';
 
-interface ButtonProps {
+export interface ConnectButtonProps {
   className?: string;
 }
 
-export const ConnectButton = ({ className }: ButtonProps) => {
-  const { openModal } = useXellarContext();
-  const { address, isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
-
-  const handleConnect = () => {
-    if (isConnected) {
-      disconnect();
-    } else {
-      openModal(MODAL_TYPE.CONNECT);
-    }
-  };
-
+export function ConnectButton({ className }: ConnectButtonProps) {
   return (
-    <StyledButton className={className} onClick={handleConnect}>
-      {isConnected && address ? truncateAddress(address) : 'Connect'}
-    </StyledButton>
+    <ConnectButtonRenderer>
+      {({
+        isConnected,
+        account,
+        openConnectModal,
+        openChainModal,
+        chain,
+        openProfileModal
+      }) => {
+        const displayBalance = account?.balanceFormatted
+          ? `${abbreviateETHBalance(Number.parseFloat(account.balanceFormatted))} ${account.balanceSymbol}`
+          : undefined;
+
+        return !isConnected && !account ? (
+          <StyledButton className={className} onClick={openConnectModal}>
+            Connect
+          </StyledButton>
+        ) : (
+          <Row className={className}>
+            <StyledButton onClick={openChainModal}>{chain?.name}</StyledButton>
+            <StyledButton onClick={openProfileModal}>
+              {displayBalance} | {truncateAddress(account?.address ?? '')}
+            </StyledButton>
+          </Row>
+        );
+      }}
+    </ConnectButtonRenderer>
   );
-};
+}
+
+ConnectButton.Custom = ConnectButtonRenderer;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+`;

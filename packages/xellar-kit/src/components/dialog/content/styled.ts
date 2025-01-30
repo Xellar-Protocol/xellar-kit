@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   flex-direction: row;
   gap: 12px;
   overflow: hidden;
+  height: 394px;
 `;
 
 export const ConnectContentWrapper = styled.div`

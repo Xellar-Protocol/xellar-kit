@@ -2,8 +2,6 @@ import { AnimatePresence } from 'motion/react';
 import { useState } from 'react';
 
 import { SpinnerIcon } from '@/assets/spinner';
-import { XellarDark } from '@/assets/xellar-dark';
-import { XellarLight } from '@/assets/xellar-light';
 import { useConnectors } from '@/hooks/connectors';
 import { useWalletConnection } from '@/hooks/use-wallet-connection';
 import { useWalletIcon } from '@/hooks/use-wallet-icon';
@@ -28,11 +26,11 @@ import { WalletConnectModalContent } from './wallet-connect/wallet-connect';
 export function ConnectDialogContent() {
   const connectors = useConnectors();
   const { theme } = useXellarContext();
-  const { selectedConnector, setSelectedConnector, uri, setUri, isConnecting } =
+  const { selectedConnector, setSelectedConnector, uri, isConnecting } =
     useWalletConnection();
   const renderIcon = useWalletIcon(theme);
 
-  const [showPassportContent, setShowPassportContent] = useState(false);
+  const [showPassportContent] = useState(false);
 
   const renderContent = () => {
     if (showPassportContent) return <PassportContent />;
@@ -68,7 +66,7 @@ export function ConnectDialogContent() {
           like Ethereum and NFTs.
         </Description>
 
-        <WalletItem
+        {/* <WalletItem
           selected={showPassportContent}
           onClick={() => {
             setShowPassportContent(true);
@@ -79,7 +77,7 @@ export function ConnectDialogContent() {
             {theme === 'light' ? <XellarDark /> : <XellarLight />}
           </IconWrapper>
           <WalletName>Xellar Passport</WalletName>
-        </WalletItem>
+        </WalletItem> */}
 
         {connectors.map(connector => (
           <WalletItem

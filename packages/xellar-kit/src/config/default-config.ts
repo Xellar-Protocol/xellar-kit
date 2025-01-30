@@ -10,12 +10,6 @@ import { arbitrum, Chain, mainnet, optimism, polygon } from 'wagmi/chains';
 
 import { defaultConnectors } from './connectors';
 
-// TODO: Move these to a provider rather than global variable
-let globalAppName: string;
-let globalAppIcon: string;
-export const getAppName = () => globalAppName;
-export const getAppIcon = () => globalAppIcon;
-
 export type _chains = readonly [Chain, ...Chain[]];
 
 // Define the '_transports' type as a Record
@@ -55,9 +49,6 @@ export const defaultConfig = ({
   chains = [mainnet, polygon, optimism, arbitrum],
   ...props
 }: DefaultConfigProps): Config => {
-  globalAppName = appName;
-  if (appIcon) globalAppIcon = appIcon;
-
   const connectors = defaultConnectors({
     app: {
       name: appName,
