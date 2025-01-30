@@ -2,7 +2,6 @@
   "name": "@xellar-protocol/xellar-kit",
   "version": "1.0.1",
   "type": "module",
-  "private": true,
   "exports": {
     "import": "./dist/index.js",
     "types": "./dist/index.d.ts"
@@ -46,5 +45,8 @@
     "react-dom": ">=18",
     "viem": "^2.22.x",
     "wagmi": "^2.x"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
