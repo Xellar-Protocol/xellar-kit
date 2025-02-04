@@ -1,9 +1,14 @@
 import { Connector, useConnectors as useWagmiConnectors } from 'wagmi';
 
 export function useConnectors() {
-  const connectors = useWagmiConnectors();
+  const wagmiConnectors = useWagmiConnectors();
 
-  return (connectors || [])
+  const connectors = wagmiConnectors || [];
+
+  return [
+    ...connectors.filter(c => c.id === 'indodax'),
+    ...connectors.filter(c => c.id !== 'indodax')
+  ]
     .filter(
       (wallet, index, self) =>
         !(

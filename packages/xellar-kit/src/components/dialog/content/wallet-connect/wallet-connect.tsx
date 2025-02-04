@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 
 import { CopyIcon } from '@/assets/copy-icon';
+import { MetaMaskIcon } from '@/assets/metamask';
 import { QRCode } from '@/components/qr-code/qr-code';
 import { WALLET_CONNECT_COMPATIBLE_WALLETS } from '@/constants/wallet';
 import { useXellarContext } from '@/providers/xellar-kit';
@@ -50,9 +51,9 @@ export function WalletConnectModalContent({
     const LightIcon = currentWallet.IconLight;
 
     return xTheme === 'light' ? (
-      <LightIcon width={32} height={32} />
+      <LightIcon width={24} height={24} />
     ) : (
-      <DarkIcon width={32} height={32} />
+      <DarkIcon width={24} height={24} />
     );
   };
 

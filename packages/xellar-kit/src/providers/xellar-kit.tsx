@@ -12,17 +12,18 @@ import { WagmiContext } from 'wagmi';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
+import { ConnectDialogMobileContent } from '@/components/dialog/content/connect-dialog-mobile';
 import { ProfileDialogContent } from '@/components/dialog/content/profile-dialog/profile-dialog';
 import { Dialog } from '@/components/dialog/dialog';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
 import { defaultTheme, lightTheme } from '@/styles/theme';
+import { isMobile } from '@/utils/is-mobile';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    
   }
 `;
 
@@ -67,6 +68,9 @@ export function XellarKitProvider({
   const modalContent = useMemo(() => {
     switch (modalType) {
       case MODAL_TYPE.CONNECT:
+        if (isMobile()) {
+          return <ConnectDialogMobileContent />;
+        }
         return <ConnectDialogContent />;
       case MODAL_TYPE.CHAIN:
         return <ChainDialogContent />;

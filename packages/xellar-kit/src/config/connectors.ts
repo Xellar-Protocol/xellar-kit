@@ -1,6 +1,7 @@
-import { CreateConnectorFn } from 'wagmi';
-import { CoinbaseWalletParameters, injected } from 'wagmi/connectors';
+import { CreateConnectorFn, injected } from 'wagmi';
+import { CoinbaseWalletParameters, metaMask } from 'wagmi/connectors';
 
+import { isMobileDevice } from '@/utils/is-mobile';
 import { walletConnectors } from '@/wallets/wallets';
 
 type DefaultConnectorsProps = {
@@ -19,8 +20,15 @@ export const defaultConnectors = (
 ): CreateConnectorFn[] => {
   const connectors: CreateConnectorFn[] = [];
 
-  // Add the rest of the connectors
-  connectors.push(injected({ target: 'metaMask' }));
+  connectors.push(
+    metaMask({
+      headless: !isMobileDevice(),
+      dappMetadata: {
+        ...(params?.app ?? {})
+      },
+      preferDesktop: !isMobileDevice()
+    })
+  );
 
   if (params?.walletConnectProjectId) {
     connectors.push(

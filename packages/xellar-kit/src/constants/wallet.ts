@@ -1,4 +1,5 @@
 import { IndodaxIcon } from '@/assets/indodax';
+import { MetaMaskIcon } from '@/assets/metamask';
 import { ReownDarkIcon } from '@/assets/reown-dark';
 import { ReownLightIcon } from '@/assets/reown-light';
 import { WalletConnectIcon } from '@/assets/wallet-connect';
@@ -11,6 +12,12 @@ export const WALLET_CONNECT_COMPATIBLE_WALLETS = [
     name: 'Xellar Mobile',
     Icon: XellarLight,
     IconLight: XellarDark
+  },
+  {
+    id: 'metaMaskSDK',
+    name: 'MetaMask',
+    Icon: MetaMaskIcon,
+    IconLight: MetaMaskIcon
   },
   {
     id: 'indodax',

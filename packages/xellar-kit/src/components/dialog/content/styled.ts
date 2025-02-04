@@ -25,10 +25,15 @@ export const InnerQRCodeWrapper = styled.div`
   align-items: center;
   flex: 1;
   position: relative;
+
+  svg {
+    width: 100% !important;
+    height: auto !important;
+  }
 `;
 
-export const Container = styled.div`
-  width: 280px;
+export const Container = styled.div<{ $isMobile: boolean }>`
+  width: ${({ $isMobile }) => ($isMobile ? '100%' : '280px')};
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -40,8 +45,8 @@ export const Icon = styled.img`
 `;
 
 export const Separator = styled.div`
-  width: 66px;
-  height: 2px;
+  width: 48px;
+  height: 4px;
   background-color: ${({ theme }) => theme.colors.TEXT};
   margin-left: 8px;
 `;

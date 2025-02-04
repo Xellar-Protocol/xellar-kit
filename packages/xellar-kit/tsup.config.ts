@@ -4,7 +4,7 @@ import packageJson from './package.json';
 
 export default defineConfig({
   entry: ['src/index.ts'],
-  format: ['esm', 'cjs'],
+  format: ['esm'],
   dts: true, // Generate TypeScript declaration files
   sourcemap: true, // Include sourcemaps
   clean: true, // Clean the output folder before building
@@ -20,6 +20,7 @@ export default defineConfig({
   tsconfig: 'tsconfig.json',
   external: [
     ...Object.keys(packageJson.peerDependencies || {}),
-    '@wagmi/connectors'
+    '@wagmi/connectors',
+    'phantom-wagmi-connector'
   ]
 });

@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 
 import { GenericWalletIcon } from '@/assets/generic-wallet';
 import { IndodaxIcon } from '@/assets/indodax';
+import { MetaMaskIcon } from '@/assets/metamask';
 import { ReownDarkIcon } from '@/assets/reown-dark';
 import { ReownLightIcon } from '@/assets/reown-light';
 import { WalletConnectIcon } from '@/assets/wallet-connect';
@@ -32,6 +33,7 @@ export function useWalletIcon(theme: 'light' | 'dark') {
         return <ReownLightIcon />;
       }
       if (id === 'walletconnect') return <WalletConnectIcon />;
+      if (id === 'metaMaskSDK') return <MetaMaskIcon />;
       return <GenericWalletIcon />;
     },
     [theme]

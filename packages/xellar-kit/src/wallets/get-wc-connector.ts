@@ -13,6 +13,8 @@ type CreateWalletConnectConnectorParams = {
   showQrModal: boolean;
   id: string;
   name: string;
+  mobileUrl?: string;
+  desktopUrl?: string;
 };
 
 const walletConnectInstances = new Map<
@@ -59,7 +61,9 @@ export function createWalletConnectConnector({
   walletConnectParameters,
   showQrModal,
   id,
-  name
+  name,
+  mobileUrl,
+  desktopUrl
 }: CreateWalletConnectConnectorParams): CreateConnectorFn {
   // Create and configure the WalletConnect connector with project ID and options.
   return createConnector(config => ({
@@ -71,6 +75,8 @@ export function createWalletConnectConnector({
       showQrModal
     })(config),
     id,
-    name
+    name,
+    mobileUrl,
+    desktopUrl
   }));
 }
