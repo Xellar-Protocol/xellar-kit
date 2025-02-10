@@ -1,5 +1,11 @@
 # @xellar-protocol/xellar-kit
 
+## 1.0.4
+
+### Patch Changes
+
+- 5d55c8c: Adjust Connector and Wallet
+
 ## 1.0.3
 
 ### Patch Changes
