@@ -10,8 +10,6 @@ interface AppParams {
   projectId: string;
 }
 
-const hasEthereum = typeof window !== 'undefined' && !!window.ethereum;
-
 const qrModalOptions: WalletConnectParameters['qrModalOptions'] = {
   explorerRecommendedWalletIds: [
     '7819f9cd07e8d7101a483087869f1e57b7d448f3ec5f4ef3eda63c19b926dc17'
@@ -37,9 +35,7 @@ export const walletConnectors = (appParams: AppParams) => [
     },
     showQrModal: false,
     id: 'indodax',
-    name: 'Indodax',
-    mobileUrl: 'indodaxweb3://wc/',
-    desktopUrl: 'https://indodaxwebapp.xellar.co/connections/add?url='
+    name: 'Indodax'
   }),
 
   createWalletConnectConnector({
@@ -58,7 +54,7 @@ export const walletConnectors = (appParams: AppParams) => [
       qrModalOptions
     },
     showQrModal: false,
-    id: 'walletconnect',
+    id: 'walletConnect',
     name: 'WalletConnect'
   })
 ];

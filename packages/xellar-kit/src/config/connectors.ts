@@ -1,7 +1,5 @@
 import { CreateConnectorFn, injected } from 'wagmi';
-import { CoinbaseWalletParameters, metaMask } from 'wagmi/connectors';
 
-import { isMobileDevice } from '@/utils/is-mobile';
 import { walletConnectors } from '@/wallets/wallets';
 
 type DefaultConnectorsProps = {
@@ -12,29 +10,21 @@ type DefaultConnectorsProps = {
     url?: string;
   };
   walletConnectProjectId: string;
-  coinbaseWalletPreference?: CoinbaseWalletParameters;
 };
 
-export const defaultConnectors = (
-  params: DefaultConnectorsProps
-): CreateConnectorFn[] => {
+export const defaultConnectors = ({
+  app,
+  walletConnectProjectId
+}: DefaultConnectorsProps): CreateConnectorFn[] => {
   const connectors: CreateConnectorFn[] = [];
 
-  connectors.push(
-    metaMask({
-      headless: !isMobileDevice(),
-      dappMetadata: {
-        ...(params?.app ?? {})
-      },
-      preferDesktop: !isMobileDevice()
-    })
-  );
+  connectors.push(injected({ target: 'metaMask' }));
 
-  if (params?.walletConnectProjectId) {
+  if (walletConnectProjectId) {
     connectors.push(
       ...walletConnectors({
-        projectId: params.walletConnectProjectId,
-        ...(params?.app ?? {})
+        projectId: walletConnectProjectId,
+        ...(app ?? {})
       })
     );
   }

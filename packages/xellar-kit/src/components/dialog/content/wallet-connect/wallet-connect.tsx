@@ -3,10 +3,8 @@ import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 
 import { CopyIcon } from '@/assets/copy-icon';
-import { MetaMaskIcon } from '@/assets/metamask';
 import { QRCode } from '@/components/qr-code/qr-code';
-import { WALLET_CONNECT_COMPATIBLE_WALLETS } from '@/constants/wallet';
-import { useXellarContext } from '@/providers/xellar-kit';
+import { WalletProps } from '@/wallets/use-wallet';
 
 import {
   AnimatedContainer,
@@ -14,19 +12,21 @@ import {
   InnerQRCodeWrapper,
   Title
 } from '../styled';
-
 interface WalletConnectModalContentProps {
   isConnecting: boolean;
-  walletId: string;
   uri: string;
+  wallet: WalletProps | null;
+  rawUri: string;
+  browserUrl?: string | null;
 }
 
 export function WalletConnectModalContent({
   isConnecting,
   uri,
-  walletId
+  wallet,
+  rawUri,
+  browserUrl
 }: WalletConnectModalContentProps) {
-  const { theme: xTheme } = useXellarContext();
   const theme = useTheme();
   const [isCopied, setIsCopied] = useState(false);
   const handleCopy = async () => {
@@ -34,7 +34,7 @@ export function WalletConnectModalContent({
       setIsCopied(false);
     }
     if ('clipboard' in navigator) {
-      await navigator.clipboard.writeText(uri);
+      await navigator.clipboard.writeText(rawUri);
       setIsCopied(true);
       setTimeout(() => {
         setIsCopied(false);
@@ -43,18 +43,8 @@ export function WalletConnectModalContent({
   };
 
   const renderIcon = () => {
-    const currentWallet = WALLET_CONNECT_COMPATIBLE_WALLETS.find(
-      wallet => wallet.id === walletId
-    )!;
-
-    const DarkIcon = currentWallet.Icon;
-    const LightIcon = currentWallet.IconLight;
-
-    return xTheme === 'light' ? (
-      <LightIcon width={24} height={24} />
-    ) : (
-      <DarkIcon width={24} height={24} />
-    );
+    if (!wallet) return null;
+    return wallet.icon;
   };
 
   return (
@@ -85,6 +75,12 @@ export function WalletConnectModalContent({
           >
             Copied to clipboard
           </CopiedText>
+        )}
+
+        {browserUrl && !isCopied && (
+          <WebUrl href={browserUrl} target="_blank" rel="noopener noreferrer">
+            Open in browser
+          </WebUrl>
         )}
       </InnerQRCodeWrapper>
     </AnimatedContainer>
@@ -117,4 +113,17 @@ const CopiedText = styled(motion.p)`
   left: 0;
   right: 0;
   text-align: center;
+`;
+
+const WebUrl = styled(motion.a)`
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.PRIMARY_ACCENT};
+  &:hover {
+    color: ${({ theme }) => theme.colors.PRIMARY};
+  }
 `;

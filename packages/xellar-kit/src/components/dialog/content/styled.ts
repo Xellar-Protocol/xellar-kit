@@ -129,4 +129,9 @@ export const IconWrapper = styled.div<{ $size?: number; $br?: number }>`
   align-items: center;
   justify-content: center;
   color: ${({ theme }) => theme.colors.TEXT};
+
+  svg {
+    width: 70% !important;
+    height: auto !important;
+  }
 `;

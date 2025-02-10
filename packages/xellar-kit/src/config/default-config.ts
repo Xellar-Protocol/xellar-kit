@@ -1,44 +1,32 @@
-import {
-  Config,
-  createConfig,
-  CreateConfigParameters,
-  CreateConnectorFn,
-  http,
-  Transport
-} from 'wagmi';
+import { Config, createConfig, CreateConfigParameters, Transport } from 'wagmi';
 import { arbitrum, Chain, mainnet, optimism, polygon } from 'wagmi/chains';
 
 import { defaultConnectors } from './connectors';
+import { getDefaultTransports } from './default-transport';
 
 export type _chains = readonly [Chain, ...Chain[]];
-
 // Define the '_transports' type as a Record
 // It maps each 'Chain' id to a 'Transport'
 export type _transports = Record<_chains[number]['id'], Transport>;
 
-const createDefaultTransports = <
+interface GetDefaultConfigParameters<
   chains extends _chains,
   transports extends _transports
->(
-  chains: chains
-): transports => {
-  const transportsObject = chains.reduce((acc: transports, chain) => {
-    const key = chain.id as keyof transports;
-    acc[key] = http() as transports[keyof transports]; // Type assertion here
-    return acc;
-  }, {} as transports);
-
-  return transportsObject;
-};
-
-type DefaultConfigProps = {
+> extends Omit<
+    CreateConfigParameters<chains, transports>,
+    // If you use 'client' you can't use 'transports' (we force to use 'transports')
+    // More info here https://wagmi.sh/core/api/createConfig#client
+    // We will also use our own 'connectors' instead of letting user specifying it
+    'client' | 'connectors' | 'chains'
+  > {
   appName: string;
   appIcon?: string;
   appDescription?: string;
   appUrl?: string;
+  chains?: _chains;
   // WC 2.0 requires a project ID (get one here: https://cloud.walletconnect.com/sign-in)
   walletConnectProjectId: string;
-} & Partial<CreateConfigParameters>;
+}
 
 export const defaultConfig = ({
   appName = 'Xellar Kit',
@@ -46,10 +34,12 @@ export const defaultConfig = ({
   appDescription,
   appUrl,
   walletConnectProjectId,
-  chains = [mainnet, polygon, optimism, arbitrum],
-  ...props
-}: DefaultConfigProps): Config => {
-  const connectors = defaultConnectors({
+  ...wagmiParameters
+}: GetDefaultConfigParameters<_chains, _transports>): Config => {
+  const { transports, chains, ...restWagmiParameters } = wagmiParameters;
+  const defaultChains = chains || [mainnet, polygon, optimism, arbitrum];
+
+  const _connectors = defaultConnectors({
     app: {
       name: appName,
       icon: appIcon,
@@ -57,13 +47,14 @@ export const defaultConfig = ({
       url: appUrl
     },
     walletConnectProjectId
-  });
+  }); // Type assertion here
 
-  return createConfig<_chains, _transports, CreateConnectorFn[]>({
-    chains,
-    // @ts-expect-error type is not correct
-    connectors,
-    transports: createDefaultTransports(chains),
-    ...props
+  const _transports = transports || getDefaultTransports({ chains });
+
+  return createConfig({
+    chains: defaultChains,
+    connectors: _connectors,
+    transports: _transports,
+    ...restWagmiParameters
   });
 };

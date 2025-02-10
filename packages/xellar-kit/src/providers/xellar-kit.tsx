@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, {
   createContext,
   createElement,
   PropsWithChildren,
   useContext,
+  useEffect,
   useMemo,
   useState
 } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { reset } from 'styled-reset';
-import { WagmiContext } from 'wagmi';
+import { useConfig, WagmiContext } from 'wagmi';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
@@ -32,6 +34,7 @@ interface XellarKitContextType {
   openModal: (type: ModalType) => void;
   closeModal: () => void;
   theme: 'dark' | 'light';
+  walletConnectProjectId: string;
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -41,7 +44,9 @@ const XellarKitContext = createContext<XellarKitContextType>(
 export function XellarKitProvider({
   children,
   theme = 'dark'
-}: PropsWithChildren<{ theme?: 'dark' | 'light' }>) {
+}: PropsWithChildren<{
+  theme?: 'dark' | 'light';
+}>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
   }
@@ -52,8 +57,19 @@ export function XellarKitProvider({
     );
   }
 
+  // Get the config from Wagmi
+  const config = useConfig();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<ModalType | null>(null);
+  const [wcProjectId, setWcProjectId] = useState('');
+
+  useEffect(() => {
+    const wcConnector = config.connectors.find(c => c.id === 'walletConnect');
+    wcConnector?.getProvider().then((p: any) => {
+      setWcProjectId(p?.rpc?.projectId);
+    });
+  }, [config.connectors]);
 
   const handleOpenModal = (type: ModalType) => {
     setModalType(type);
@@ -89,7 +105,8 @@ export function XellarKitProvider({
     modalOpen,
     openModal: handleOpenModal,
     closeModal: handleCloseModal,
-    theme
+    theme,
+    walletConnectProjectId: wcProjectId
   };
 
   return createElement(

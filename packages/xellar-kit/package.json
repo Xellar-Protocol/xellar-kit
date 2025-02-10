@@ -17,8 +17,8 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix --max-warnings 0",
     "check-types": "tsc --noEmit",
-    "dev": "tsup --watch",
-    "build": "tsup"
+    "dev": "tsup-node --watch",
+    "build": "tsup-node"
   },
   "devDependencies": {
     "@types/qrcode": "^1",

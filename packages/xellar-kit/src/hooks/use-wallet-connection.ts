@@ -1,21 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { Connector, CreateConnectorFn, useConnect } from 'wagmi';
 import { walletConnect } from 'wagmi/connectors';
 
 import { useXellarContext } from '@/providers/xellar-kit';
 import { isMobile, isMobileDevice } from '@/utils/is-mobile';
+import { WalletProps } from '@/wallets/use-wallet';
+
+import { useConnector } from './connectors';
 
 export function useWalletConnection() {
-  const { closeModal } = useXellarContext();
-  const [selectedConnector, setSelectedConnector] = useState<Connector | null>(
-    null
-  );
-  const [selectedConnectorMobile, setSelectedConnectorMobile] =
-    useState<Connector | null>(null);
+  const { closeModal, walletConnectProjectId } = useXellarContext();
+  const [wallet, setWallet] = useState<WalletProps | null>(null);
+  const wcConnector = useConnector('walletConnect');
+
   const [uri, setUri] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
-  const { connectAsync, isPending } = useConnect();
+  const { connectAsync } = useConnect();
 
   const getWalletConnectUri = async (connector: Connector): Promise<string> => {
     const provider = await connector.getProvider();
@@ -30,43 +30,32 @@ export function useWalletConnection() {
   };
 
   const onQrCode = async (connector: Connector) => {
-    const uri = await getWalletConnectUri(connector);
-
-    if (isMobileDevice() && connector?.mobileUrl) {
-      const a = document.createElement('a');
-      a.href = `${connector.mobileUrl}${uri}`;
-      a.click();
-      setIsConnecting(false);
-      return;
-    }
-
-    if (connector?.mobileUrl) {
-      setUri(`${connector.mobileUrl}${uri}`);
-    } else {
-      setUri(uri);
-    }
-
+    const _uri = await getWalletConnectUri(connector);
+    setUri(_uri);
     setIsConnecting(false);
   };
 
-  const onWalletConnect = async (_connector: Connector) => {
-    setSelectedConnectorMobile(_connector);
+  const onWalletConnect = async (wallet: WalletProps) => {
+    const _connector = wallet.connector;
+    console.log(typeof wallet.getWalletConnectDeeplink);
+
+    if (wallet.getWalletConnectDeeplink) {
+      return;
+    }
+
     const w3mcss = document.createElement('style');
     w3mcss.innerHTML = `w3m-modal, wcm-modal{ --wcm-z-index: 2147483647; --w3m-z-index:2147483647; }`;
     document.head.appendChild(w3mcss);
-    const provider: any = await _connector.getProvider();
-    const projectId = provider?.rpc?.projectId;
-    const mobileUrl = _connector?.mobileUrl;
 
     let cn: CreateConnectorFn | Connector = _connector;
-    if (projectId && isMobile() && _connector.id !== 'indodax') {
+    if (walletConnectProjectId && wallet.id !== 'indodax') {
       cn = walletConnect({
-        projectId,
+        projectId: walletConnectProjectId,
         showQrModal: true
       });
     }
 
-    if (isMobileDevice() && mobileUrl && projectId) {
+    if (isMobileDevice()) {
       onQrCode(_connector);
     }
 
@@ -75,55 +64,82 @@ export function useWalletConnection() {
     } catch (err) {
       console.error('WalletConnect', err);
     }
-    setSelectedConnectorMobile(null);
     // remove modal styling
     document.head.removeChild(w3mcss);
   };
 
-  const selectConnector = async (connector: Connector) => {
-    if (connector.type === 'injected') {
+  const selectWallet = async (wallet: WalletProps) => {
+    console.log({ wallet });
+
+    if (isMobileDevice()) {
+      onWalletConnect(wallet);
+    }
+
+    if (wallet.connector.type !== 'injected' && !uri) {
+      onQrCode(wallet.connector);
+    }
+
+    if (wallet.connector.type === 'injected') {
+      // If it's MetaMask and not installed, we should use WalletConnect instead
+      if (wallet.id.includes('metaMask') && !wallet.isInstalled) {
+        try {
+          if (!uri) {
+            setIsConnecting(true);
+            onQrCode(wcConnector);
+          }
+          await connectAsync({
+            connector: wcConnector
+          });
+          setIsConnecting(false);
+          setWallet(null);
+          closeModal();
+        } catch (error) {
+          console.error('WalletConnect error:', error);
+          setIsConnecting(false);
+          setWallet(null);
+        }
+        setIsConnecting(false);
+        return;
+      }
+
       setUri(null);
     }
 
-    if (connector.type !== 'injected') {
-      onQrCode(connector);
+    if (!uri) {
+      setIsConnecting(true);
     }
-
-    setIsConnecting(true);
-    connector
+    wallet.connector
       .connect()
       .then(acccount => {
         if (acccount.accounts.length > 0) {
           setIsConnecting(false);
-          setSelectedConnector(null);
+          setWallet(null);
           closeModal();
         }
       })
       .catch(error => {
         console.error(error);
         setIsConnecting(false);
-        setSelectedConnector(null);
+        setWallet(null);
       });
   };
 
-  const selectConnectorRef = useRef(selectConnector);
-  selectConnectorRef.current = selectConnector;
+  const selectWalletRef = useRef(selectWallet);
+  selectWalletRef.current = selectWallet;
 
   useEffect(() => {
-    if (selectedConnector) {
-      selectConnectorRef.current(selectedConnector);
+    if (wallet) {
+      selectWalletRef.current(wallet);
     }
-  }, [selectedConnector]);
+  }, [wallet]);
 
   return {
-    selectedConnector,
-    setSelectedConnector,
+    wallet,
+    setWallet,
     uri,
     setUri,
-    isConnecting: isConnecting || isPending,
+    isConnecting: isConnecting,
     setIsConnecting,
-    onWalletConnect,
-    selectedConnectorMobile,
-    setSelectedConnectorMobile
+    onWalletConnect
   };
 }

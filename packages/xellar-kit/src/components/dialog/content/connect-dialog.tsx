@@ -3,10 +3,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SpinnerIcon } from '@/assets/spinner';
-import { useConnectors } from '@/hooks/connectors';
 import { useWalletConnection } from '@/hooks/use-wallet-connection';
-import { useWalletIcon } from '@/hooks/use-wallet-icon';
-import { useXellarContext } from '@/providers/xellar-kit';
+import { useWallets } from '@/wallets/use-wallet';
 
 import { PassportContent } from './passport-content/passport-content';
 import {
@@ -25,26 +23,55 @@ import {
 import { WalletConnectModalContent } from './wallet-connect/wallet-connect';
 
 export function ConnectDialogContent() {
-  const connectors = useConnectors();
+  const wallets = useWallets();
 
-  const { theme } = useXellarContext();
-  const { selectedConnector, setSelectedConnector, uri, isConnecting } =
-    useWalletConnection();
-  const renderIcon = useWalletIcon(theme);
+  const { wallet, setWallet, uri, isConnecting } = useWalletConnection();
+
+  // const deeplink =
+  //   (!wallet?.isInstalled && isMobile) ||
+  //   (wallet?.shouldDeeplinkDesktop && !isMobile)
+  //     ? wallet?.getWalletConnectDeeplink?.(uri ?? '')
+  //     : undefined;
+
+  const deeplink = wallet?.getBrowserDeeplink
+    ? wallet?.getWalletConnectDeeplink?.(uri ?? '')
+    : uri;
+
+  // const redirectToMoreWallets = isMobile && isWalletConnectConnector(wallet.id);
+
+  const browserUrl = uri ? wallet?.getBrowserDeeplink?.(uri) : null;
 
   const [showPassportContent] = useState(false);
 
   const renderContent = () => {
     if (showPassportContent) return <PassportContent />;
-    if (uri) {
+
+    // If MetaMask is selected but not installed, and we have a QR code URI
+    if (wallet?.id.includes('metaMask') && !wallet.isInstalled && uri) {
       return (
         <WalletConnectModalContent
           isConnecting={isConnecting}
-          walletId={selectedConnector?.id ?? ''}
           uri={uri}
+          wallet={wallet}
+          rawUri={uri}
+          browserUrl={browserUrl}
         />
       );
     }
+
+    // If we have a deeplink (for other wallets) and wallet is selected
+    if (deeplink && wallet && uri) {
+      return (
+        <WalletConnectModalContent
+          isConnecting={isConnecting}
+          uri={deeplink}
+          wallet={wallet}
+          rawUri={uri}
+          browserUrl={browserUrl}
+        />
+      );
+    }
+
     return (
       <EmptyStateWrapper>
         <Description style={{ textAlign: 'center' }}>
@@ -69,23 +96,21 @@ export function ConnectDialogContent() {
         </Description>
 
         <ConnectorList>
-          {connectors.map(connector => (
-            <WalletItem
-              key={connector.uid}
-              onClick={() => {
-                setSelectedConnector(connector);
-              }}
-              selected={selectedConnector?.id === connector.id}
-            >
-              <IconWrapper>
-                {renderIcon(connector.id, connector.icon)}
-              </IconWrapper>
-              <WalletName>{connector.name}</WalletName>
-              {selectedConnector?.id === connector.id && isConnecting && (
-                <SpinnerIcon />
-              )}
-            </WalletItem>
-          ))}
+          {wallets.map(_wallet => {
+            return (
+              <WalletItem
+                key={_wallet.id}
+                onClick={() => {
+                  setWallet(_wallet);
+                }}
+                selected={_wallet.id === wallet?.id}
+              >
+                <IconWrapper>{_wallet.icon}</IconWrapper>
+                <WalletName>{_wallet.name}</WalletName>
+                {_wallet.id === wallet?.id && isConnecting && <SpinnerIcon />}
+              </WalletItem>
+            );
+          })}
         </ConnectorList>
       </Container>
 

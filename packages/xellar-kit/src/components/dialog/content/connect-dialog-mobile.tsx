@@ -3,10 +3,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { SpinnerIcon } from '@/assets/spinner';
-import { useConnectors } from '@/hooks/connectors';
 import { useWalletConnection } from '@/hooks/use-wallet-connection';
-import { useWalletIcon } from '@/hooks/use-wallet-icon';
-import { useXellarContext } from '@/providers/xellar-kit';
+import { useWallets } from '@/wallets/use-wallet';
 
 import { PassportContent } from './passport-content/passport-content';
 import {
@@ -22,18 +20,9 @@ import {
 } from './styled';
 
 export function ConnectDialogMobileContent() {
-  const connectors = useConnectors();
-  const { theme } = useXellarContext();
+  const wallets = useWallets();
 
-  console.log(connectors);
-
-  const {
-    selectedConnectorMobile: selectedConnector,
-    isConnecting,
-    onWalletConnect
-  } = useWalletConnection();
-
-  const renderIcon = useWalletIcon(theme);
+  const { wallet, setWallet, isConnecting } = useWalletConnection();
 
   const [showPassportContent] = useState(false);
 
@@ -53,25 +42,19 @@ export function ConnectDialogMobileContent() {
         </Description>
 
         <ConnectorList>
-          {connectors
-            .filter(c => c.type !== 'injected')
-            .map(connector => (
-              <WalletItem
-                key={connector.uid}
-                onClick={() => {
-                  onWalletConnect(connector);
-                }}
-                selected={selectedConnector?.id === connector.id}
-              >
-                <IconWrapper>
-                  {renderIcon(connector.id, connector.icon)}
-                </IconWrapper>
-                <WalletName>{connector.name}</WalletName>
-                {selectedConnector?.id === connector.id && isConnecting && (
-                  <SpinnerIcon />
-                )}
-              </WalletItem>
-            ))}
+          {wallets.map(_wallet => (
+            <WalletItem
+              key={_wallet.id}
+              onClick={() => {
+                setWallet(_wallet);
+              }}
+              selected={_wallet.id === wallet?.id}
+            >
+              <IconWrapper>{_wallet.icon}</IconWrapper>
+              <WalletName>{_wallet.name}</WalletName>
+              {_wallet.id === wallet?.id && isConnecting && <SpinnerIcon />}
+            </WalletItem>
+          ))}
         </ConnectorList>
       </Container>
     );
