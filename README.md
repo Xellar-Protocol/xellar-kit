@@ -1,7 +1,7 @@
 # Xellar-kit
 
 
-![](./xellar-kit-video.gif)
+![](https://raw.githubusercontent.com/Xellar-Protocol/xellar-kit/main/xellar-kit-video.gif)
 
 
 Xellar-kit is a plug-and-play wallet connection solution designed for seamless integration with **Xellar Passport** and various other wallets, including **MetaMask (injector)** and **WalletConnect**. It provides a smooth developer experience for integrating multi-wallet authentication into decentralized applications (dApps).
