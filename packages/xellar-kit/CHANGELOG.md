@@ -1,5 +1,11 @@
 # @xellar-protocol/xellar-kit
 
+## 1.0.7
+
+### Patch Changes
+
+- 08cfda0: Update
+
 ## 1.0.6
 
 ### Patch Changes
