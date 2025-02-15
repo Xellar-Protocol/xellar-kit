@@ -1,3 +1,4 @@
+import { polygonAmoy } from 'viem/chains';
 import { ChainId, Network } from 'xellar-ew-sdk';
 
 export const chainMap: Record<number, Network> = {
@@ -22,6 +23,7 @@ export const chainMap: Record<number, Network> = {
   [ChainId.ETHEREUM_SEPOLIA]: Network.ETHEREUM_SEPOLIA,
   [ChainId.BINANCE_SMART_CHAIN_TESTNET]: Network.BINANCE_SMART_CHAIN_TESTNET,
   [ChainId.POLYGON_MUMBAI]: Network.POLYGON_POS_TESTNET,
+  [polygonAmoy.id]: 'polygon-pos-amoy-testnet' as Network,
   [ChainId.LISK_SEPOLIA]: Network.LISK_SEPOLIA,
   [ChainId.STORY_TESTNET]: Network.STORY_TESTNET,
   [ChainId.SKALE_CALYPSO_TESTNET]: Network.SKALE_CALYPSO_TESTNET,

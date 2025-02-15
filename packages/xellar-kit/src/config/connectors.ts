@@ -12,12 +12,14 @@ type DefaultConnectorsProps = {
   };
   walletConnectProjectId: string;
   xellarAppId?: string;
+  xellarEnv?: 'sandbox' | 'production';
 };
 
 export const defaultConnectors = ({
   app,
   walletConnectProjectId,
-  xellarAppId
+  xellarAppId,
+  xellarEnv
 }: DefaultConnectorsProps): CreateConnectorFn[] => {
   const connectors: CreateConnectorFn[] = [];
 
@@ -36,7 +38,7 @@ export const defaultConnectors = ({
     connectors.push(
       xellarConnector({
         appId: xellarAppId,
-        env: 'sandbox'
+        env: xellarEnv ?? 'sandbox'
       })
     );
   }

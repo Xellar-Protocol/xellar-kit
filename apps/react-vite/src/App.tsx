@@ -3,7 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { ConnectButton } from "@xellar-protocol/xellar-kit";
-import { useReadContract, useSignMessage, useWriteContract } from "wagmi";
+import { useSignMessage, useWriteContract } from "wagmi";
 import { erc20Abi } from "viem";
 
 function App() {

@@ -35,7 +35,6 @@ interface XellarKitContextType {
   closeModal: () => void;
   theme: 'dark' | 'light';
   walletConnectProjectId: string;
-  xellarAppId: string;
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -64,19 +63,11 @@ export function XellarKitProvider({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<ModalType | null>(null);
   const [wcProjectId, setWcProjectId] = useState('');
-  const [xellarAppId, setXellarAppId] = useState('');
 
   useEffect(() => {
     const wcConnector = config.connectors.find(c => c.id === 'walletConnect');
     wcConnector?.getProvider().then((p: any) => {
       setWcProjectId(p?.rpc?.projectId);
-    });
-
-    const xellarConnector = config.connectors.find(
-      c => c.id === 'xellar-passport'
-    );
-    xellarConnector?.getProvider().then((p: any) => {
-      setXellarAppId(p?.appId ?? '');
     });
   }, [config.connectors]);
 
@@ -115,8 +106,7 @@ export function XellarKitProvider({
     openModal: handleOpenModal,
     closeModal: handleCloseModal,
     theme,
-    walletConnectProjectId: wcProjectId,
-    xellarAppId
+    walletConnectProjectId: wcProjectId
   };
 
   return createElement(

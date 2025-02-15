@@ -1,5 +1,12 @@
 import { Config, createConfig, CreateConfigParameters, Transport } from 'wagmi';
-import { arbitrum, Chain, mainnet, optimism, polygon } from 'wagmi/chains';
+import {
+  arbitrum,
+  Chain,
+  mainnet,
+  optimism,
+  polygon,
+  polygonAmoy
+} from 'wagmi/chains';
 
 import { defaultConnectors } from './connectors';
 import { getDefaultTransports } from './default-transport';
@@ -27,6 +34,7 @@ interface GetDefaultConfigParameters<
   // WC 2.0 requires a project ID (get one here: https://cloud.walletconnect.com/sign-in)
   walletConnectProjectId: string;
   xellarAppId?: string;
+  xellarEnv?: 'sandbox' | 'production';
 }
 
 export const defaultConfig = ({
@@ -36,10 +44,17 @@ export const defaultConfig = ({
   appUrl,
   walletConnectProjectId,
   xellarAppId,
+  xellarEnv = 'sandbox',
   ...wagmiParameters
 }: GetDefaultConfigParameters<_chains, _transports>): Config => {
   const { transports, chains, ...restWagmiParameters } = wagmiParameters;
-  const defaultChains = chains || [mainnet, polygon, optimism, arbitrum];
+  const defaultChains = chains || [
+    mainnet,
+    polygon,
+    optimism,
+    arbitrum,
+    polygonAmoy
+  ];
 
   const _connectors = defaultConnectors({
     app: {
@@ -49,7 +64,8 @@ export const defaultConfig = ({
       url: appUrl
     },
     walletConnectProjectId,
-    xellarAppId
+    xellarAppId,
+    xellarEnv
   }); // Type assertion here
 
   const _transports = transports || getDefaultTransports({ chains });
