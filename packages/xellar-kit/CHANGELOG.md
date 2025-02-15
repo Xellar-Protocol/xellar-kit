@@ -1,5 +1,11 @@
 # @xellar-protocol/xellar-kit
 
+## 1.0.6
+
+### Patch Changes
+
+- 954c497: Symlink
+
 ## 1.0.5
 
 ### Patch Changes
