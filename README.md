@@ -1,84 +1,83 @@
-# Turborepo starter
+# Xellar-kit
 
-This is an official starter Turborepo.
+Xellar-kit is a plug-and-play wallet connection solution designed for seamless integration with **Xellar Passport** and various other wallets, including **MetaMask (injector)** and **WalletConnect**. It provides a smooth developer experience for integrating multi-wallet authentication into decentralized applications (dApps).
 
-## Using this example
+## Features
 
-Run the following command:
+- 🔌 **Xellar Passport Integration** – Seamlessly authenticate users via Xellar Passport.
+- 🦊 **MetaMask (Injected Wallets) Support** – Detect and connect to browser extension wallets.
+- 📲 **WalletConnect Integration** – Connect to mobile wallets with QR code scanning.
+- 🛠 **Customizable UI** – Easily theme and configure the modal to fit your dApp.
+- ⚡ **Developer-Friendly API** – Simple hooks and components for quick integration.
+
+## Installation
 
 ```sh
-npx create-turbo@latest
+npm install xellar-kit
+# or
+yarn add xellar-kit
 ```
 
-## What's inside?
+## Usage
 
-This Turborepo includes the following packages/apps:
+### Basic Setup
 
-### Apps and Packages
+```tsx
+import { XellarKitProvider, useXellarKit } from "xellar-kit";
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@xellar-protocol/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@xellar-protocol/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@xellar-protocol/typescript-config`: `tsconfig.json`s used throughout the monorepo
+function App() {
+  return (
+    <XellarKitProvider>
+      <MyComponent />
+    </XellarKitProvider>
+  );
+}
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+function MyComponent() {
+  const { connect, disconnect, account, isConnected } = useXellarKit();
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
+  return (
+    <div>
+      {isConnected ? (
+        <>
+          <p>Connected: {account}</p>
+          <button onClick={disconnect}>Disconnect</button>
+        </>
+      ) : (
+        <button onClick={connect}>Connect Wallet</button>
+      )}
+    </div>
+  );
+}
 ```
 
-### Remote Caching
+## API
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+### `<XellarKitProvider>`
+Wrap your application with `XellarKitProvider` to enable wallet connection features.
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+## Supported Wallets
+- **Xellar Passport** (native integration)
+- **MetaMask (Injected Web3 Wallets)**
+- **WalletConnect** (QR code-based connection)
 
-```
-cd my-turborepo
-npx turbo login
-```
+## Customization
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+Xellar-kit allows styling and theming via props and CSS variables. More details on theming options coming soon!
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## Roadmap
+- 🔹 Support for Coinbase Wallet
+- 🔹 Integration with Solana wallets
+- 🔹 Other multi-chain support for EVM & non-EVM networks
 
-```
-npx turbo link
-```
+## Contributing
+Contributions are welcome! Open an issue or submit a pull request to get started.
 
-## Useful Links
+## License
+Apache 2.0 License. See `LICENSE` for details.
 
-Learn more about the power of Turborepo:
+---
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+💡 **Xellar-kit** aims to be the go-to solution for Web3 authentication. Cheers!
+
