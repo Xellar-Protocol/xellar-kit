@@ -1,5 +1,11 @@
 # @xellar-protocol/xellar-kit
 
+## 1.0.8
+
+### Patch Changes
+
+- aecfb6d: Change readme url
+
 ## 1.0.7
 
 ### Patch Changes
