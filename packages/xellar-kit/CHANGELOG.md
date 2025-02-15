@@ -1,5 +1,11 @@
 # @xellar-protocol/xellar-kit
 
+## 1.0.5
+
+### Patch Changes
+
+- afacf2d: Enhance Kit
+
 ## 1.0.4
 
 ### Patch Changes

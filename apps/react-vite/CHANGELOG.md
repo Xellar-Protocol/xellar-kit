@@ -1,5 +1,12 @@
 # example-react-vite
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [afacf2d]
+  - @xellar-protocol/xellar-kit@1.0.5
+
 ## 0.0.5
 
 ### Patch Changes
