@@ -1,14 +1,8 @@
 # Xellar-kit
 
 
-## Demo Video
+![](./xellar-kit-video.mp4)
 
-<video width="600" controls>
-  <source src="./xellar-kit-video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
-#
 
 Xellar-kit is a plug-and-play wallet connection solution designed for seamless integration with **Xellar Passport** and various other wallets, including **MetaMask (injector)** and **WalletConnect**. It provides a smooth developer experience for integrating multi-wallet authentication into decentralized applications (dApps).
 
@@ -98,7 +92,6 @@ Contributions are welcome! Open an issue or submit a pull request to get started
 
 ## License
 Apache 2.0 License. See `LICENSE` for details.
-
 
 
 
