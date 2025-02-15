@@ -61,6 +61,10 @@ export function xellarConnector(options: XellarConnectorOptions) {
       //   accountsChanged = this.onAccountsChanged.bind(this);
       //   provider.on('accountsChanged', accountsChanged);
       // }
+      config.emitter.emit('connect', {
+        accounts: [address],
+        chainId: chainId ?? 1
+      });
 
       return {
         accounts: [address],
@@ -118,6 +122,8 @@ export function xellarConnector(options: XellarConnectorOptions) {
       config.emitter.emit('disconnect');
 
       useBoundStore.getState().clearToken();
+      useBoundStore.getState().clearAddress();
+      useBoundStore.getState().clearRefreshToken();
     },
     async getProvider(): Promise<EIP1193Provider> {
       // return xellarProvider;
