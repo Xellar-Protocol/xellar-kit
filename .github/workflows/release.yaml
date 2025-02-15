@@ -33,6 +33,11 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
+      - name: Copy README.md and LICENSE to packages
+        run: |
+          cp README.md packages/xellar-kit/README.md
+          cp LICENSE packages/xellar-kit/LICENSE
+
       - name: Build
         run: pnpm build
 
