@@ -23,29 +23,42 @@ yarn add xellar-kit
 ### Basic Setup
 
 ```tsx
-import { XellarKitProvider, useXellarKit } from "xellar-kit";
+import { XellarKitProvider, defaultConfig,ConnectButton } from "@xellar-protocol/xellar-kit";
+import { Config, WagmiProvider } from "wagmi";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
+
+const config = defaultConfig({
+  appName: "<your_app_name>",
+  walletConnectProjectId: "<your_wallet_connect_project_id>",
+  xellarAppId: "<your_xellar_app_id>",
+}) as Config;
+
+const queryClient = new QueryClient();
+
+
   return (
-    <XellarKitProvider>
-      <MyComponent />
-    </XellarKitProvider>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <XellarKitProvider>
+          <MyComponent />
+        </XellarKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 
 function MyComponent() {
-  const { connect, disconnect, account, isConnected } = useXellarKit();
+
 
   return (
     <div>
-      {isConnected ? (
-        <>
-          <p>Connected: {account}</p>
-          <button onClick={disconnect}>Disconnect</button>
-        </>
-      ) : (
-        <button onClick={connect}>Connect Wallet</button>
-      )}
+    <ConnectButton.Custom>
+        {({ openConnectModal, disconnect, isConnected, openChainModal, openProfileModal, account, chain }) => (
+          <button onClick={openConnectModal}>Connect</button>
+        )}
+      </ConnectButton.Custom>
     </div>
   );
 }
