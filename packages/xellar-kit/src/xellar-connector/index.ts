@@ -122,6 +122,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
       }
 
       config.emitter.emit('change', { chainId });
+      useBoundStore.setState({ chainId });
 
       return chain;
     },
