@@ -21,8 +21,8 @@
     "build": "tsup"
   },
   "devDependencies": {
-    "@types/qrcode": "^1",
     "@types/js-cookie": "^3.0.6",
+    "@types/qrcode": "^1",
     "@xellar-protocol/eslint-config": "workspace:*",
     "@xellar-protocol/prettier-config": "workspace:*",
     "@xellar-protocol/typescript-config": "workspace:*",
@@ -33,15 +33,16 @@
     "typescript-plugin-styled-components": "^3.0.0"
   },
   "dependencies": {
-    "js-cookie": "^3.0.5",
-    "xellar-ew-sdk": "4.2.11",
-    "zustand": "^5.0.3",
+    "@react-oauth/google": "^0.12.1",
     "clsx": "^2.1.1",
+    "js-cookie": "^3.0.5",
     "motion": "^11.17.0",
     "qrcode": "^1.5.4",
     "react-remove-scroll": "^2.6.2",
     "styled-components": "^6.1.14",
-    "styled-reset": "^4.5.2"
+    "styled-reset": "^4.5.2",
+    "xellar-ew-sdk": "4.2.11",
+    "zustand": "^5.0.3"
   },
   "peerDependencies": {
     "@tanstack/react-query": ">=5.0.0",

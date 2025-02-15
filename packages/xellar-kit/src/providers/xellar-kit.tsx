@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import React, {
   createContext,
   createElement,
+  Fragment,
   PropsWithChildren,
   useContext,
   useEffect,
@@ -35,6 +37,7 @@ interface XellarKitContextType {
   closeModal: () => void;
   theme: 'dark' | 'light';
   walletConnectProjectId: string;
+  googleClientId?: string;
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -63,11 +66,21 @@ export function XellarKitProvider({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<ModalType | null>(null);
   const [wcProjectId, setWcProjectId] = useState('');
+  const [googleClientId, setGoogleClientId] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     const wcConnector = config.connectors.find(c => c.id === 'walletConnect');
     wcConnector?.getProvider().then((p: any) => {
       setWcProjectId(p?.rpc?.projectId);
+    });
+
+    const xellarConnector = config.connectors.find(
+      c => c.id === 'xellar-passport'
+    );
+    xellarConnector?.getProvider().then((p: any) => {
+      setGoogleClientId(p?.googleClientId);
     });
   }, [config.connectors]);
 
@@ -106,13 +119,16 @@ export function XellarKitProvider({
     openModal: handleOpenModal,
     closeModal: handleCloseModal,
     theme,
-    walletConnectProjectId: wcProjectId
+    walletConnectProjectId: wcProjectId,
+    googleClientId
   };
+
+  const GoogleProviderWrapper = googleClientId ? GoogleOAuthProvider : Fragment;
 
   return createElement(
     XellarKitContext.Provider,
     { value },
-    <>
+    <GoogleProviderWrapper clientId={googleClientId ?? ''}>
       <GlobalStyle />
       <ThemeProvider theme={theme === 'dark' ? defaultTheme : lightTheme}>
         {children}
@@ -120,7 +136,7 @@ export function XellarKitProvider({
           {modalContent}
         </Dialog>
       </ThemeProvider>
-    </>
+    </GoogleProviderWrapper>
   );
 }
 

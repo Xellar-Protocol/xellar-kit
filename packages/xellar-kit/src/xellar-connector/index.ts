@@ -13,16 +13,14 @@ import { useBoundStore } from './store';
 export interface XellarConnectorOptions {
   appId: string;
   env: 'sandbox' | 'production';
+  googleClientId?: string;
 }
 
 type RPCSchema = PublicRpcSchema | WalletRpcSchema;
-type WalletProvider = EIP1193Provider & {
-  appId: string;
-  env: 'sandbox' | 'production';
-};
+type WalletProvider = EIP1193Provider & XellarConnectorOptions;
 
 export function xellarConnector(options: XellarConnectorOptions) {
-  const { appId, env = 'sandbox' } = options;
+  const { appId, env = 'sandbox', googleClientId } = options;
 
   if (!appId) {
     throw new Error('appId is required');
@@ -37,6 +35,10 @@ export function xellarConnector(options: XellarConnectorOptions) {
     name: 'Xellar Passport',
     async setup() {
       useBoundStore.setState({ appId, env });
+      const chainId = config.chains[0]?.id;
+      if (chainId) {
+        useBoundStore.setState({ chainId });
+      }
       if (!xellarSDK) {
         xellarSDK = new XellarSDK({
           appId,
@@ -45,11 +47,22 @@ export function xellarConnector(options: XellarConnectorOptions) {
         });
       }
     },
+    onConnect(info) {
+      const address = useBoundStore.getState().address;
+      const chainId = Number(info.chainId);
+      useBoundStore.setState({ chainId });
+      config.emitter.emit('connect', {
+        accounts: [address as `0x${string}`],
+        chainId
+      });
+    },
     async connect({ chainId }: { chainId?: number } = {}) {
       const walletToken = useBoundStore.getState().token;
       const address = useBoundStore.getState().address;
-      const storeChainId = useBoundStore.getState().chainId;
-      useBoundStore.setState({ chainId: storeChainId || chainId || 1 });
+
+      let targetChainId = chainId;
+      targetChainId = config.chains[0]?.id;
+
       if (!walletToken) {
         throw new Error('No token found');
       }
@@ -58,27 +71,27 @@ export function xellarConnector(options: XellarConnectorOptions) {
         throw new Error('No addresses found');
       }
 
-      // if (!accountsChanged) {
-      //   accountsChanged = this.onAccountsChanged.bind(this);
-      //   provider.on('accountsChanged', accountsChanged);
-      // }
+      if (!targetChainId) throw new Error('No chains found on connector.');
+
       config.emitter.emit('connect', {
         accounts: [address],
-        chainId: storeChainId ?? chainId ?? 1
+        chainId: targetChainId
       });
 
       return {
         accounts: [address],
-        chainId: storeChainId ?? chainId ?? 1
+        chainId: targetChainId
       };
     },
 
     async disconnect() {
       useBoundStore.getState().clearToken();
+      useBoundStore.getState().clearAddress();
+      useBoundStore.getState().clearRefreshToken();
     },
 
-    onMessage(message) {
-      console.log({ message });
+    onMessage() {
+      // Not implemented
     },
 
     async getAccounts() {
@@ -146,6 +159,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
       const _provider = {
         appId,
         env,
+        googleClientId: googleClientId ?? '',
         request: (params: EIP1193Parameters<RPCSchema>) =>
           handleRequest(xellarSDK, params)
       } as WalletProvider;

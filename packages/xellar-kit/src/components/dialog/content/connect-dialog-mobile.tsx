@@ -22,12 +22,15 @@ import {
 export function ConnectDialogMobileContent() {
   const wallets = useWallets();
 
-  const { wallet, setWallet, isConnecting } = useWalletConnection();
+  const { setWallet, isConnecting } = useWalletConnection();
 
-  const [showPassportContent] = useState(false);
+  const [walletId, setWalletId] = useState<string | null>(null);
 
   const renderContent = () => {
-    if (showPassportContent) return <PassportContent />;
+    if (walletId === 'xellar-passport')
+      return (
+        <PassportContent onBack={() => setWalletId(null)} showBackButton />
+      );
 
     return (
       <Container $isMobile>
@@ -46,13 +49,18 @@ export function ConnectDialogMobileContent() {
             <WalletItem
               key={_wallet.id}
               onClick={() => {
-                setWallet(_wallet);
+                setWalletId(_wallet.id);
+                if (_wallet.id !== 'xellar-passport') {
+                  setWallet(_wallet);
+                } else {
+                  setWallet(null);
+                }
               }}
-              selected={_wallet.id === wallet?.id}
+              selected={_wallet.id === walletId}
             >
               <IconWrapper>{_wallet.icon}</IconWrapper>
               <WalletName>{_wallet.name}</WalletName>
-              {_wallet.id === wallet?.id && isConnecting && <SpinnerIcon />}
+              {_wallet.id === walletId && isConnecting && <SpinnerIcon />}
             </WalletItem>
           ))}
         </ConnectorList>

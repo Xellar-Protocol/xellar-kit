@@ -30,11 +30,12 @@ interface GetDefaultConfigParameters<
   appIcon?: string;
   appDescription?: string;
   appUrl?: string;
-  chains?: _chains;
+  chains?: [Chain, ...Chain[]];
   // WC 2.0 requires a project ID (get one here: https://cloud.walletconnect.com/sign-in)
   walletConnectProjectId: string;
   xellarAppId?: string;
   xellarEnv?: 'sandbox' | 'production';
+  googleClientId?: string;
 }
 
 export const defaultConfig = ({
@@ -45,6 +46,7 @@ export const defaultConfig = ({
   walletConnectProjectId,
   xellarAppId,
   xellarEnv = 'sandbox',
+  googleClientId,
   ...wagmiParameters
 }: GetDefaultConfigParameters<_chains, _transports>): Config => {
   const { transports, chains, ...restWagmiParameters } = wagmiParameters;
@@ -65,7 +67,8 @@ export const defaultConfig = ({
     },
     walletConnectProjectId,
     xellarAppId,
-    xellarEnv
+    xellarEnv,
+    googleClientId
   }); // Type assertion here
 
   const _transports = transports || getDefaultTransports({ chains });

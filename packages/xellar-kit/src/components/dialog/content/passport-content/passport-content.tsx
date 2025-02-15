@@ -8,7 +8,13 @@ import { WalletCreatedPage } from './wallet-created-page';
 
 type Content = 'LOGIN' | 'OTP' | 'WALLET_CREATED';
 
-export function PassportContent() {
+export function PassportContent({
+  showBackButton = false,
+  onBack
+}: {
+  showBackButton?: boolean;
+  onBack?: () => void;
+}) {
   const [content, setContent] = useState<Content>('LOGIN');
   const [codeVerifier, setCodeVerifier] = useState<string | null>(null);
   const [recoverySecret, setRecoverySecret] = useState<string | null>(null);
@@ -22,6 +28,8 @@ export function PassportContent() {
             setContent('OTP');
             setCodeVerifier(c);
           }}
+          onBack={onBack}
+          showBackButton={showBackButton}
         />
       )}
       {content === 'OTP' && codeVerifier && (

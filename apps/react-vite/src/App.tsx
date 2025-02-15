@@ -14,14 +14,14 @@ function App() {
   const { writeContractAsync } = useWriteContract();
 
   const handleWriteContract = async () => {
-    const signature = await writeContractAsync({
+    const hash = await writeContractAsync({
       abi: erc20Abi,
       address: "0x53844F9577C2334e541Aec7Df7174ECe5dF1fCf0" as `0x${string}`,
       functionName: "approve",
       args: ["0xCa2D0dFC23f4f4b1ee01ed727664f807c21f4505" as `0x${string}`, 1000000000000000000n],
     });
 
-    console.log({ signature });
+    console.log({ hash });
   };
 
   const handleSignMessage = async () => {
@@ -51,6 +51,12 @@ function App() {
       <button onClick={handleSignMessage}>Sign Message</button>
       <button onClick={handleWriteContract}>Write Contract</button>
       <ConnectButton />
+
+      <ConnectButton.Custom>
+        {({ openConnectModal, disconnect, isConnected, openChainModal, openProfileModal, account, chain }) => (
+          <button onClick={openConnectModal}>Connect</button>
+        )}
+      </ConnectButton.Custom>
     </>
   );
 }

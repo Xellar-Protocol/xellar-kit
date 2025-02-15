@@ -6,7 +6,7 @@ import { useConnector } from '@/hooks/connectors';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { useBoundStore } from '@/xellar-connector/store';
 
-import { AnimatedContainer } from '../styled';
+import { AnimatedContainer, Description } from '../styled';
 import { useXellarSDK } from './hooks';
 import { OTPInput } from './otp-input';
 import {
@@ -48,11 +48,6 @@ export function OTPPage({ onBack, codeVerifier, onComplete }: OTPPageProps) {
   const [otp, setOtp] = useState('');
   const xellarSDK = useXellarSDK();
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log({ otp, codeVerifier, connector });
-  // const onSubmit = (otp: string) => {
-  //   console.log({ otp });
-  // };
 
   const onSubmit = async () => {
     try {
@@ -112,6 +107,9 @@ export function OTPPage({ onBack, codeVerifier, onComplete }: OTPPageProps) {
         </Header>
 
         <PassportContainer>
+          <Description style={{ marginBottom: 12, textAlign: 'center' }}>
+            Please enter the 6-digit code sent to your email address.
+          </Description>
           <OTPInput onComplete={setOtp} disabled={isLoading} />
           <PassportButton
             style={{ width: '100%', marginTop: 12 }}

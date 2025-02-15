@@ -1,5 +1,32 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
+import Cookies from 'js-cookie';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+
+interface StoreState {
+  token: string | null;
+  setToken: (token: string | null) => void;
+  clearToken: () => void;
+}
+
+const cookieStorage = {
+  getItem: (name: string) => {
+    const value = Cookies.get(name);
+    return value ?? null;
+  },
+  setItem: (name: string, value: string) => {
+    if (!value) return;
+    Cookies.set(name, value, {
+      expires: 7,
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    });
+  },
+  removeItem: (name: string) => {
+    Cookies.remove(name);
+  }
+};
 
 interface StoreState {
   token: string | null;
@@ -46,7 +73,7 @@ export const useBoundStore = create<StoreState>()(
     }),
     {
       name: 'Xellar-Passport-Storage',
-      storage: createJSONStorage(() => localStorage)
+      storage: createJSONStorage(() => cookieStorage)
     }
   )
 );

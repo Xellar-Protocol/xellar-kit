@@ -3,7 +3,7 @@ import { Connector, CreateConnectorFn, useConnect } from 'wagmi';
 import { walletConnect } from 'wagmi/connectors';
 
 import { useXellarContext } from '@/providers/xellar-kit';
-import { isMobile, isMobileDevice } from '@/utils/is-mobile';
+import { isMobileDevice } from '@/utils/is-mobile';
 import { WalletProps } from '@/wallets/use-wallet';
 
 import { useConnector } from './connectors';
@@ -69,8 +69,6 @@ export function useWalletConnection() {
   };
 
   const selectWallet = async (wallet: WalletProps) => {
-    console.log({ wallet });
-
     if (isMobileDevice()) {
       onWalletConnect(wallet);
     }
