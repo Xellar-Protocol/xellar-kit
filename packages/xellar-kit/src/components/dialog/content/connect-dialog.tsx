@@ -27,6 +27,10 @@ export function ConnectDialogContent() {
 
   const { wallet, setWallet, uri, isConnecting } = useWalletConnection();
 
+  const [walletId, setWalletId] = useState<string | null>(
+    wallets.find(w => w.id === 'xellar-passport')?.id ?? null
+  );
+
   // const deeplink =
   //   (!wallet?.isInstalled && isMobile) ||
   //   (wallet?.shouldDeeplinkDesktop && !isMobile)
@@ -41,10 +45,8 @@ export function ConnectDialogContent() {
 
   const browserUrl = uri ? wallet?.getBrowserDeeplink?.(uri) : null;
 
-  const [showPassportContent] = useState(false);
-
   const renderContent = () => {
-    if (showPassportContent) return <PassportContent />;
+    if (walletId === 'xellar-passport') return <PassportContent />;
 
     // If MetaMask is selected but not installed, and we have a QR code URI
     if (wallet?.id.includes('metaMask') && !wallet.isInstalled && uri) {
@@ -90,24 +92,24 @@ export function ConnectDialogContent() {
         </Title>
         <Separator />
 
-        <Description>
-          Wallets are used to send, receive, store, and display digital assets
-          like Ethereum and NFTs.
-        </Description>
-
-        <ConnectorList>
+        <ConnectorList style={{ marginTop: 24 }}>
           {wallets.map(_wallet => {
             return (
               <WalletItem
                 key={_wallet.id}
                 onClick={() => {
-                  setWallet(_wallet);
+                  setWalletId(_wallet.id);
+                  if (_wallet.id !== 'xellar-passport') {
+                    setWallet(_wallet);
+                  } else {
+                    setWallet(null);
+                  }
                 }}
-                selected={_wallet.id === wallet?.id}
+                selected={_wallet.id === walletId}
               >
                 <IconWrapper>{_wallet.icon}</IconWrapper>
                 <WalletName>{_wallet.name}</WalletName>
-                {_wallet.id === wallet?.id && isConnecting && <SpinnerIcon />}
+                {_wallet.id === walletId && isConnecting && <SpinnerIcon />}
               </WalletItem>
             );
           })}

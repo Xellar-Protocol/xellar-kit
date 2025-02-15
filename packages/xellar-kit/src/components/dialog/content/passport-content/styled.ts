@@ -17,7 +17,7 @@ export const InnerContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 24px;
-  width: 300px;
+  width: 280px;
 `;
 
 export const PassportTitle = styled.h3`
@@ -31,12 +31,12 @@ export const IconsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 export const TextInput = styled.input`
-  height: 48px;
+  height: 42px;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
   padding: 0 12px;
@@ -63,7 +63,7 @@ export const Row = styled.div`
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
-export const SignInButton = styled(StyledButton)`
+export const PassportButton = styled(StyledButton)`
   height: 42px;
   text-align: center;
   display: flex;
@@ -73,4 +73,36 @@ export const SignInButton = styled(StyledButton)`
   font-weight: 600;
   font-size: 13px;
   border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.BG_SECONDARY};
+  color: ${({ theme }) => theme.colors.TEXT};
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.PRIMARY};
+  }
+`;
+
+export const RootContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  height: 100%;
+`;
+
+export const Header = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+export const Title = styled.h4`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.TEXT};
+`;
+
+export const BackButton = styled.div`
+  border: none;
+  outline: none;
+  cursor: pointer;
 `;

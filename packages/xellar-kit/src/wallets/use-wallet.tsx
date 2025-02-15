@@ -126,5 +126,11 @@ export const useWallets = (): WalletProps[] => {
         if (b.id === 'walletConnect') return -1;
         return 0;
       })
+      // move xellar-passport to the first position
+      .sort((a, b) => {
+        if (a.id === 'xellar-passport') return -1;
+        if (b.id === 'xellar-passport') return 1;
+        return 0;
+      })
   );
 };

@@ -1,6 +1,7 @@
 import { CreateConnectorFn, injected } from 'wagmi';
 
 import { walletConnectors } from '@/wallets/wallets';
+import { xellarConnector } from '@/xellar-connector';
 
 type DefaultConnectorsProps = {
   app?: {
@@ -10,11 +11,13 @@ type DefaultConnectorsProps = {
     url?: string;
   };
   walletConnectProjectId: string;
+  xellarAppId?: string;
 };
 
 export const defaultConnectors = ({
   app,
-  walletConnectProjectId
+  walletConnectProjectId,
+  xellarAppId
 }: DefaultConnectorsProps): CreateConnectorFn[] => {
   const connectors: CreateConnectorFn[] = [];
 
@@ -29,6 +32,14 @@ export const defaultConnectors = ({
     );
   }
 
+  if (xellarAppId) {
+    connectors.push(
+      xellarConnector({
+        appId: xellarAppId,
+        env: 'sandbox'
+      })
+    );
+  }
   //   }
   /*
   connectors.push(

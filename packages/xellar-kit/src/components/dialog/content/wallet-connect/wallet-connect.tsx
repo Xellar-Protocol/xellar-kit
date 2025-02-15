@@ -64,7 +64,7 @@ export function WalletConnectModalContent({
         <QRCode
           blur={isConnecting}
           icon={<IconWrapper $size={48}>{renderIcon()}</IconWrapper>}
-          size={320}
+          size={280}
           uri={uri}
         />
         {isCopied && (

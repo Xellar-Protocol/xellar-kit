@@ -1,77 +1,65 @@
-import {
-  AppleDarkIcon,
-  AppleIcon,
-  GoogleIcon,
-  TelegramIcon,
-  TwitterIcon,
-  WhatsappIcon
-} from '@/assets/socials';
-import { useXellarContext } from '@/providers/xellar-kit';
+import { AnimatePresence } from 'motion/react';
+import { useState } from 'react';
+import styled from 'styled-components';
 
-import { AnimatedContainer, IconWrapper } from '../styled';
-import {
-  IconsContainer,
-  InnerContainer,
-  PassportContainer,
-  PassportTitle,
-  Row,
-  Separator,
-  SignInButton,
-  TextInput
-} from './styled';
+import { LoginPage } from './login-page';
+import { OTPPage } from './otp-page';
+import { WalletCreatedPage } from './wallet-created-page';
+
+type Content = 'LOGIN' | 'OTP' | 'WALLET_CREATED';
 
 export function PassportContent() {
-  const { theme } = useXellarContext();
+  const [content, setContent] = useState<Content>('LOGIN');
+  const [codeVerifier, setCodeVerifier] = useState<string | null>(null);
+  const [recoverySecret, setRecoverySecret] = useState<string | null>(null);
+
   return (
-    <AnimatedContainer
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -50 }}
-    >
-      <PassportContainer>
-        <PassportTitle style={{ textAlign: 'center' }}>
-          The gateway to <span style={{ color: '#01CFEA' }}>manage</span>{' '}
-          everything in your <span style={{ color: '#FF1CF7' }}>wallet</span>
-        </PassportTitle>
-
-        <InnerContainer>
-          <IconsContainer>
-            <IconWrapper $size={48} $br={12}>
-              <GoogleIcon />
-            </IconWrapper>
-            <IconWrapper $size={48} $br={12}>
-              <TelegramIcon />
-            </IconWrapper>
-            <IconWrapper $size={48} $br={12}>
-              {theme === 'dark' ? <AppleIcon /> : <AppleDarkIcon />}
-            </IconWrapper>
-            <IconWrapper $size={48} $br={12}>
-              <WhatsappIcon />
-            </IconWrapper>
-            <IconWrapper $size={48} $br={12}>
-              <TwitterIcon />
-            </IconWrapper>
-          </IconsContainer>
-
-          <Row>
-            <Separator />
-            <span>Or</span>
-            <Separator />
-          </Row>
-
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 12
-            }}
-          >
-            <TextInput type="email" placeholder="Enter your email" />
-            <SignInButton>Sign In</SignInButton>
-          </div>
-        </InnerContainer>
-      </PassportContainer>
-    </AnimatedContainer>
+    <AnimatePresence mode="wait">
+      {content === 'LOGIN' && (
+        <LoginPage
+          key="login"
+          onComplete={c => {
+            setContent('OTP');
+            setCodeVerifier(c);
+          }}
+        />
+      )}
+      {content === 'OTP' && codeVerifier && (
+        <OTPPage
+          key="otp"
+          onBack={() => setContent('LOGIN')}
+          codeVerifier={codeVerifier}
+          onComplete={authRes => {
+            if (authRes.isNewWalletCreated && authRes.recoverySecret) {
+              setContent('WALLET_CREATED');
+              setRecoverySecret(authRes.recoverySecret);
+            }
+          }}
+        />
+      )}
+      {content === 'WALLET_CREATED' && recoverySecret && (
+        <WalletCreatedPage
+          key="wallet-created"
+          recoverySecret={recoverySecret}
+        />
+      )}
+    </AnimatePresence>
   );
 }
+
+export const IconWrapper = styled.div`
+  width: 42px;
+  height: 42px;
+  border: 1px solid ${({ theme }) => theme.colors.BORDER};
+  background-color: ${({ theme }) => theme.colors.BACKGROUND};
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.colors.TEXT};
+
+  svg {
+    width: 50% !important;
+    height: auto !important;
+  }
+`;

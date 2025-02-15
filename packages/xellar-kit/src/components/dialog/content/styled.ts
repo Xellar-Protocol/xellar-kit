@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   flex-direction: row;
   gap: 12px;
   overflow: hidden;
-  height: 394px;
+  height: 360px;
 `;
 
 export const ConnectContentWrapper = styled.div`
@@ -15,7 +15,8 @@ export const ConnectContentWrapper = styled.div`
   align-items: center;
   gap: 12px;
   padding-right: 8px;
-  width: 320px;
+  width: 280px;
+  overflow: hidden;
 `;
 
 export const InnerQRCodeWrapper = styled.div`

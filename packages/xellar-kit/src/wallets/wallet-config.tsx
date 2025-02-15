@@ -3,6 +3,8 @@ import { IndodaxIcon } from '@/assets/indodax';
 import { MetaMaskIcon } from '@/assets/metamask';
 import { ReownLightIcon } from '@/assets/reown-light';
 import { WalletConnectIcon } from '@/assets/wallet-connect';
+import { XellarDark } from '@/assets/xellar-dark';
+import { XellarLight } from '@/assets/xellar-light';
 import { isAndroid, isIOS } from '@/utils/is-mobile';
 
 /**
@@ -65,6 +67,11 @@ export const walletConfigs: {
       isAndroid() ? uri : `indodaxweb3://wc/${encodeURIComponent(uri)}`,
     getBrowserDeeplink: (uri: string) =>
       `https://indodaxwebapp.xellar.co/connections/add?uri=${encodeURIComponent(uri)}`
+  },
+  'xellar-passport': {
+    name: 'Xellar Passport',
+    icon: <XellarLight />,
+    iconConnector: <XellarLight />
   },
   'metaMask, metaMask-io, io.metamask, io.metamask.mobile, metaMaskSDK': {
     name: 'MetaMask',
