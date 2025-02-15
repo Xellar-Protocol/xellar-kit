@@ -1,0 +1,10 @@
+{
+  "name": "@xellar-protocol/prettier-config",
+  "version": "0.0.0",
+  "private": true,
+  "exports": "./index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
