@@ -113,6 +113,18 @@ export function xellarConnector(options: XellarConnectorOptions) {
           accounts: accounts.map(x => x as `0x${string}`)
         });
     },
+
+    async switchChain({ chainId }: { chainId: number }) {
+      const chain = config.chains.find(x => x.id === chainId);
+
+      if (!chain) {
+        throw new Error('Chain not found');
+      }
+
+      config.emitter.emit('change', { chainId });
+
+      return chain;
+    },
     onChainChanged(chain) {
       const chainId = Number(chain);
       config.emitter.emit('change', { chainId });
