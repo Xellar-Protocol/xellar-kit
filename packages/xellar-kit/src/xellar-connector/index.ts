@@ -48,7 +48,8 @@ export function xellarConnector(options: XellarConnectorOptions) {
     async connect({ chainId }: { chainId?: number } = {}) {
       const walletToken = useBoundStore.getState().token;
       const address = useBoundStore.getState().address;
-      useBoundStore.setState({ chainId: chainId || 1 });
+      const storeChainId = useBoundStore.getState().chainId;
+      useBoundStore.setState({ chainId: storeChainId || chainId || 1 });
       if (!walletToken) {
         throw new Error('No token found');
       }
@@ -63,12 +64,12 @@ export function xellarConnector(options: XellarConnectorOptions) {
       // }
       config.emitter.emit('connect', {
         accounts: [address],
-        chainId: chainId ?? 1
+        chainId: storeChainId ?? chainId ?? 1
       });
 
       return {
         accounts: [address],
-        chainId: chainId ?? 1
+        chainId: storeChainId ?? chainId ?? 1
       };
     },
 
@@ -129,6 +130,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
     onChainChanged(chain) {
       const chainId = Number(chain);
       config.emitter.emit('change', { chainId });
+      useBoundStore.setState({ chainId });
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async onDisconnect(_error) {
