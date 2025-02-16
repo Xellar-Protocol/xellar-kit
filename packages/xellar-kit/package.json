@@ -1,5 +1,5 @@
 {
-  "name": "@xellar-protocol/xellar-kit",
+  "name": "@xellar/kit",
   "version": "1.0.8",
   "type": "module",
   "exports": {
@@ -23,9 +23,9 @@
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
     "@types/qrcode": "^1",
-    "@xellar-protocol/eslint-config": "workspace:*",
-    "@xellar-protocol/prettier-config": "workspace:*",
-    "@xellar-protocol/typescript-config": "workspace:*",
+    "@xellar/eslint-config": "workspace:*",
+    "@xellar/prettier-config": "workspace:*",
+    "@xellar/typescript-config": "workspace:*",
     "esbuild-plugin-styled-components": "^3.0.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",

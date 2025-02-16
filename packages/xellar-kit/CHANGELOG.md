@@ -1,4 +1,4 @@
-# @xellar-protocol/xellar-kit
+# @xellar/kit
 
 ## 1.0.8
 

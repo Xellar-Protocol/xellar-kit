@@ -1,5 +1,5 @@
 {
-  "name": "@xellar-protocol/prettier-config",
+  "name": "@xellar/prettier-config",
   "version": "0.0.0",
   "private": true,
   "exports": "./index.js",

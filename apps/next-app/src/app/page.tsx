@@ -1,4 +1,4 @@
-import { ConnectButton } from "@xellar-protocol/xellar-kit";
+import { ConnectButton } from "@xellar/kit";
 import Image from "next/image";
 
 export default function Home() {

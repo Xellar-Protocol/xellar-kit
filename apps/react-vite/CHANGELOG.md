@@ -5,60 +5,60 @@
 ### Patch Changes
 
 - Updated dependencies [aecfb6d]
-  - @xellar-protocol/xellar-kit@1.0.8
+  - @xellar/kit@1.0.8
 
 ## 0.0.8
 
 ### Patch Changes
 
 - Updated dependencies [08cfda0]
-  - @xellar-protocol/xellar-kit@1.0.7
+  - @xellar/kit@1.0.7
 
 ## 0.0.7
 
 ### Patch Changes
 
 - Updated dependencies [954c497]
-  - @xellar-protocol/xellar-kit@1.0.6
+  - @xellar/kit@1.0.6
 
 ## 0.0.6
 
 ### Patch Changes
 
 - Updated dependencies [afacf2d]
-  - @xellar-protocol/xellar-kit@1.0.5
+  - @xellar/kit@1.0.5
 
 ## 0.0.5
 
 ### Patch Changes
 
 - Updated dependencies [5d55c8c]
-  - @xellar-protocol/xellar-kit@1.0.4
+  - @xellar/kit@1.0.4
 
 ## 0.0.4
 
 ### Patch Changes
 
 - Updated dependencies [4c74c6a]
-  - @xellar-protocol/xellar-kit@1.0.3
+  - @xellar/kit@1.0.3
 
 ## 0.0.3
 
 ### Patch Changes
 
 - Updated dependencies [d98779b]
-  - @xellar-protocol/xellar-kit@1.0.2
+  - @xellar/kit@1.0.2
 
 ## 0.0.2
 
 ### Patch Changes
 
 - Updated dependencies [383baa4]
-  - @xellar-protocol/xellar-kit@1.0.1
+  - @xellar/kit@1.0.1
 
 ## 0.0.1
 
 ### Patch Changes
 
 - Updated dependencies [9b73bee]
-  - @xellar-protocol/xellar-kit@1.0.0
+  - @xellar/kit@1.0.0

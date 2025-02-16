@@ -2,10 +2,10 @@
   "name": "xellar-kit",
   "private": true,
   "scripts": {
-    "build": "pnpm --recursive --parallel --filter=@xellar-protocol/xellar-kit build",
+    "build": "pnpm --recursive --parallel --filter=@xellar/kit build",
     "build:packages": "pnpm build:packages",
-    "dev": "pnpm --recursive --parallel --filter @xellar-protocol/xellar-kit --filter example-* dev",
-    "dev:kit": "pnpm --filter @xellar-protocol/xellar-kit dev",
+    "dev": "pnpm --recursive --parallel --filter @xellar/kit --filter example-* dev",
+    "dev:kit": "pnpm --filter @xellar/kit dev",
     "lint": "pnpm lint",
     "lint:fix": "pnpm lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

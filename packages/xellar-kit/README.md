@@ -27,7 +27,7 @@ yarn add xellar-kit
 ### Basic Setup
 
 ```tsx
-import { XellarKitProvider, defaultConfig,ConnectButton } from "@xellar-protocol/xellar-kit";
+import { XellarKitProvider, defaultConfig,ConnectButton } from "@xellar/kit";
 import { Config, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 

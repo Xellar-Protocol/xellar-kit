@@ -1,7 +1,7 @@
 import React from "react";
 import { Config, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { XellarKitProvider, defaultConfig } from "@xellar-protocol/xellar-kit";
+import { XellarKitProvider, defaultConfig } from "@xellar/kit";
 
 const walletConnectProjectId = "";
 
