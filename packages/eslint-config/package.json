@@ -1,5 +1,5 @@
 {
-  "name": "@xellar-protocol/eslint-config",
+  "name": "@xellar/eslint-config",
   "version": "0.0.0",
   "type": "module",
   "private": true,
