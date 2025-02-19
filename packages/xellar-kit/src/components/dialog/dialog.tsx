@@ -84,7 +84,15 @@ export function Dialog({
               onClick={stopPropagation}
               $isMobile={isBottomSheet}
             >
-              <InnerDialogContent $isMobile={isBottomSheet} layout>
+              <InnerDialogContent
+                $isMobile={isBottomSheet}
+                layout
+                transition={{
+                  duration: 0.3,
+                  type: 'spring',
+                  bounce: 0
+                }}
+              >
                 {children}
               </InnerDialogContent>
             </DialogContent>
@@ -139,13 +147,14 @@ const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
 `;
 
 const InnerDialogContent = styled(motion.div)<{ $isMobile: boolean }>`
-  padding: 18px;
+  padding: 24px;
   overflow-y: auto;
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
   border: 2px solid ${({ theme }) => theme.colors.BORDER};
   border-radius: ${({ $isMobile }) => ($isMobile ? '20px 20px 0 0' : '20px')};
   box-shadow: 0 4px 100px -19px ${({ theme }) => theme.colors.SHADOW};
   color: ${({ theme }) => theme.colors.TEXT};
+  max-width: 280px;
 `;
 
 const variants = {

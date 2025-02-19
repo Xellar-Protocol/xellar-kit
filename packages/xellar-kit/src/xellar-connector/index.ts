@@ -36,6 +36,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
     async setup() {
       useBoundStore.setState({ appId, env });
       const chainId = config.chains[0]?.id;
+
       if (chainId) {
         useBoundStore.setState({ chainId });
       }
@@ -51,6 +52,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
       const address = useBoundStore.getState().address;
       const chainId = Number(info.chainId);
       useBoundStore.setState({ chainId });
+
       config.emitter.emit('connect', {
         accounts: [address as `0x${string}`],
         chainId

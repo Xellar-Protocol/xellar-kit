@@ -19,6 +19,7 @@ import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog
 import { ConnectDialogMobileContent } from '@/components/dialog/content/connect-dialog-mobile';
 import { ProfileDialogContent } from '@/components/dialog/content/profile-dialog/profile-dialog';
 import { Dialog } from '@/components/dialog/dialog';
+import { useConnectModalStore } from '@/components/dialog/store';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
 import { defaultTheme, lightTheme } from '@/styles/theme';
 import { isMobile } from '@/utils/is-mobile';
@@ -70,6 +71,8 @@ export function XellarKitProvider({
     undefined
   );
 
+  const { setPage } = useConnectModalStore();
+
   useEffect(() => {
     const wcConnector = config.connectors.find(c => c.id === 'walletConnect');
     wcConnector?.getProvider().then((p: any) => {
@@ -92,6 +95,9 @@ export function XellarKitProvider({
   const handleCloseModal = () => {
     setModalOpen(false);
     setModalType(null);
+    setTimeout(() => {
+      setPage('home');
+    }, 50);
   };
 
   const modalContent = useMemo(() => {

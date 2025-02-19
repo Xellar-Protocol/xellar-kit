@@ -1,12 +1,5 @@
 import { Config, createConfig, CreateConfigParameters, Transport } from 'wagmi';
-import {
-  arbitrum,
-  Chain,
-  mainnet,
-  optimism,
-  polygon,
-  polygonAmoy
-} from 'wagmi/chains';
+import { arbitrum, Chain, mainnet, optimism, polygon } from 'wagmi/chains';
 
 import { defaultConnectors } from './connectors';
 import { getDefaultTransports } from './default-transport';
@@ -50,13 +43,7 @@ export const defaultConfig = ({
   ...wagmiParameters
 }: GetDefaultConfigParameters<_chains, _transports>): Config => {
   const { transports, chains, ...restWagmiParameters } = wagmiParameters;
-  const defaultChains = chains || [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    polygonAmoy
-  ];
+  const defaultChains = chains || [mainnet, polygon, optimism, arbitrum];
 
   const _connectors = defaultConnectors({
     app: {

@@ -6,6 +6,7 @@ import { useConnector } from '@/hooks/connectors';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { useBoundStore } from '@/xellar-connector/store';
 
+import { useConnectModalStore } from '../../store';
 import { AnimatedContainer, Description } from '../styled';
 import { useXellarSDK } from './hooks';
 import { OTPInput } from './otp-input';
@@ -18,18 +19,6 @@ import {
   Title
 } from './styled';
 
-interface OTPPageProps {
-  onBack: () => void;
-  codeVerifier: string;
-  onComplete: ({
-    isNewWalletCreated,
-    recoverySecret
-  }: {
-    isNewWalletCreated: boolean;
-    recoverySecret?: string;
-  }) => void;
-}
-
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 type AddressResponse = {
@@ -37,10 +26,33 @@ type AddressResponse = {
   address: string;
 };
 
-export function OTPPage({ onBack, codeVerifier, onComplete }: OTPPageProps) {
+export function OTPPage() {
   const setToken = useBoundStore(state => state.setToken);
   const setRefreshToken = useBoundStore(state => state.setRefreshToken);
   const setAddress = useBoundStore(state => state.setAddress);
+
+  const {
+    back,
+    direction,
+    setDirection,
+    codeVerifier,
+    setRecoverySecret,
+    push
+  } = useConnectModalStore();
+
+  const handleBack = () => {
+    back();
+  };
+
+  const getAnimationProps = () => ({
+    initial: {
+      opacity: 0,
+      x: direction === 'back' ? -200 : 200
+    },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: direction === 'back' ? 200 : -200 }
+  });
+
   const { closeModal } = useXellarContext();
 
   const connector = useConnector('xellar-passport');
@@ -50,6 +62,10 @@ export function OTPPage({ onBack, codeVerifier, onComplete }: OTPPageProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async () => {
+    if (!codeVerifier) {
+      return;
+    }
+
     try {
       setIsLoading(true);
       const result = await xellarSDK.auth.email.verify(codeVerifier, otp);
@@ -60,11 +76,12 @@ export function OTPPage({ onBack, codeVerifier, onComplete }: OTPPageProps) {
 
         setToken(createWalletResult.walletToken);
         setRefreshToken(createWalletResult.refreshToken);
+        setRecoverySecret(createWalletResult.secret0);
 
-        onComplete({
-          isNewWalletCreated: true,
-          recoverySecret: createWalletResult.secret0
-        });
+        await connector.connect();
+
+        push('wallet-created');
+        setDirection('forward');
       } else {
         setToken(result.walletToken);
         setRefreshToken(result.refreshToken);
@@ -80,10 +97,6 @@ export function OTPPage({ onBack, codeVerifier, onComplete }: OTPPageProps) {
 
         await connector.connect();
         closeModal();
-
-        onComplete({
-          isNewWalletCreated: false
-        });
       }
     } catch (error) {
       console.log({ error });
@@ -94,13 +107,16 @@ export function OTPPage({ onBack, codeVerifier, onComplete }: OTPPageProps) {
 
   return (
     <AnimatedContainer
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -50 }}
+      {...getAnimationProps()}
+      transition={{
+        duration: 0.3,
+        type: 'spring',
+        bounce: 0
+      }}
     >
       <RootContainer>
         <Header>
-          <BackButton role="button" onClick={onBack}>
+          <BackButton role="button" onClick={handleBack}>
             <BackIcon width={16} height={16} />
           </BackButton>
           <Title>OTP Verification</Title>

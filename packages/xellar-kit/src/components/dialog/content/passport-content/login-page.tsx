@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { BackIcon } from '@/assets/back-icon';
 import { SpinnerIcon } from '@/assets/spinner';
 
-import { AnimatedContainer } from '../styled';
+import { useConnectModalStore } from '../../store';
+import { AnimatedContainer, Description } from '../styled';
 import { useXellarSDK } from './hooks';
 import {
   BackButton,
@@ -13,24 +14,29 @@ import {
   InnerContainer,
   PassportButton,
   PassportContainer,
-  PassportTitle,
   RootContainer,
-  TextInput
+  TextInput,
+  Title
 } from './styled';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-interface LoginPageProps {
-  onComplete: (codeVerifier: string) => void;
-  onBack?: () => void;
-  showBackButton?: boolean;
-}
+export function LoginPage() {
+  const { back, direction, setCodeVerifier, push } = useConnectModalStore();
 
-export function LoginPage({
-  onComplete,
-  onBack,
-  showBackButton = false
-}: LoginPageProps) {
+  const handleBack = () => {
+    back();
+  };
+
+  const getAnimationProps = () => ({
+    initial: {
+      opacity: 0,
+      x: direction === 'back' ? -200 : 200
+    },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: direction === 'back' ? 200 : -200 }
+  });
+
   const xellarSDK = useXellarSDK();
 
   const [email, setEmail] = useState('');
@@ -57,7 +63,8 @@ export function LoginPage({
       setIsLoading(true);
       const result = await xellarSDK.auth.email.login(email);
       setIsLoading(false);
-      onComplete(result);
+      setCodeVerifier(result);
+      push('otp');
     } catch (error) {
       console.log({ error });
     } finally {
@@ -67,25 +74,25 @@ export function LoginPage({
 
   return (
     <AnimatedContainer
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -50 }}
+      {...getAnimationProps()}
+      transition={{
+        duration: 0.3,
+        type: 'spring',
+        bounce: 0
+      }}
     >
       <RootContainer>
-        {showBackButton && (
-          <Header>
-            <BackButton role="button" onClick={onBack}>
-              <BackIcon width={16} height={16} />
-            </BackButton>
-          </Header>
-        )}
+        <Header>
+          <BackButton role="button" onClick={handleBack}>
+            <BackIcon width={16} height={16} />
+          </BackButton>
+          <Title>Email Login</Title>
+        </Header>
 
-        <PassportContainer>
-          <PassportTitle style={{ textAlign: 'center', maxWidth: 240 }}>
-            The gateway to <span style={{ color: '#01CFEA' }}>manage</span>{' '}
-            everything in your <span style={{ color: '#FF1CF7' }}>wallet</span>
-          </PassportTitle>
-
+        <PassportContainer style={{ marginTop: 16 }}>
+          <Description style={{ margin: 0 }}>
+            Enter your email to sign in to your account
+          </Description>
           <InnerContainer>
             <div
               style={{
