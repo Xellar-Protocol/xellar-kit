@@ -37,12 +37,11 @@ export function LoginPage() {
     exit: { opacity: 0, x: direction === 'back' ? 200 : -200 }
   });
 
-  const xellarSDK = useXellarSDK();
+  const { xellarSDK } = useXellarSDK();
 
   const [email, setEmail] = useState('');
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  // const
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isValidEmail) {

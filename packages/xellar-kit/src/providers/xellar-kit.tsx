@@ -130,11 +130,14 @@ export function XellarKitProvider({
   };
 
   const GoogleProviderWrapper = googleClientId ? GoogleOAuthProvider : Fragment;
+  const googleProviderProps = googleClientId
+    ? { clientId: googleClientId }
+    : {};
 
   return createElement(
     XellarKitContext.Provider,
     { value },
-    <GoogleProviderWrapper clientId={googleClientId ?? ''}>
+    <GoogleProviderWrapper {...(googleProviderProps as any)}>
       <GlobalStyle />
       <ThemeProvider theme={theme === 'dark' ? defaultTheme : lightTheme}>
         {children}

@@ -11,6 +11,7 @@ type Direction = 'back' | 'forward';
 
 interface StoreState {
   page: ModalPage;
+  isLoading: boolean;
   recoverySecret: string | null;
   direction: Direction;
   history: ModalPage[];
@@ -22,12 +23,14 @@ interface StoreState {
   codeVerifier: string | null;
   setCodeVerifier: (codeVerifier: string) => void;
   setRecoverySecret: (recoverySecret: string) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 export const useConnectModalStore = create<StoreState>()(set => ({
   page: 'home',
   direction: 'forward',
   history: ['home'],
+  isLoading: false,
   recoverySecret: null,
   codeVerifier: null,
   push: page =>
@@ -59,5 +62,6 @@ export const useConnectModalStore = create<StoreState>()(set => ({
   setDirection: direction => set({ direction }),
   setHistory: history => set({ history }),
   setCodeVerifier: codeVerifier => set({ codeVerifier }),
-  setRecoverySecret: recoverySecret => set({ recoverySecret })
+  setRecoverySecret: recoverySecret => set({ recoverySecret }),
+  setIsLoading: isLoading => set({ isLoading })
 }));

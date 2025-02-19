@@ -88,7 +88,7 @@ export function Dialog({
                 $isMobile={isBottomSheet}
                 layout
                 transition={{
-                  duration: 0.3,
+                  duration: 0.2,
                   type: 'spring',
                   bounce: 0
                 }}

@@ -58,7 +58,7 @@ export function OTPPage() {
   const connector = useConnector('xellar-passport');
 
   const [otp, setOtp] = useState('');
-  const xellarSDK = useXellarSDK();
+  const { xellarSDK } = useXellarSDK();
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async () => {
@@ -77,6 +77,10 @@ export function OTPPage() {
         setToken(createWalletResult.walletToken);
         setRefreshToken(createWalletResult.refreshToken);
         setRecoverySecret(createWalletResult.secret0);
+        setAddress(
+          createWalletResult.address.find(n => n.network === 'evm')
+            ?.address as `0x${string}`
+        );
 
         await connector.connect();
 
