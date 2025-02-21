@@ -21,8 +21,10 @@ import { ProfileDialogContent } from '@/components/dialog/content/profile-dialog
 import { Dialog } from '@/components/dialog/dialog';
 import { useConnectModalStore } from '@/components/dialog/store';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
-import { defaultTheme, lightTheme } from '@/styles/theme';
+import { darkTheme, Theme } from '@/styles/theme';
 import { isMobile } from '@/utils/is-mobile';
+
+import { Web3ContextProvider } from './web3-provider';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -36,9 +38,13 @@ interface XellarKitContextType {
   modalOpen: boolean;
   openModal: (type: ModalType) => void;
   closeModal: () => void;
-  theme: 'dark' | 'light';
+  theme: Theme;
   walletConnectProjectId: string;
   googleClientId?: string;
+  telegramConfig?: {
+    botId: string;
+    botUsername: string;
+  };
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -47,9 +53,16 @@ const XellarKitContext = createContext<XellarKitContextType>(
 
 export function XellarKitProvider({
   children,
-  theme = 'dark'
+  theme = darkTheme as Theme,
+  googleClientId,
+  telegramConfig
 }: PropsWithChildren<{
-  theme?: 'dark' | 'light';
+  theme?: Theme;
+  googleClientId?: string;
+  telegramConfig?: {
+    botId: string;
+    botUsername: string;
+  };
 }>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
@@ -67,9 +80,6 @@ export function XellarKitProvider({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<ModalType | null>(null);
   const [wcProjectId, setWcProjectId] = useState('');
-  const [googleClientId, setGoogleClientId] = useState<string | undefined>(
-    undefined
-  );
 
   const { setPage } = useConnectModalStore();
 
@@ -77,13 +87,6 @@ export function XellarKitProvider({
     const wcConnector = config.connectors.find(c => c.id === 'walletConnect');
     wcConnector?.getProvider().then((p: any) => {
       setWcProjectId(p?.rpc?.projectId);
-    });
-
-    const xellarConnector = config.connectors.find(
-      c => c.id === 'xellar-passport'
-    );
-    xellarConnector?.getProvider().then((p: any) => {
-      setGoogleClientId(p?.googleClientId);
     });
   }, [config.connectors]);
 
@@ -126,7 +129,8 @@ export function XellarKitProvider({
     closeModal: handleCloseModal,
     theme,
     walletConnectProjectId: wcProjectId,
-    googleClientId
+    googleClientId,
+    telegramConfig
   };
 
   const GoogleProviderWrapper = googleClientId ? GoogleOAuthProvider : Fragment;
@@ -137,15 +141,17 @@ export function XellarKitProvider({
   return createElement(
     XellarKitContext.Provider,
     { value },
-    <GoogleProviderWrapper {...(googleProviderProps as any)}>
-      <GlobalStyle />
-      <ThemeProvider theme={theme === 'dark' ? defaultTheme : lightTheme}>
-        {children}
-        <Dialog isOpen={modalOpen} onClose={handleCloseModal}>
-          {modalContent}
-        </Dialog>
-      </ThemeProvider>
-    </GoogleProviderWrapper>
+    <Web3ContextProvider enabled={modalOpen}>
+      <GoogleProviderWrapper {...(googleProviderProps as any)}>
+        <GlobalStyle />
+        <ThemeProvider theme={theme}>
+          {children}
+          <Dialog isOpen={modalOpen} onClose={handleCloseModal}>
+            {modalContent}
+          </Dialog>
+        </ThemeProvider>
+      </GoogleProviderWrapper>
+    </Web3ContextProvider>
   );
 }
 

@@ -5,24 +5,11 @@ import styled from 'styled-components';
 import { SpinnerIcon } from '@/assets/spinner';
 
 import { useConnectModalStore } from '../store';
+import { ConnectDialogHome } from './connect-dialog-home';
+import { ConnectDialogWalletList } from './connect-dialog-wallet-list';
+import { LoginPage } from './passport-content/login-page';
+import { OTPPage } from './passport-content/otp-page';
 import { WalletCreatedPage } from './passport-content/wallet-created-page';
-const ConnectDialogHome = React.lazy(() =>
-  import('./connect-dialog-home').then(module => ({
-    default: module.ConnectDialogHome
-  }))
-);
-
-const LoginPage = React.lazy(() =>
-  import('./passport-content/login-page').then(module => ({
-    default: module.LoginPage
-  }))
-);
-
-const OTPPage = React.lazy(() =>
-  import('./passport-content/otp-page').then(module => ({
-    default: module.OTPPage
-  }))
-);
 
 export function ConnectDialogContent() {
   const { page, isLoading } = useConnectModalStore();
@@ -34,6 +21,7 @@ export function ConnectDialogContent() {
         {page === 'mail' && <LoginPage />}
         {page === 'otp' && <OTPPage />}
         {page === 'wallet-created' && <WalletCreatedPage />}
+        {page === 'wallet' && <ConnectDialogWalletList />}
       </AnimatePresence>
 
       <AnimatePresence>

@@ -18,15 +18,15 @@ const qrModalOptions: WalletConnectParameters['qrModalOptions'] = {
 };
 
 export const walletConnectors = (appParams: AppParams) => [
-  // createWalletConnectConnector({
-  //   projectId: appParams.projectId,
-  //   walletConnectParameters: {
-  //     qrModalOptions
-  //   },
-  //   showQrModal: false,
-  //   id: 'xellar-mobile',
-  //   name: 'Xellar Mobile'
-  // }),
+  createWalletConnectConnector({
+    projectId: appParams.projectId,
+    walletConnectParameters: {
+      qrModalOptions
+    },
+    showQrModal: false,
+    id: 'xellar-mobile',
+    name: 'Xellar Mobile'
+  }),
 
   createWalletConnectConnector({
     projectId: appParams.projectId,

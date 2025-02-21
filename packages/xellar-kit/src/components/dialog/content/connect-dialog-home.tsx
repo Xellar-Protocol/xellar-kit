@@ -1,15 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useGoogleLogin } from '@react-oauth/google';
 import styled from 'styled-components';
+import { getAddress } from 'viem';
+import { useConnect } from 'wagmi';
 
 import { MailIcon } from '@/assets/mail-icon';
-import { AppleIcon, GoogleIcon, TelegramIcon } from '@/assets/socials';
+import {
+  AppleIcon,
+  GoogleIcon,
+  TelegramIcon,
+  WhatsappIcon
+} from '@/assets/socials';
 import { WalletGroupLight } from '@/assets/wallet-group';
 import { useConnector } from '@/hooks/connectors';
+import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { useBoundStore } from '@/xellar-connector/store';
 
 import { useConnectModalStore } from '../store';
-import { useXellarSDK } from './passport-content/hooks';
+import { AuthSuccessResponse, useXellarSDK } from './passport-content/hooks';
 import {
   Container,
   Description,
@@ -22,11 +31,18 @@ import {
   Wrapper
 } from './styled';
 
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export function ConnectDialogHome() {
   const setToken = useBoundStore(state => state.setToken);
   const setRefreshToken = useBoundStore(state => state.setRefreshToken);
   const setAddress = useBoundStore(state => state.setAddress);
-  const { closeModal } = useXellarContext();
+  const { closeModal, telegramConfig } = useXellarContext();
+  const { connect } = useWeb3();
+
+  const uri = connect.getUri();
+
+  const { connectAsync } = useConnect();
 
   const connector = useConnector('xellar-passport');
 
@@ -60,39 +76,130 @@ export function ConnectDialogHome() {
           createWalletResult.address.find(n => n.network === 'evm')
             ?.address as `0x${string}`
         );
-
-        await connector.connect();
+        await connectAsync({ connector });
 
         push('wallet-created');
         setDirection('forward');
         setIsLoading(false);
-
-        return;
-      }
-
-      const address = result.data.addresses.find(n => n.network === 'evm')
-        ?.address as `0x${string}`;
-
-      if (address) {
+      } else {
+        const address = getAddress(
+          result.data.addresses.find(n => n.network === 'evm')
+            ?.address as `0x${string}`
+        );
         setAddress(address);
+        setToken(result.data.walletToken);
+        setRefreshToken(result.data.refreshToken);
+
+        await wait(200);
+        await connectAsync({ connector });
+
+        closeModal();
+        closeModal();
+        setIsLoading(false);
       }
-
-      setToken(result.data.walletToken);
-      setRefreshToken(result.data.refreshToken);
-
-      await connector.connect();
-
-      closeModal();
-
-      setIsLoading(false);
     }
   });
+
+  const handleTelegramLogin = () => {
+    const scriptUrl = 'https://telegram.org/js/telegram-widget.js';
+
+    if (!telegramConfig) return;
+    setIsLoading(true);
+
+    const script = document.createElement('script');
+    script.src = scriptUrl;
+    script.async = true;
+    script.onload = () => {
+      (window as any).Telegram.Login.auth(
+        {
+          bot_id: telegramConfig.botId,
+          request_access: true
+        },
+        (
+          data:
+            | false
+            | {
+                id: number;
+                first_name: string;
+                last_name: string;
+                username: string;
+                photo_url: string;
+                auth_date: number;
+                hash: string;
+              }
+        ) => {
+          if (!data) {
+            setIsLoading(false);
+            return;
+          }
+
+          xellarSDK.auth.telegram
+            .authorize({
+              botUsername: telegramConfig.botUsername,
+              data: {
+                auth_date: String(data.auth_date),
+                first_name: data.first_name,
+                hash: data.hash,
+                id: String(data.id),
+                last_name: data.last_name,
+                photo_url: data.photo_url,
+                username: data.username
+              }
+            })
+            .then(async res => {
+              const result = res as AuthSuccessResponse;
+
+              if (!result.isWalletCreated) {
+                const createWalletResult =
+                  await xellarSDK.account.wallet.create({
+                    accessToken: result.accessToken
+                  });
+
+                setToken(createWalletResult.walletToken);
+                setRefreshToken(createWalletResult.refreshToken);
+                setRecoverySecret(createWalletResult.secret0);
+                setAddress(
+                  createWalletResult.address.find(n => n.network === 'evm')
+                    ?.address as `0x${string}`
+                );
+                await connectAsync({ connector });
+
+                push('wallet-created');
+                setDirection('forward');
+                setIsLoading(false);
+              } else {
+                const address = getAddress(
+                  result.addresses.find(n => n.network === 'evm')
+                    ?.address as `0x${string}`
+                );
+                setAddress(address);
+                setToken(result.walletToken);
+                setRefreshToken(res.refreshToken);
+
+                await wait(200);
+                await connectAsync({ connector });
+
+                closeModal();
+                closeModal();
+                setIsLoading(false);
+              }
+            })
+            .catch(err => {
+              console.error(err);
+              setIsLoading(false);
+            });
+        }
+      );
+    };
+
+    document.head.appendChild(script);
+  };
 
   return (
     <Wrapper
       {...getAnimationProps()}
       transition={{
-        duration: 0.3,
+        duration: 0.2,
         type: 'spring',
         bounce: 0
       }}
@@ -126,7 +233,7 @@ export function ConnectDialogHome() {
             </IconWrapper>
             <WalletName>Google</WalletName>
           </WalletItem>
-          <WalletItem>
+          <WalletItem onClick={() => handleTelegramLogin()}>
             <IconWrapper $size={42} $br={12}>
               <TelegramIcon />
             </IconWrapper>
@@ -139,6 +246,24 @@ export function ConnectDialogHome() {
             <WalletName>Apple</WalletName>
           </WalletItem>
           <WalletItem>
+            <IconWrapper $size={42} $br={12}>
+              <WhatsappIcon />
+            </IconWrapper>
+            <WalletName>WhatsApp</WalletName>
+          </WalletItem>
+
+          <WalletItem
+            style={{
+              opacity: !uri ? 0.5 : 1
+            }}
+            onClick={() => {
+              if (!uri) {
+                return;
+              }
+              setDirection('forward');
+              push('wallet');
+            }}
+          >
             <IconWrapper $size={42} $br={12}>
               <WalletGroupLight width={20} height={20} />
             </IconWrapper>

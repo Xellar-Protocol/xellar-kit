@@ -70,9 +70,11 @@ export const TelegramIcon = (props: SVGProps<SVGSVGElement>) => (
 );
 
 export const AppleIcon = (props: SVGProps<SVGSVGElement>) => {
-  const isDark = useTheme().theme === 'dark';
+  const { scheme } = useTheme();
 
-  if (isDark) {
+  const isDark = scheme === 'dark';
+
+  if (!isDark) {
     return <AppleDarkIcon {...props} />;
   }
 

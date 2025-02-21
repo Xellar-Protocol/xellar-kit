@@ -133,7 +133,6 @@ const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
     'Helvetica Neue',
     sans-serif;
   position: ${({ $isMobile }) => ($isMobile ? 'fixed' : 'relative')};
-  min-width: 280px;
   max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '90%')};
   max-height: ${({ $isMobile }) => ($isMobile ? '85vh' : '90vh')};
   margin-top: ${({ $isMobile }) => ($isMobile ? 'auto' : '0')};
@@ -154,7 +153,6 @@ const InnerDialogContent = styled(motion.div)<{ $isMobile: boolean }>`
   border-radius: ${({ $isMobile }) => ($isMobile ? '20px 20px 0 0' : '20px')};
   box-shadow: 0 4px 100px -19px ${({ theme }) => theme.colors.SHADOW};
   color: ${({ theme }) => theme.colors.TEXT};
-  max-width: 280px;
 `;
 
 const variants = {

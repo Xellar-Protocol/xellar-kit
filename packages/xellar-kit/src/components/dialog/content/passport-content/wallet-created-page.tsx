@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { StyledButton } from '@/components/ui/button';
+import { useXellarContext } from '@/providers/xellar-kit';
 
 import { useConnectModalStore } from '../../store';
 import { AnimatedContainer, Description } from '../styled';
 import { RootContainer, Title } from './styled';
 
 export function WalletCreatedPage() {
+  const { closeModal } = useXellarContext();
   const { recoverySecret } = useConnectModalStore();
   const [isCopied, setIsCopied] = useState(false);
 
@@ -79,7 +81,7 @@ export function WalletCreatedPage() {
             )}
           </AnimatePresence>
 
-          <DoneButton>Done</DoneButton>
+          <DoneButton onClick={closeModal}>Done</DoneButton>
         </Container>
       </RootContainer>
     </AnimatedContainer>

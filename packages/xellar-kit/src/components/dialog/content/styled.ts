@@ -74,7 +74,7 @@ export const EmptyStateWrapper = styled.div`
 export const AnimatedContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 280px;
   height: 100%;
 `;
 

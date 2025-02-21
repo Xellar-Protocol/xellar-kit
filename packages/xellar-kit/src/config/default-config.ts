@@ -28,7 +28,6 @@ interface GetDefaultConfigParameters<
   walletConnectProjectId: string;
   xellarAppId?: string;
   xellarEnv?: 'sandbox' | 'production';
-  googleClientId?: string;
 }
 
 export const defaultConfig = ({
@@ -39,7 +38,6 @@ export const defaultConfig = ({
   walletConnectProjectId,
   xellarAppId,
   xellarEnv = 'sandbox',
-  googleClientId,
   ...wagmiParameters
 }: GetDefaultConfigParameters<_chains, _transports>): Config => {
   const { transports, chains, ...restWagmiParameters } = wagmiParameters;
@@ -54,8 +52,7 @@ export const defaultConfig = ({
     },
     walletConnectProjectId,
     xellarAppId,
-    xellarEnv,
-    googleClientId
+    xellarEnv
   }); // Type assertion here
 
   const _transports = transports || getDefaultTransports({ chains });

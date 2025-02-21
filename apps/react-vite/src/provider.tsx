@@ -10,7 +10,6 @@ const config = defaultConfig({
   walletConnectProjectId,
   xellarAppId: import.meta.env.VITE_XELLAR_APP_ID,
   xellarEnv: "sandbox",
-  googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
 }) as Config;
 
 const queryClient = new QueryClient();
@@ -19,7 +18,15 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <XellarKitProvider theme="dark">{children}</XellarKitProvider>
+        <XellarKitProvider
+          googleClientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+          telegramConfig={{
+            botId: import.meta.env.VITE_TELEGRAM_BOT_ID,
+            botUsername: import.meta.env.VITE_TELEGRAM_BOT_USERNAME,
+          }}
+        >
+          {children}
+        </XellarKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

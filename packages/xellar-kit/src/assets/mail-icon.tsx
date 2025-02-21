@@ -1,5 +1,6 @@
 import { SVGProps } from 'react';
 import { useTheme } from 'styled-components';
+
 export const MailIcon = (props: SVGProps<SVGSVGElement>) => {
   const { colors } = useTheme();
 

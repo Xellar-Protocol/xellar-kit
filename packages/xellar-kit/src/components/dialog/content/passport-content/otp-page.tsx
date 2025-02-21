@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useConnect } from 'wagmi';
 
 import { BackIcon } from '@/assets/back-icon';
 import { SpinnerIcon } from '@/assets/spinner';
@@ -56,6 +57,7 @@ export function OTPPage() {
   const { closeModal } = useXellarContext();
 
   const connector = useConnector('xellar-passport');
+  const { connectAsync } = useConnect();
 
   const [otp, setOtp] = useState('');
   const { xellarSDK } = useXellarSDK();
@@ -82,7 +84,7 @@ export function OTPPage() {
             ?.address as `0x${string}`
         );
 
-        await connector.connect();
+        await connectAsync({ connector });
 
         push('wallet-created');
         setDirection('forward');
@@ -99,8 +101,9 @@ export function OTPPage() {
           setAddress(address as `0x${string}`);
         }
 
-        await connector.connect();
+        await connectAsync({ connector });
         closeModal();
+        window.location.reload();
       }
     } catch (error) {
       console.log({ error });
@@ -113,7 +116,7 @@ export function OTPPage() {
     <AnimatedContainer
       {...getAnimationProps()}
       transition={{
-        duration: 0.3,
+        duration: 0.2,
         type: 'spring',
         bounce: 0
       }}

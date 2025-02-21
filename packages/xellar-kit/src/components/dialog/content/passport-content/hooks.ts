@@ -62,7 +62,7 @@ type WalletNotCreatedResponse = {
   accessToken: string;
 };
 
-type AuthSuccessResponse = {
+export type AuthSuccessResponse = {
   refreshToken: string;
   /** (optional)
    * JWT token used to access the Rampable Operation endpoint.

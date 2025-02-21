@@ -10,8 +10,6 @@ import { useXellarSDK } from './hooks';
 import {
   BackButton,
   Header,
-  // IconsContainer,
-  InnerContainer,
   PassportButton,
   PassportContainer,
   RootContainer,
@@ -75,7 +73,7 @@ export function LoginPage() {
     <AnimatedContainer
       {...getAnimationProps()}
       transition={{
-        duration: 0.3,
+        duration: 0.2,
         type: 'spring',
         bounce: 0
       }}
@@ -88,34 +86,40 @@ export function LoginPage() {
           <Title>Email Login</Title>
         </Header>
 
-        <PassportContainer style={{ marginTop: 16 }}>
-          <Description style={{ margin: 0 }}>
-            Enter your email to sign in to your account
-          </Description>
-          <InnerContainer>
-            <div
-              style={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column'
+        <Description style={{ margin: 0, marginTop: 24, textAlign: 'left' }}>
+          Enter your email to sign in to your account
+        </Description>
+
+        <PassportContainer style={{ height: 200, paddingTop: 24 }}>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%'
+            }}
+          >
+            <TextInput
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={handleChangeEmail}
+              onKeyDown={e => {
+                const isEnterKey = e.key === 'Enter';
+                if (isEnterKey) {
+                  handleSignIn();
+                }
               }}
+            />
+            {!isValidEmail && <ErrorText>Invalid email</ErrorText>}{' '}
+            <PassportButton
+              onClick={handleSignIn}
+              style={{ marginTop: 'auto' }}
+              aria-disabled={isLoading}
             >
-              <TextInput
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={handleChangeEmail}
-              />
-              {!isValidEmail && <ErrorText>Invalid email</ErrorText>}{' '}
-              <PassportButton
-                onClick={handleSignIn}
-                style={{ marginTop: 12 }}
-                aria-disabled={isLoading}
-              >
-                {isLoading ? <SpinnerIcon /> : 'Sign In'}
-              </PassportButton>
-            </div>
-          </InnerContainer>
+              {isLoading ? <SpinnerIcon /> : 'Sign In'}
+            </PassportButton>
+          </div>
         </PassportContainer>
       </RootContainer>
     </AnimatedContainer>
@@ -147,5 +151,6 @@ IconWrapper.defaultProps = {
 const ErrorText = styled.p`
   color: #ff0000;
   font-size: 12px;
-  margin-top: 4px;
+  margin-top: 8px;
+  margin-left: 2px;
 `;
