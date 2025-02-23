@@ -84,7 +84,15 @@ export function Dialog({
               onClick={stopPropagation}
               $isMobile={isBottomSheet}
             >
-              <InnerDialogContent $isMobile={isBottomSheet} layout>
+              <InnerDialogContent
+                $isMobile={isBottomSheet}
+                layout
+                transition={{
+                  duration: 0.2,
+                  type: 'spring',
+                  bounce: 0
+                }}
+              >
                 {children}
               </InnerDialogContent>
             </DialogContent>
@@ -125,7 +133,6 @@ const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
     'Helvetica Neue',
     sans-serif;
   position: ${({ $isMobile }) => ($isMobile ? 'fixed' : 'relative')};
-  min-width: 280px;
   max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '90%')};
   max-height: ${({ $isMobile }) => ($isMobile ? '85vh' : '90vh')};
   margin-top: ${({ $isMobile }) => ($isMobile ? 'auto' : '0')};
@@ -139,7 +146,7 @@ const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
 `;
 
 const InnerDialogContent = styled(motion.div)<{ $isMobile: boolean }>`
-  padding: 18px;
+  padding: 24px;
   overflow-y: auto;
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
   border: 2px solid ${({ theme }) => theme.colors.BORDER};

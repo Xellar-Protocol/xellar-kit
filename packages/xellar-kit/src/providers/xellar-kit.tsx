@@ -16,12 +16,13 @@ import { useConfig, WagmiContext } from 'wagmi';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
-import { ConnectDialogMobileContent } from '@/components/dialog/content/connect-dialog-mobile';
 import { ProfileDialogContent } from '@/components/dialog/content/profile-dialog/profile-dialog';
 import { Dialog } from '@/components/dialog/dialog';
+import { useConnectModalStore } from '@/components/dialog/store';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
-import { defaultTheme, lightTheme } from '@/styles/theme';
-import { isMobile } from '@/utils/is-mobile';
+import { darkTheme, Theme } from '@/styles/theme';
+
+import { Web3ContextProvider } from './web3-provider';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -31,13 +32,28 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-interface XellarKitContextType {
+interface XellarKitProviderProps {
+  theme?: Theme;
+  googleClientId?: string;
+  telegramConfig?: {
+    /** Telegram bot ID */
+    botId: string;
+    /** Telegram bot username */
+    botUsername: string;
+  };
+  enableWhatsappLogin?: boolean;
+  appleLoginConfig?: {
+    /** Client ID - eg: 'com.example.com' */
+    clientId: string;
+    /** Apple's redirectURI - must be one of the URIs you added to the serviceID - the undocumented trick in apple docs is that you should call auth from a page that is listed as a redirectURI, localhost fails */
+    redirectUri: string;
+  };
+}
+
+interface XellarKitContextType extends XellarKitProviderProps {
   modalOpen: boolean;
   openModal: (type: ModalType) => void;
   closeModal: () => void;
-  theme: 'dark' | 'light';
-  walletConnectProjectId: string;
-  googleClientId?: string;
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -46,10 +62,12 @@ const XellarKitContext = createContext<XellarKitContextType>(
 
 export function XellarKitProvider({
   children,
-  theme = 'dark'
-}: PropsWithChildren<{
-  theme?: 'dark' | 'light';
-}>) {
+  theme = darkTheme as Theme,
+  googleClientId,
+  telegramConfig,
+  enableWhatsappLogin = false,
+  appleLoginConfig
+}: PropsWithChildren<XellarKitProviderProps>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
   }
@@ -66,21 +84,13 @@ export function XellarKitProvider({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<ModalType | null>(null);
   const [wcProjectId, setWcProjectId] = useState('');
-  const [googleClientId, setGoogleClientId] = useState<string | undefined>(
-    undefined
-  );
+
+  const { setPage } = useConnectModalStore();
 
   useEffect(() => {
     const wcConnector = config.connectors.find(c => c.id === 'walletConnect');
     wcConnector?.getProvider().then((p: any) => {
       setWcProjectId(p?.rpc?.projectId);
-    });
-
-    const xellarConnector = config.connectors.find(
-      c => c.id === 'xellar-passport'
-    );
-    xellarConnector?.getProvider().then((p: any) => {
-      setGoogleClientId(p?.googleClientId);
     });
   }, [config.connectors]);
 
@@ -92,14 +102,14 @@ export function XellarKitProvider({
   const handleCloseModal = () => {
     setModalOpen(false);
     setModalType(null);
+    setTimeout(() => {
+      setPage('home');
+    }, 50);
   };
 
   const modalContent = useMemo(() => {
     switch (modalType) {
       case MODAL_TYPE.CONNECT:
-        if (isMobile()) {
-          return <ConnectDialogMobileContent />;
-        }
         return <ConnectDialogContent />;
       case MODAL_TYPE.CHAIN:
         return <ChainDialogContent />;
@@ -120,23 +130,31 @@ export function XellarKitProvider({
     closeModal: handleCloseModal,
     theme,
     walletConnectProjectId: wcProjectId,
-    googleClientId
+    googleClientId,
+    telegramConfig,
+    enableWhatsappLogin,
+    appleLoginConfig
   };
 
   const GoogleProviderWrapper = googleClientId ? GoogleOAuthProvider : Fragment;
+  const googleProviderProps = googleClientId
+    ? { clientId: googleClientId }
+    : {};
 
   return createElement(
     XellarKitContext.Provider,
     { value },
-    <GoogleProviderWrapper clientId={googleClientId ?? ''}>
-      <GlobalStyle />
-      <ThemeProvider theme={theme === 'dark' ? defaultTheme : lightTheme}>
-        {children}
-        <Dialog isOpen={modalOpen} onClose={handleCloseModal}>
-          {modalContent}
-        </Dialog>
-      </ThemeProvider>
-    </GoogleProviderWrapper>
+    <Web3ContextProvider enabled={modalOpen}>
+      <GoogleProviderWrapper {...(googleProviderProps as any)}>
+        <GlobalStyle />
+        <ThemeProvider theme={theme}>
+          {children}
+          <Dialog isOpen={modalOpen} onClose={handleCloseModal}>
+            {modalContent}
+          </Dialog>
+        </ThemeProvider>
+      </GoogleProviderWrapper>
+    </Web3ContextProvider>
   );
 }
 

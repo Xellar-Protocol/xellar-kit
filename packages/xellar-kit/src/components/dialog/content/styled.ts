@@ -1,12 +1,12 @@
 import { motion } from 'motion/react';
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+import { isMobile } from '@/utils/is-mobile';
+
+export const Wrapper = styled(motion.div)`
   display: flex;
   flex-direction: row;
   gap: 12px;
-  overflow: hidden;
-  height: 360px;
 `;
 
 export const ConnectContentWrapper = styled.div`
@@ -14,9 +14,6 @@ export const ConnectContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding-right: 8px;
-  width: 280px;
-  overflow: hidden;
 `;
 
 export const InnerQRCodeWrapper = styled.div`
@@ -56,17 +53,15 @@ export const Title = styled.h3`
   font-size: 18px;
   font-weight: 600;
   line-height: 24px;
-  margin-left: 8px;
 `;
 
 export const Description = styled.p`
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
-  margin-left: 8px;
   max-width: 250px;
   font-weight: 500;
-  margin: 8px 0 8px 8px;
+  margin: 8px 0;
   color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
 `;
 
@@ -81,7 +76,7 @@ export const EmptyStateWrapper = styled.div`
 export const AnimatedContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: ${() => (isMobile() ? '100%' : '280px')};
   height: 100%;
 `;
 
@@ -90,22 +85,13 @@ export const TitleSpan = styled.span`
 `;
 
 export const WalletItem = styled.div<{ selected?: boolean }>`
-  height: 40px;
   transition: background-color 0.15s ease-in-out;
   border-radius: 8px;
   display: flex;
-  padding: 0 8px;
   gap: 8px;
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  color: ${({ theme, selected }) => (selected ? '#fff' : theme.colors.TEXT)};
-  background-color: ${({ theme, selected }) =>
-    selected ? theme.colors.PRIMARY : 'transparent'};
-  &:hover {
-    background-color: ${({ theme, selected }) =>
-      selected ? theme.colors.PRIMARY : theme.colors.BG_SECONDARY};
-  }
 `;
 
 WalletItem.defaultProps = {
@@ -124,7 +110,7 @@ export const IconWrapper = styled.div<{ $size?: number; $br?: number }>`
   width: ${({ $size }) => $size || 28}px;
   height: ${({ $size }) => $size || 28}px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
+  background-color: ${({ theme }) => theme.colors.BG_SECONDARY};
   border-radius: ${({ $br }) => $br || 6}px;
   display: flex;
   align-items: center;
@@ -132,7 +118,7 @@ export const IconWrapper = styled.div<{ $size?: number; $br?: number }>`
   color: ${({ theme }) => theme.colors.TEXT};
 
   svg {
-    width: 70% !important;
+    width: 60% !important;
     height: auto !important;
   }
 `;

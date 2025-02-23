@@ -1,20 +1,23 @@
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { StyledButton } from '@/components/ui/button';
+import { useXellarContext } from '@/providers/xellar-kit';
 
+import { useConnectModalStore } from '../../store';
 import { AnimatedContainer, Description } from '../styled';
 import { RootContainer, Title } from './styled';
 
-interface WalletCreatedPageProps {
-  recoverySecret: string;
-}
-
-export function WalletCreatedPage({ recoverySecret }: WalletCreatedPageProps) {
+export function WalletCreatedPage() {
+  const { closeModal } = useXellarContext();
+  const { recoverySecret } = useConnectModalStore();
   const [isCopied, setIsCopied] = useState(false);
 
   const handleDownload = () => {
+    if (!recoverySecret) {
+      return;
+    }
     const element = document.createElement('a');
     const file = new Blob([recoverySecret], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
@@ -25,6 +28,9 @@ export function WalletCreatedPage({ recoverySecret }: WalletCreatedPageProps) {
   };
 
   const handleCopy = async () => {
+    if (!recoverySecret) {
+      return;
+    }
     if (isCopied) {
       return;
     }
@@ -63,17 +69,19 @@ export function WalletCreatedPage({ recoverySecret }: WalletCreatedPageProps) {
             </DownloadORCopyButton>
           </ButtonWrapper>
 
-          {isCopied && (
-            <CopiedText
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              Copied to clipboard
-            </CopiedText>
-          )}
+          <AnimatePresence>
+            {isCopied && (
+              <CopiedText
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                Copied to clipboard
+              </CopiedText>
+            )}
+          </AnimatePresence>
 
-          <DoneButton>Done</DoneButton>
+          <DoneButton onClick={closeModal}>Done</DoneButton>
         </Container>
       </RootContainer>
     </AnimatedContainer>
@@ -119,6 +127,7 @@ const CopiedText = styled(motion.p)`
   font-size: 10px;
   color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
   text-align: center;
+  margin-top: 12px;
 `;
 
 const DoneButton = styled.div`

@@ -1,4 +1,5 @@
-export const defaultTheme = {
+export const baseTheme = {
+  scheme: 'dark',
   colors: {
     BACKGROUND_TRANSPARENT: 'rgba(0, 0, 0, 0.5)',
     PRIMARY: '#006FEE',
@@ -12,10 +13,14 @@ export const defaultTheme = {
   }
 };
 
+export type Theme = Omit<BaseTheme, 'scheme'> & { scheme: 'dark' | 'light' };
+
+export const darkTheme = { ...baseTheme } as Theme;
+
 export const lightTheme = {
-  ...defaultTheme,
+  ...baseTheme,
   colors: {
-    ...defaultTheme.colors,
+    ...baseTheme.colors,
     BACKGROUND: '#fafafa',
     TEXT: '#171717',
     TEXT_SECONDARY: '#a3a3a3',
@@ -23,10 +28,11 @@ export const lightTheme = {
     BORDER: '#a3a3a3',
     SHADOW: '#a5f3fc',
     BACKGROUND_TRANSPARENT: 'rgba(255, 255, 255, 0.5)'
-  }
-};
+  },
+  scheme: 'light'
+} as Theme;
 
-export type Theme = typeof defaultTheme;
+type BaseTheme = typeof baseTheme;
 
 // import original module declarations
 import 'styled-components';

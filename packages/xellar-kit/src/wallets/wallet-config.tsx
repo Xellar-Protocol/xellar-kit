@@ -1,10 +1,9 @@
 import { GenericWalletIcon } from '@/assets/generic-wallet';
 import { IndodaxIcon } from '@/assets/indodax';
 import { MetaMaskIcon } from '@/assets/metamask';
-import { ReownLightIcon } from '@/assets/reown-light';
+import { ReownIcon } from '@/assets/reown-icon';
 import { WalletConnectIcon } from '@/assets/wallet-connect';
-import { XellarDark } from '@/assets/xellar-dark';
-import { XellarLight } from '@/assets/xellar-light';
+import { XellarIcon } from '@/assets/xellar-icon';
 import { isAndroid, isIOS } from '@/utils/is-mobile';
 
 /**
@@ -70,8 +69,15 @@ export const walletConfigs: {
   },
   'xellar-passport': {
     name: 'Xellar Passport',
-    icon: <XellarLight />,
-    iconConnector: <XellarLight />
+    icon: <XellarIcon />,
+    iconConnector: <XellarIcon />
+  },
+  'xellar-mobile': {
+    name: 'Xellar Mobile',
+    icon: <XellarIcon />,
+    iconConnector: <XellarIcon />,
+    getWalletConnectDeeplink: (uri: string) =>
+      isAndroid() ? uri : `indodaxweb3://wc/${encodeURIComponent(uri)}`
   },
   'metaMask, metaMask-io, io.metamask, io.metamask.mobile, metaMaskSDK': {
     name: 'MetaMask',
@@ -105,8 +111,8 @@ export const walletConfigs: {
   reown: {
     name: 'Reown',
     shortName: 'Reown',
-    icon: <ReownLightIcon />,
-    iconConnector: <ReownLightIcon />
+    icon: <ReownIcon />,
+    iconConnector: <ReownIcon />
   },
   walletConnect: {
     name: 'WalletConnect',

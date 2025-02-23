@@ -1,6 +1,7 @@
 {
   "name": "xellar-kit",
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "build": "pnpm --recursive --parallel --filter=@xellar/kit build",
     "build:packages": "pnpm build:packages",
