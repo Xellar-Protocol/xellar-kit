@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.0
+
+### Minor Changes
+
+- d7daf75: Revamp UI, add social login
+
 ## 1.0.8
 
 ### Patch Changes
