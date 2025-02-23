@@ -28,7 +28,7 @@ export function ChainDialogContent() {
   return (
     <Wrapper>
       <Title>Switch Chain</Title>
-      <Separator />
+      <Separator style={{ margin: '0' }} />
       {chains.map(chain => (
         <ChainItem
           key={chain.id}

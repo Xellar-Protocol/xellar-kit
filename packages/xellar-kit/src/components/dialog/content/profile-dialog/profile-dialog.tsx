@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components';
 import { useAccount, useDisconnect } from 'wagmi';
 
 import { CopyIcon } from '@/assets/copy-icon';
+import { Avatar } from '@/components/ui/avatar';
 import { StyledButton } from '@/components/ui/button';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { truncateAddress } from '@/utils/string';
@@ -36,14 +37,24 @@ export function ProfileDialogContent() {
 
   return (
     <Wrapper>
-      <Title>Connected</Title>
-      <Separator />
+      <div>
+        <Title>Connected</Title>
+        <Separator style={{ margin: '12px 0 0 0' }} />
+      </div>
+
+      <AvatarWrapper>
+        <Avatar name={address ?? ''} size={80} />
+      </AvatarWrapper>
 
       <AddressField>
         <Address>{truncateAddress(address ?? '')}</Address>
 
         <CopyIconWrapper onClick={handleCopy}>
-          <CopyIcon color={theme.colors.TEXT_SECONDARY} />
+          <CopyIcon
+            color={theme.colors.TEXT_SECONDARY}
+            width={12}
+            height={12}
+          />
         </CopyIconWrapper>
       </AddressField>
 
@@ -51,6 +62,12 @@ export function ProfileDialogContent() {
     </Wrapper>
   );
 }
+
+const AvatarWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -64,16 +81,14 @@ const AddressField = styled.div`
   flex-direction: row;
   gap: 8px;
   height: 32px;
-  background-color: ${({ theme }) => theme.colors.BG_SECONDARY};
-  border-radius: 8px;
   align-items: center;
+  justify-content: center;
   padding: 0 12px;
 `;
 
 const Address = styled.p`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
-  flex: 1;
 `;
 
 const CopyIconWrapper = styled.div`
