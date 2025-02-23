@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 
+import { WalletProps } from '@/wallets/use-wallet';
+
 type ModalPage =
   | 'home'
+  | 'whatsapp'
   | 'mail'
   | 'wallet'
   | 'qr-code'
@@ -15,6 +18,10 @@ interface StoreState {
   recoverySecret: string | null;
   direction: Direction;
   history: ModalPage[];
+  wallet: WalletProps | null;
+  setWallet: (wallet: WalletProps) => void;
+  otpType: 'email' | 'whatsapp';
+  setOtpType: (otpType: 'email' | 'whatsapp') => void;
   push: (page: ModalPage) => void;
   back: () => void;
   setPage: (page: ModalPage) => void;
@@ -33,6 +40,10 @@ export const useConnectModalStore = create<StoreState>()(set => ({
   isLoading: false,
   recoverySecret: null,
   codeVerifier: null,
+  otpType: 'email',
+  wallet: null,
+  setWallet: wallet => set({ wallet }),
+  setOtpType: otpType => set({ otpType }),
   push: page =>
     set(state => ({
       page,

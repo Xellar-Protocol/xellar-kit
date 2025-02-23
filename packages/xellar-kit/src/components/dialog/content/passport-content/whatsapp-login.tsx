@@ -17,9 +17,9 @@ import {
   Title
 } from './styled';
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^[1-9]\d{1,14}$/;
 
-export function LoginPage() {
+export function WhatsappLoginPage() {
   const { back, direction, setCodeVerifier, push, setOtpType } =
     useConnectModalStore();
 
@@ -38,31 +38,31 @@ export function LoginPage() {
 
   const { xellarSDK } = useXellarSDK();
 
-  const [email, setEmail] = useState('');
-  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isValidEmail) {
-      setIsValidEmail(true);
+  const handleChangePhoneNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isValidPhoneNumber) {
+      setIsValidPhoneNumber(true);
     }
 
-    setEmail(e.target.value);
+    setPhoneNumber(e.target.value);
   };
 
   const handleSignIn = async () => {
     try {
       if (isLoading) return;
-      if (!emailRegex.test(email)) {
-        setIsValidEmail(false);
+      if (!phoneRegex.test(phoneNumber)) {
+        setIsValidPhoneNumber(false);
         return;
       }
 
       setIsLoading(true);
-      const result = await xellarSDK.auth.email.login(email);
+      const result = await xellarSDK.auth.whatsapp.login(phoneNumber);
       setIsLoading(false);
-      setCodeVerifier(result);
-      setOtpType('email');
+      setCodeVerifier(result.verifyToken);
+      setOtpType('whatsapp');
       push('otp');
     } catch (error) {
       console.log({ error });
@@ -85,11 +85,12 @@ export function LoginPage() {
           <BackButton role="button" onClick={handleBack}>
             <BackIcon width={16} height={16} />
           </BackButton>
-          <Title>Email Login</Title>
+          <Title>Whatsapp Login</Title>
         </Header>
 
         <Description style={{ margin: 0, marginTop: 24, textAlign: 'left' }}>
-          Enter your email to sign in to your account
+          Enter your phone number without the &apos;+&apos; symbol to sign in to
+          your account. Make sure your phone number is registered with WhatsApp.
         </Description>
 
         <PassportContainer style={{ height: 200, paddingTop: 24 }}>
@@ -102,10 +103,10 @@ export function LoginPage() {
             }}
           >
             <TextInput
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={handleChangeEmail}
+              type="tel"
+              placeholder="Enter your phone number"
+              value={phoneNumber}
+              onChange={handleChangePhoneNumber}
               onKeyDown={e => {
                 const isEnterKey = e.key === 'Enter';
                 if (isEnterKey) {
@@ -113,7 +114,7 @@ export function LoginPage() {
                 }
               }}
             />
-            {!isValidEmail && <ErrorText>Invalid email</ErrorText>}{' '}
+            {!isValidPhoneNumber && <ErrorText>Invalid phone number</ErrorText>}{' '}
             <PassportButton
               onClick={handleSignIn}
               style={{ marginTop: 'auto' }}

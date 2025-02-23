@@ -10,60 +10,12 @@ export const baseTheme = {
     SHADOW: '#475D81',
     BORDER: '#262626',
     BG_SECONDARY: '#171717'
-  },
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '12px',
-    lg: '16px',
-    xl: '20px',
-    xxl: '24px',
-    '2xl': '32px',
-    '3xl': '42px'
-  },
-  borderRadius: {
-    xs: '4px',
-    sm: '6px',
-    md: '8px',
-    lg: '12px',
-    xl: '16px',
-    xxl: '20px',
-    full: '9999px'
-  },
-  typography: {
-    fontSize: {
-      xs: '10px',
-      sm: '12px',
-      md: '14px',
-      lg: '16px',
-      xl: '20px'
-    },
-    fontWeight: {
-      normal: 400,
-      medium: 500,
-      semibold: 600,
-      bold: 700
-    }
-  },
-  layout: {
-    maxWidth: {
-      dialog: '280px'
-    },
-    height: {
-      button: '42px',
-      input: '42px'
-    }
-  },
-  transition: {
-    default: '0.2s ease-in-out',
-    fast: '0.15s ease-in-out'
-  },
-  blur: {
-    default: '4px'
   }
 };
 
-export const darkTheme = { ...baseTheme };
+export type Theme = Omit<BaseTheme, 'scheme'> & { scheme: 'dark' | 'light' };
+
+export const darkTheme = { ...baseTheme } as Theme;
 
 export const lightTheme = {
   ...baseTheme,
@@ -78,10 +30,9 @@ export const lightTheme = {
     BACKGROUND_TRANSPARENT: 'rgba(255, 255, 255, 0.5)'
   },
   scheme: 'light'
-};
+} as Theme;
 
 type BaseTheme = typeof baseTheme;
-export type Theme = Omit<BaseTheme, 'scheme'> & { scheme: 'dark' | 'light' };
 
 // import original module declarations
 import 'styled-components';

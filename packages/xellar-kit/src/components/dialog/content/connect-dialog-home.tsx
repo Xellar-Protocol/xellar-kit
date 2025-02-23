@@ -37,7 +37,13 @@ export function ConnectDialogHome() {
   const setToken = useBoundStore(state => state.setToken);
   const setRefreshToken = useBoundStore(state => state.setRefreshToken);
   const setAddress = useBoundStore(state => state.setAddress);
-  const { closeModal, telegramConfig } = useXellarContext();
+  const {
+    closeModal,
+    telegramConfig,
+    googleClientId,
+    enableWhatsappLogin,
+    appleLoginConfig
+  } = useXellarContext();
   const { connect } = useWeb3();
 
   const uri = connect.getUri();
@@ -183,6 +189,8 @@ export function ConnectDialogHome() {
                 closeModal();
                 setIsLoading(false);
               }
+
+              document.body.removeChild(script);
             })
             .catch(err => {
               console.error(err);
@@ -193,6 +201,86 @@ export function ConnectDialogHome() {
     };
 
     document.head.appendChild(script);
+  };
+
+  const handleAppleLogin = () => {
+    if (!appleLoginConfig) return;
+
+    const script = document.createElement('script');
+    script.src =
+      'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
+    script.async = true;
+    script.defer = true;
+
+    script.onload = async () => {
+      (window as any).AppleID.auth.init({
+        clientId: appleLoginConfig.clientId,
+        scope: 'name email',
+        redirectURI: appleLoginConfig.redirectUri,
+        state: 'state',
+        usePopup: true
+      });
+
+      try {
+        setIsLoading(true);
+        const result = await (window as any).AppleID.auth.signIn();
+        const authorization = result.authorization;
+        const idToken = authorization.idToken;
+
+        xellarSDK.auth.apple
+          .authorize(idToken)
+          .then(async res => {
+            const result = res as AuthSuccessResponse;
+
+            if (!result.isWalletCreated) {
+              const createWalletResult = await xellarSDK.account.wallet.create({
+                accessToken: result.accessToken
+              });
+
+              setToken(createWalletResult.walletToken);
+              setRefreshToken(createWalletResult.refreshToken);
+              setRecoverySecret(createWalletResult.secret0);
+              setAddress(
+                createWalletResult.address.find(n => n.network === 'evm')
+                  ?.address as `0x${string}`
+              );
+              await connectAsync({ connector });
+
+              push('wallet-created');
+              setDirection('forward');
+              setIsLoading(false);
+            } else {
+              const address = getAddress(
+                result.addresses.find(n => n.network === 'evm')
+                  ?.address as `0x${string}`
+              );
+              setAddress(address);
+              setToken(result.walletToken);
+              setRefreshToken(res.refreshToken);
+
+              await wait(200);
+              await connectAsync({ connector });
+
+              closeModal();
+              closeModal();
+              setIsLoading(false);
+              document.body.removeChild(script);
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            setIsLoading(false);
+          });
+      } catch (error) {
+        console.error('error:', error);
+        setIsLoading(false);
+      } finally {
+        document.body.removeChild(script);
+        setIsLoading(false);
+      }
+    };
+
+    document.body.appendChild(script);
   };
 
   return (
@@ -227,30 +315,43 @@ export function ConnectDialogHome() {
             </IconWrapper>
             <WalletName>Email</WalletName>
           </WalletItem>
-          <WalletItem onClick={() => handleGoogleLogin()}>
-            <IconWrapper $size={42} $br={12}>
-              <GoogleIcon />
-            </IconWrapper>
-            <WalletName>Google</WalletName>
-          </WalletItem>
-          <WalletItem onClick={() => handleTelegramLogin()}>
-            <IconWrapper $size={42} $br={12}>
-              <TelegramIcon />
-            </IconWrapper>
-            <WalletName>Telegram</WalletName>
-          </WalletItem>
-          <WalletItem>
-            <IconWrapper $size={42} $br={12}>
-              <AppleIcon />
-            </IconWrapper>
-            <WalletName>Apple</WalletName>
-          </WalletItem>
-          <WalletItem>
-            <IconWrapper $size={42} $br={12}>
-              <WhatsappIcon />
-            </IconWrapper>
-            <WalletName>WhatsApp</WalletName>
-          </WalletItem>
+          {googleClientId && (
+            <WalletItem onClick={() => handleGoogleLogin()}>
+              <IconWrapper $size={42} $br={12}>
+                <GoogleIcon />
+              </IconWrapper>
+              <WalletName>Google</WalletName>
+            </WalletItem>
+          )}
+          {telegramConfig && (
+            <WalletItem onClick={() => handleTelegramLogin()}>
+              <IconWrapper $size={42} $br={12}>
+                <TelegramIcon />
+              </IconWrapper>
+              <WalletName>Telegram</WalletName>
+            </WalletItem>
+          )}
+          {appleLoginConfig && (
+            <WalletItem onClick={() => handleAppleLogin()}>
+              <IconWrapper $size={42} $br={12}>
+                <AppleIcon />
+              </IconWrapper>
+              <WalletName>Apple</WalletName>
+            </WalletItem>
+          )}
+          {enableWhatsappLogin && (
+            <WalletItem
+              onClick={() => {
+                setDirection('forward');
+                push('whatsapp');
+              }}
+            >
+              <IconWrapper $size={42} $br={12}>
+                <WhatsappIcon />
+              </IconWrapper>
+              <WalletName>WhatsApp</WalletName>
+            </WalletItem>
+          )}
 
           <WalletItem
             style={{

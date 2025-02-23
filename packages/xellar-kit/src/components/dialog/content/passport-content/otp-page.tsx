@@ -38,6 +38,7 @@ export function OTPPage() {
     setDirection,
     codeVerifier,
     setRecoverySecret,
+    otpType,
     push
   } = useConnectModalStore();
 
@@ -68,47 +69,94 @@ export function OTPPage() {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      const result = await xellarSDK.auth.email.verify(codeVerifier, otp);
-      if (!result.isWalletCreated) {
-        const createWalletResult = await xellarSDK.account.wallet.create({
-          accessToken: result.accessToken
-        });
+    if (otpType === 'email') {
+      try {
+        setIsLoading(true);
+        const result = await xellarSDK.auth.email.verify(codeVerifier, otp);
+        if (!result.isWalletCreated) {
+          const createWalletResult = await xellarSDK.account.wallet.create({
+            accessToken: result.accessToken
+          });
 
-        setToken(createWalletResult.walletToken);
-        setRefreshToken(createWalletResult.refreshToken);
-        setRecoverySecret(createWalletResult.secret0);
-        setAddress(
-          createWalletResult.address.find(n => n.network === 'evm')
-            ?.address as `0x${string}`
-        );
+          setToken(createWalletResult.walletToken);
+          setRefreshToken(createWalletResult.refreshToken);
+          setRecoverySecret(createWalletResult.secret0);
+          setAddress(
+            createWalletResult.address.find(n => n.network === 'evm')
+              ?.address as `0x${string}`
+          );
 
-        await connectAsync({ connector });
+          await connectAsync({ connector });
 
-        push('wallet-created');
-        setDirection('forward');
-      } else {
-        setToken(result.walletToken);
-        setRefreshToken(result.refreshToken);
-        await wait(500);
+          push('wallet-created');
+          setDirection('forward');
+        } else {
+          setToken(result.walletToken);
+          setRefreshToken(result.refreshToken);
+          await wait(500);
 
-        const address = (
-          result as unknown as { addresses: AddressResponse[] }
-        ).addresses.find(n => n.network === 'evm')?.address;
+          const address = (
+            result as unknown as { addresses: AddressResponse[] }
+          ).addresses.find(n => n.network === 'evm')?.address;
 
-        if (address) {
-          setAddress(address as `0x${string}`);
+          if (address) {
+            setAddress(address as `0x${string}`);
+          }
+
+          await connectAsync({ connector });
+          closeModal();
+          window.location.reload();
         }
-
-        await connectAsync({ connector });
-        closeModal();
-        window.location.reload();
+      } catch (error) {
+        console.log({ error });
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log({ error });
-    } finally {
-      setIsLoading(false);
+    }
+
+    if (otpType === 'whatsapp') {
+      try {
+        setIsLoading(true);
+        const result = await xellarSDK.auth.whatsapp.verify(codeVerifier, otp);
+        if (!result.isWalletCreated) {
+          const createWalletResult = await xellarSDK.account.wallet.create({
+            accessToken: result.accessToken
+          });
+
+          setToken(createWalletResult.walletToken);
+          setRefreshToken(createWalletResult.refreshToken);
+          setRecoverySecret(createWalletResult.secret0);
+          setAddress(
+            createWalletResult.address.find(n => n.network === 'evm')
+              ?.address as `0x${string}`
+          );
+
+          await connectAsync({ connector });
+
+          push('wallet-created');
+          setDirection('forward');
+        } else {
+          setToken(result.walletToken);
+          setRefreshToken(result.refreshToken);
+          await wait(500);
+
+          const address = (
+            result as unknown as { addresses: AddressResponse[] }
+          ).addresses.find(n => n.network === 'evm')?.address;
+
+          if (address) {
+            setAddress(address as `0x${string}`);
+          }
+
+          await connectAsync({ connector });
+          closeModal();
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log({ error });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 

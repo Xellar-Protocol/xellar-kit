@@ -1,9 +1,11 @@
-import { useState } from 'react';
 import styled from 'styled-components';
+import { useConnect } from 'wagmi';
 
 import { BackIcon } from '@/assets/back-icon';
-import { SpinnerIcon } from '@/assets/spinner';
-import { useWalletConnection } from '@/hooks/use-wallet-connection';
+import { useWalletConnectModal } from '@/hooks/wallet-connect';
+import { useWeb3 } from '@/providers/web3-provider';
+import { useXellarContext } from '@/providers/xellar-kit';
+import { isMobileDevice } from '@/utils/is-mobile';
 import { useWallets } from '@/wallets/use-wallet';
 
 import { useConnectModalStore } from '../store';
@@ -18,7 +20,18 @@ import {
 } from './styled';
 
 export function ConnectDialogWalletList() {
-  const { back, direction } = useConnectModalStore();
+  const { back, direction, push, setDirection, setWallet } =
+    useConnectModalStore();
+
+  const { closeModal } = useXellarContext();
+
+  const { open } = useWalletConnectModal();
+
+  const { connect } = useConnect();
+
+  const { connect: web3connect } = useWeb3();
+
+  const uri = web3connect.getUri();
 
   const handleBack = () => {
     back();
@@ -34,10 +47,6 @@ export function ConnectDialogWalletList() {
   });
 
   const wallets = useWallets();
-
-  const { setWallet, isConnecting } = useWalletConnection();
-
-  const [walletId, setWalletId] = useState<string | null>(null);
 
   return (
     <AnimatedContainer
@@ -66,18 +75,54 @@ export function ConnectDialogWalletList() {
             <WalletItem
               key={_wallet.id}
               onClick={() => {
-                setWalletId(_wallet.id);
-                if (_wallet.id !== 'xellar-passport') {
-                  setWallet(_wallet);
-                } else {
-                  setWallet(null);
+                if (_wallet.connector.type === 'injected') {
+                  if (
+                    _wallet.id.toLowerCase().includes('metamask') &&
+                    _wallet.isInstalled
+                  ) {
+                    connect(
+                      { connector: _wallet.connector },
+                      {
+                        onSuccess: () => {
+                          closeModal();
+                        }
+                      }
+                    );
+                    return;
+                  }
                 }
+
+                if (isMobileDevice()) {
+                  if (
+                    _wallet.id === 'walletConnect' ||
+                    _wallet.id === 'reown'
+                  ) {
+                    open();
+                    return;
+                  }
+
+                  const deeplink = _wallet?.getWalletConnectDeeplink
+                    ? _wallet.getWalletConnectDeeplink(uri)
+                    : null;
+
+                  if (deeplink) {
+                    const anchor = document.createElement('a');
+                    anchor.href = deeplink;
+                    anchor.click();
+                  }
+
+                  return;
+                }
+
+                setWallet(_wallet);
+                setTimeout(() => {
+                  setDirection('forward');
+                  push('qr-code');
+                }, 100);
               }}
-              selected={_wallet.id === walletId}
             >
               <IconWrapper $size={40}>{_wallet.icon}</IconWrapper>
               <WalletName>{_wallet.name}</WalletName>
-              {_wallet.id === walletId && isConnecting && <SpinnerIcon />}
             </WalletItem>
           ))}
         </ConnectorList>

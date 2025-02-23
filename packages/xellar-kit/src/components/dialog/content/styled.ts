@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import styled from 'styled-components';
 
+import { isMobile } from '@/utils/is-mobile';
+
 export const Wrapper = styled(motion.div)`
   display: flex;
   flex-direction: row;
@@ -74,7 +76,7 @@ export const EmptyStateWrapper = styled.div`
 export const AnimatedContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: 280px;
+  width: ${() => (isMobile() ? '100%' : '280px')};
   height: 100%;
 `;
 

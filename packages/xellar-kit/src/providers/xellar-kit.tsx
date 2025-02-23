@@ -16,13 +16,11 @@ import { useConfig, WagmiContext } from 'wagmi';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
-import { ConnectDialogMobileContent } from '@/components/dialog/content/connect-dialog-mobile';
 import { ProfileDialogContent } from '@/components/dialog/content/profile-dialog/profile-dialog';
 import { Dialog } from '@/components/dialog/dialog';
 import { useConnectModalStore } from '@/components/dialog/store';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
 import { darkTheme, Theme } from '@/styles/theme';
-import { isMobile } from '@/utils/is-mobile';
 
 import { Web3ContextProvider } from './web3-provider';
 
@@ -34,17 +32,28 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-interface XellarKitContextType {
+interface XellarKitProviderProps {
+  theme?: Theme;
+  googleClientId?: string;
+  telegramConfig?: {
+    /** Telegram bot ID */
+    botId: string;
+    /** Telegram bot username */
+    botUsername: string;
+  };
+  enableWhatsappLogin?: boolean;
+  appleLoginConfig?: {
+    /** Client ID - eg: 'com.example.com' */
+    clientId: string;
+    /** Apple's redirectURI - must be one of the URIs you added to the serviceID - the undocumented trick in apple docs is that you should call auth from a page that is listed as a redirectURI, localhost fails */
+    redirectUri: string;
+  };
+}
+
+interface XellarKitContextType extends XellarKitProviderProps {
   modalOpen: boolean;
   openModal: (type: ModalType) => void;
   closeModal: () => void;
-  theme: Theme;
-  walletConnectProjectId: string;
-  googleClientId?: string;
-  telegramConfig?: {
-    botId: string;
-    botUsername: string;
-  };
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -55,15 +64,10 @@ export function XellarKitProvider({
   children,
   theme = darkTheme as Theme,
   googleClientId,
-  telegramConfig
-}: PropsWithChildren<{
-  theme?: Theme;
-  googleClientId?: string;
-  telegramConfig?: {
-    botId: string;
-    botUsername: string;
-  };
-}>) {
+  telegramConfig,
+  enableWhatsappLogin = false,
+  appleLoginConfig
+}: PropsWithChildren<XellarKitProviderProps>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
   }
@@ -106,9 +110,6 @@ export function XellarKitProvider({
   const modalContent = useMemo(() => {
     switch (modalType) {
       case MODAL_TYPE.CONNECT:
-        if (isMobile()) {
-          return <ConnectDialogMobileContent />;
-        }
         return <ConnectDialogContent />;
       case MODAL_TYPE.CHAIN:
         return <ChainDialogContent />;
@@ -130,7 +131,9 @@ export function XellarKitProvider({
     theme,
     walletConnectProjectId: wcProjectId,
     googleClientId,
-    telegramConfig
+    telegramConfig,
+    enableWhatsappLogin,
+    appleLoginConfig
   };
 
   const GoogleProviderWrapper = googleClientId ? GoogleOAuthProvider : Fragment;

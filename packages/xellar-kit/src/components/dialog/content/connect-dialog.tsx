@@ -10,6 +10,8 @@ import { ConnectDialogWalletList } from './connect-dialog-wallet-list';
 import { LoginPage } from './passport-content/login-page';
 import { OTPPage } from './passport-content/otp-page';
 import { WalletCreatedPage } from './passport-content/wallet-created-page';
+import { WhatsappLoginPage } from './passport-content/whatsapp-login';
+import { QRCodePage } from './qr-code-page';
 
 export function ConnectDialogContent() {
   const { page, isLoading } = useConnectModalStore();
@@ -22,6 +24,8 @@ export function ConnectDialogContent() {
         {page === 'otp' && <OTPPage />}
         {page === 'wallet-created' && <WalletCreatedPage />}
         {page === 'wallet' && <ConnectDialogWalletList />}
+        {page === 'whatsapp' && <WhatsappLoginPage />}
+        {page === 'qr-code' && <QRCodePage />}
       </AnimatePresence>
 
       <AnimatePresence>
