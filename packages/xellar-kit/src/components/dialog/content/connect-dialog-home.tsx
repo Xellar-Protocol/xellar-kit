@@ -11,6 +11,7 @@ import {
   TelegramIcon,
   WhatsappIcon
 } from '@/assets/socials';
+import { SpinnerIcon } from '@/assets/spinner';
 import { WalletGroupLight } from '@/assets/wallet-group';
 import { useConnector } from '@/hooks/connectors';
 import { useWeb3 } from '@/providers/web3-provider';
@@ -369,6 +370,7 @@ export function ConnectDialogHome() {
               <WalletGroupLight width={20} height={20} />
             </IconWrapper>
             <WalletName>Web3 Wallets</WalletName>
+            {!uri && <SpinnerIcon />}
           </WalletItem>
         </ConnectorList>
       </Container>

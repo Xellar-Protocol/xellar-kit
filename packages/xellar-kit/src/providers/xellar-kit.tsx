@@ -12,7 +12,7 @@ import React, {
 } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { reset } from 'styled-reset';
-import { useConfig, WagmiContext } from 'wagmi';
+import { useAccountEffect, useConfig, WagmiContext } from 'wagmi';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
@@ -135,6 +135,12 @@ export function XellarKitProvider({
     enableWhatsappLogin,
     appleLoginConfig
   };
+
+  useAccountEffect({
+    onConnect: () => {
+      setModalOpen(false);
+    }
+  });
 
   const GoogleProviderWrapper = googleClientId ? GoogleOAuthProvider : Fragment;
   const googleProviderProps = googleClientId

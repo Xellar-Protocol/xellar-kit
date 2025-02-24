@@ -77,7 +77,7 @@ export const walletConfigs: {
     icon: <XellarIcon />,
     iconConnector: <XellarIcon />,
     getWalletConnectDeeplink: (uri: string) =>
-      isAndroid() ? uri : `indodaxweb3://wc/${encodeURIComponent(uri)}`
+      isAndroid() ? uri : `xellar://wc/${encodeURIComponent(uri)}`
   },
   'metaMask, metaMask-io, io.metamask, io.metamask.mobile, metaMaskSDK': {
     name: 'MetaMask',
