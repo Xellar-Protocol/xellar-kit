@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.1
+
+### Patch Changes
+
+- 4c7fe52: Fix Modal not closing when connected
+
 ## 1.1.0
 
 ### Minor Changes
