@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
+    "@xellar/sdk": "^4.2.11",
     "clsx": "^2.1.1",
     "js-cookie": "^3.0.5",
     "motion": "^11.17.0",
@@ -43,7 +44,6 @@
     "react-remove-scroll": "^2.6.2",
     "styled-components": "^6.1.14",
     "styled-reset": "^4.5.2",
-    "xellar-ew-sdk": "4.2.11",
     "zustand": "^5.0.3"
   },
   "peerDependencies": {

@@ -1,5 +1,5 @@
+import { Network, XellarSDK } from '@xellar/sdk';
 import { EIP1193Parameters, PublicRpcSchema, WalletRpcSchema } from 'viem';
-import { Network, XellarSDK } from 'xellar-ew-sdk';
 
 import { chainMap } from '@/utils/chain-map';
 

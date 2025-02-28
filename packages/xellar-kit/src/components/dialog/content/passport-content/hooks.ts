@@ -1,5 +1,5 @@
+import { XellarSDK } from '@xellar/sdk';
 import { useMemo } from 'react';
-import { XellarSDK } from 'xellar-ew-sdk';
 
 import { useBoundStore } from '@/xellar-connector/store';
 

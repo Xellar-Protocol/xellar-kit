@@ -1,5 +1,5 @@
+import { ChainId, Network } from '@xellar/sdk';
 import { polygonAmoy } from 'viem/chains';
-import { ChainId, Network } from 'xellar-ew-sdk';
 
 export const chainMap: Record<number, Network> = {
   [ChainId.ETHEREUM]: Network.ETHEREUM,

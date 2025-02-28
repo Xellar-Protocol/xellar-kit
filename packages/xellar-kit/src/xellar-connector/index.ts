@@ -1,4 +1,5 @@
 import { createConnector } from '@wagmi/core';
+import { XellarSDK } from '@xellar/sdk';
 import {
   EIP1193Parameters,
   EIP1193Provider,
@@ -6,7 +7,6 @@ import {
   PublicRpcSchema,
   WalletRpcSchema
 } from 'viem';
-import { XellarSDK } from 'xellar-ew-sdk';
 
 import { handleRequest } from './provider-request';
 import { useBoundStore } from './store';
