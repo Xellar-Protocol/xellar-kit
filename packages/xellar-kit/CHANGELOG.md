@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.3
+
+### Patch Changes
+
+- 7b55777: Adjust Dependencies
+
 ## 1.1.2
 
 ### Patch Changes
