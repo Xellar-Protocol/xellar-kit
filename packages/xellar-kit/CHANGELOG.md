@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.2
+
+### Patch Changes
+
+- e94d421: Expose `useConnectModal` hooks
+
 ## 1.1.1
 
 ### Patch Changes
