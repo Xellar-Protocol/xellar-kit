@@ -42,11 +42,10 @@ export function Dialog({
   }, [isOpen, onClose]);
 
   const [bodyScrollable, setBodyScrollable] = useState(true);
+
   useEffect(() => {
-    setBodyScrollable(
-      getComputedStyle(window.document.body).overflow !== 'hidden'
-    );
-  }, []);
+    setBodyScrollable(isOpen);
+  }, [isOpen]);
 
   const handleBackdropClick = useCallback(() => onClose(), [onClose]);
 
