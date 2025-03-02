@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.4
+
+### Patch Changes
+
+- 3cae3e6: Fix Body Scrollable
+
 ## 1.1.3
 
 ### Patch Changes
