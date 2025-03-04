@@ -150,7 +150,6 @@ const InnerDialogContent = styled(motion.div)<{ $isMobile: boolean }>`
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
   border: 2px solid ${({ theme }) => theme.colors.BORDER};
   border-radius: ${({ $isMobile }) => ($isMobile ? '20px 20px 0 0' : '20px')};
-  box-shadow: 0 4px 100px -19px ${({ theme }) => theme.colors.SHADOW};
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 

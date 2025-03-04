@@ -1,30 +1,20 @@
 import styled from 'styled-components';
 
-import { MailIcon } from '@/assets/mail-icon';
 import {
   AppleIcon,
   GoogleIcon,
   TelegramIcon,
   WhatsappIcon
 } from '@/assets/socials';
-import { SpinnerIcon } from '@/assets/spinner';
-import { WalletGroupLight } from '@/assets/wallet-group';
+import { StyledButton } from '@/components/ui/button';
+import { SocialItem } from '@/components/ui/social-item';
+import { TextInput } from '@/components/ui/text-input';
 import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
 
 import { useSocialLogin } from '../hooks/social-login';
 import { useConnectModalStore } from '../store';
-import {
-  Container,
-  Description,
-  IconWrapper,
-  Separator,
-  Title,
-  TitleSpan,
-  WalletItem,
-  WalletName,
-  Wrapper
-} from './styled';
+import { Container, Description, Separator, Title, Wrapper } from './styled';
 
 export function ConnectDialogHome() {
   const {
@@ -61,92 +51,56 @@ export function ConnectDialogHome() {
       }}
     >
       <Container $isMobile={false}>
-        <Title>
-          Connect <TitleSpan>Wallet</TitleSpan>
-        </Title>
+        <Title>Sign Up</Title>
         <Separator />
 
         <Description>
           You can use social account to instantly connect with your wallet or
           use your existing web3 wallets
         </Description>
-
-        <ConnectorList>
-          <WalletItem
-            onClick={() => {
-              setDirection('forward');
-              push('mail');
-            }}
-          >
-            <IconWrapper $size={42} $br={12}>
-              <MailIcon />
-            </IconWrapper>
-            <WalletName>Email</WalletName>
-          </WalletItem>
+        <SocialList>
           {googleClientId && (
-            <WalletItem onClick={() => handleGoogleLogin()}>
-              <IconWrapper $size={42} $br={12}>
-                <GoogleIcon />
-              </IconWrapper>
-              <WalletName>Google</WalletName>
-            </WalletItem>
+            <SocialItem style={{ flex: 1 }} onClick={() => handleGoogleLogin()}>
+              <GoogleIcon />
+            </SocialItem>
           )}
           {telegramConfig && (
-            <WalletItem onClick={() => handleTelegramLogin()}>
-              <IconWrapper $size={42} $br={12}>
-                <TelegramIcon />
-              </IconWrapper>
-              <WalletName>Telegram</WalletName>
-            </WalletItem>
+            <SocialItem
+              style={{ flex: 1 }}
+              onClick={() => handleTelegramLogin()}
+            >
+              <TelegramIcon />
+            </SocialItem>
           )}
           {appleLoginConfig && (
-            <WalletItem onClick={() => handleAppleLogin()}>
-              <IconWrapper $size={42} $br={12}>
-                <AppleIcon />
-              </IconWrapper>
-              <WalletName>Apple</WalletName>
-            </WalletItem>
+            <SocialItem style={{ flex: 1 }} onClick={() => handleAppleLogin()}>
+              <AppleIcon />
+            </SocialItem>
           )}
           {enableWhatsappLogin && (
-            <WalletItem
+            <SocialItem
+              style={{ flex: 1 }}
               onClick={() => {
                 setDirection('forward');
                 push('whatsapp');
               }}
             >
-              <IconWrapper $size={42} $br={12}>
-                <WhatsappIcon />
-              </IconWrapper>
-              <WalletName>WhatsApp</WalletName>
-            </WalletItem>
+              <WhatsappIcon />
+            </SocialItem>
           )}
+        </SocialList>
 
-          <WalletItem
-            style={{
-              opacity: !uri ? 0.5 : 1
-            }}
-            onClick={() => {
-              if (!uri) {
-                return;
-              }
-              setDirection('forward');
-              push('wallet');
-            }}
-          >
-            <IconWrapper $size={42} $br={12}>
-              <WalletGroupLight width={20} height={20} />
-            </IconWrapper>
-            <WalletName>Web3 Wallets</WalletName>
-            {!uri && <SpinnerIcon />}
-          </WalletItem>
-        </ConnectorList>
+        <TextInput placeholder="Enter your email" />
+        <StyledButton>Sign Up</StyledButton>
       </Container>
     </Wrapper>
   );
 }
 
-const ConnectorList = styled.div`
+const SocialList = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 18px;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 8px;
 `;
