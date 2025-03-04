@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.5
+
+### Patch Changes
+
+- 429fb48: Fix Styled Reset
+
 ## 1.1.4
 
 ### Patch Changes
