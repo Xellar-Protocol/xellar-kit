@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.6
+
+### Patch Changes
+
+- 8412f0e: Add Story Aeneid and Story Mainnet
+
 ## 1.1.5
 
 ### Patch Changes
