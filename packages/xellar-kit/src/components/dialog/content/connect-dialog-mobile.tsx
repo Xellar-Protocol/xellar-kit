@@ -1,9 +1,9 @@
 import { AnimatePresence } from 'motion/react';
 import { useState } from 'react';
-import styled from 'styled-components';
 
 import { SpinnerIcon } from '@/assets/spinner';
 import { useWalletConnection } from '@/hooks/use-wallet-connection';
+import { styled } from '@/styles/styled';
 import { useWallets } from '@/wallets/use-wallet';
 
 import { PassportContent } from './passport-content/passport-content';

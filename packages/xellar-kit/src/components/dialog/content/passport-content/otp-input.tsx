@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+
+import { styled } from '@/styles/styled';
 
 interface OTPInputProps {
   onComplete?: (value: string) => void;

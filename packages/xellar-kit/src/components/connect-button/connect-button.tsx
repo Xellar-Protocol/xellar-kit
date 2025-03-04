@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-
+import { styled } from '@/styles/styled';
 import { truncateAddress } from '@/utils/string';
 
 import { StyledButton } from '../ui/button';

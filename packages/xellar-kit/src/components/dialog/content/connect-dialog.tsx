@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
-import styled from 'styled-components';
 
 import { SpinnerIcon } from '@/assets/spinner';
+import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../store';
 import { ConnectDialogHome } from './connect-dialog-home';

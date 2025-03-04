@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 
 import { BackIcon } from '@/assets/back-icon';
 import { SpinnerIcon } from '@/assets/spinner';
+import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../../store';
 import { AnimatedContainer, Description } from '../styled';

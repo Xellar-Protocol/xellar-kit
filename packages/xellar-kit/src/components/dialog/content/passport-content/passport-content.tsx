@@ -1,6 +1,7 @@
 import { AnimatePresence } from 'motion/react';
 import { useState } from 'react';
-import styled from 'styled-components';
+
+import { styled } from '@/styles/styled';
 
 import { LoginPage } from './login-page';
 import { OTPPage } from './otp-page';

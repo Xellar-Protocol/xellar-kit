@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
-import styled from 'styled-components';
 
+import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
 export const Wrapper = styled(motion.div)`
