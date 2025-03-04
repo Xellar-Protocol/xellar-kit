@@ -1,9 +1,10 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import styled, { useTheme } from 'styled-components';
+import { useTheme } from 'styled-components';
 
 import { CopyIcon } from '@/assets/copy-icon';
 import { QRCode } from '@/components/qr-code/qr-code';
+import { styled } from '@/styles/styled';
 import { WalletProps } from '@/wallets/use-wallet';
 
 import {
