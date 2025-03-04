@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import styled, { useTheme } from 'styled-components';
+import { useTheme } from 'styled-components';
 import { useAccount, useDisconnect } from 'wagmi';
 
 import { CopyIcon } from '@/assets/copy-icon';
 import { Avatar } from '@/components/ui/avatar';
 import { StyledButton } from '@/components/ui/button';
 import { useXellarContext } from '@/providers/xellar-kit';
+import { styled } from '@/styles/styled';
 import { truncateAddress } from '@/utils/string';
 
 import { Separator, Title } from '../styled';
