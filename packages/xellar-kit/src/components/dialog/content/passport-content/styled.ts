@@ -25,6 +25,9 @@ export const PassportTitle = styled.h3`
   font-weight: 600;
   line-height: 24px;
   margin-bottom: 24px;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
 `;
 
 export const IconsContainer = styled.div`
@@ -99,6 +102,7 @@ export const Title = styled.h4`
   font-size: 16px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.TEXT};
+  margin: 0;
 `;
 
 export const BackButton = styled.div`

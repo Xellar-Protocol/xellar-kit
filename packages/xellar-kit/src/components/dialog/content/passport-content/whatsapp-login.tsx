@@ -156,4 +156,6 @@ const ErrorText = styled.p`
   font-size: 12px;
   margin-top: 8px;
   margin-left: 2px;
+  margin-bottom: 0;
+  margin-right: 0;
 `;

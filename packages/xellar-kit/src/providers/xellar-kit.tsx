@@ -11,7 +11,6 @@ import React, {
   useState
 } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { reset } from 'styled-reset';
 import { useAccountEffect, useConfig, WagmiContext } from 'wagmi';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
@@ -25,7 +24,6 @@ import { darkTheme, Theme } from '@/styles/theme';
 import { Web3ContextProvider } from './web3-provider';
 
 const GlobalStyle = createGlobalStyle`
-  ${reset}
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

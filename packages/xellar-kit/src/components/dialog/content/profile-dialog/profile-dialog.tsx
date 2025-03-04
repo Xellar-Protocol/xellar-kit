@@ -89,6 +89,7 @@ const AddressField = styled.div`
 const Address = styled.p`
   font-size: 16px;
   font-weight: 500;
+  margin: 0;
 `;
 
 const CopyIconWrapper = styled.div`
