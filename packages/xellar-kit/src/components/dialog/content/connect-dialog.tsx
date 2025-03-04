@@ -45,6 +45,7 @@ export function ConnectDialogContent() {
 
 const Cointainer = styled.div`
   position: relative;
+  overflow: hidden;
 `;
 
 const LoadingContainer = styled(motion.div)`

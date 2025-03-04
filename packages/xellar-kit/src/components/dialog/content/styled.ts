@@ -53,6 +53,7 @@ export const Title = styled.h3`
   font-size: 18px;
   font-weight: 600;
   line-height: 24px;
+  margin: 0;
 `;
 
 export const Description = styled.p`

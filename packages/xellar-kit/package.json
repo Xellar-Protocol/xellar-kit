@@ -43,7 +43,6 @@
     "qrcode": "^1.5.4",
     "react-remove-scroll": "^2.6.2",
     "styled-components": "^6.1.14",
-    "styled-reset": "^4.5.2",
     "zustand": "^5.0.3"
   },
   "peerDependencies": {
