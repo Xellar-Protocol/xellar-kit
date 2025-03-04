@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.7
+
+### Patch Changes
+
+- 66b539b: Fix Styled Components
+
 ## 1.1.6
 
 ### Patch Changes
