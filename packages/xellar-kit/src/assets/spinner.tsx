@@ -1,5 +1,6 @@
 import { SVGProps } from 'react';
-import styled from 'styled-components';
+
+import { styled } from '@/styles/styled';
 
 export const SpinnerIcon = (props: SVGProps<SVGSVGElement>) => (
   <StyledSpinner

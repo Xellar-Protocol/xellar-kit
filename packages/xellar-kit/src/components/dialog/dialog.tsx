@@ -7,8 +7,8 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { RemoveScroll } from 'react-remove-scroll';
-import styled from 'styled-components';
 
+import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
 interface DialogProps {

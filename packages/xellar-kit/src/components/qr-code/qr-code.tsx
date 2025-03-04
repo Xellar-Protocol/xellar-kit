@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
 import QRCodeUtil from 'qrcode';
 import React, { type ReactElement, useMemo } from 'react';
-import styled from 'styled-components';
+
+import { styled } from '@/styles/styled';
 
 const generateMatrix = (
   value: string,

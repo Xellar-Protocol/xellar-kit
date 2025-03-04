@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 import { MailIcon } from '@/assets/mail-icon';
 import {
   AppleIcon,
@@ -11,6 +9,7 @@ import { SpinnerIcon } from '@/assets/spinner';
 import { WalletGroupLight } from '@/assets/wallet-group';
 import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
+import { styled } from '@/styles/styled';
 
 import { useSocialLogin } from '../hooks/social-login';
 import { useConnectModalStore } from '../store';
