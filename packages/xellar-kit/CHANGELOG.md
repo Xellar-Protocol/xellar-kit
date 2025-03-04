@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.1.8
+
+### Patch Changes
+
+- 0501ec3: Fix Styled
+
 ## 1.1.7
 
 ### Patch Changes
