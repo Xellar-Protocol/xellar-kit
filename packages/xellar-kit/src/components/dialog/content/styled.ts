@@ -31,7 +31,8 @@ export const InnerQRCodeWrapper = styled.div`
 `;
 
 export const Container = styled.div<{ $isMobile: boolean }>`
-  width: ${({ $isMobile }) => ($isMobile ? '100%' : '280px')};
+  width: 100%;
+  min-width: ${({ $isMobile }) => ($isMobile ? '100%' : '280px')};
   display: flex;
   flex-direction: column;
   gap: 8px;

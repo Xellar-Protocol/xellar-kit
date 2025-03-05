@@ -9,6 +9,8 @@ export const StyledButton = styled.div<StyledButtonProps>`
     variant === 'primary' ? theme.colors.PRIMARY : theme.colors.BACKGROUND};
   color: ${({ theme }) => theme.colors.TEXT};
   height: 42px;
+  padding-left: 16px;
+  padding-right: 16px;
   border-radius: 12px;
   border: ${({ theme, variant = 'primary' }) =>
     variant === 'outline'

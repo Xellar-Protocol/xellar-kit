@@ -250,7 +250,7 @@ export function OTPPage() {
             maxLength={6}
             render={({ slots }) => {
               return (
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, width: '100%' }}>
                   {slots.map((slot, idx) => (
                     <Slot key={idx} {...slot} />
                   ))}
@@ -301,7 +301,7 @@ const Slot = (props: SlotProps) => {
 };
 
 const StyledSlot = styled.div<{ isActive: boolean }>`
-  width: 34px;
+  width: 32px;
   height: 42px;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
