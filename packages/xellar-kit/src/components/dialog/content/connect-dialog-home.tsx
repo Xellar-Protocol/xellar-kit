@@ -11,6 +11,7 @@ import { SocialItem } from '@/components/ui/social-item';
 import { TextInput } from '@/components/ui/text-input';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
+import { isMobile } from '@/utils/is-mobile';
 
 import { useSocialLogin } from '../hooks/social-login';
 import { useConnectModalStore } from '../store';
@@ -93,7 +94,7 @@ export function ConnectDialogHome() {
         bounce: 0
       }}
     >
-      <Container $isMobile={false}>
+      <Container $isMobile={isMobile()}>
         <Title>Sign Up</Title>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>

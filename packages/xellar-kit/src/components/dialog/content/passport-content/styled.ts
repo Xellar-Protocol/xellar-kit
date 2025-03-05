@@ -10,15 +10,6 @@ export const PassportContainer = styled.div`
   gap: 12px;
 `;
 
-export const InnerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  width: 280px;
-`;
-
 export const PassportTitle = styled.h3`
   font-size: 14px;
   font-weight: 600;

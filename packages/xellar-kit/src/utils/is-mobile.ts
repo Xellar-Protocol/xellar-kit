@@ -27,5 +27,5 @@ export function isMobileDevice(): boolean {
 }
 
 export function isMobile(): boolean {
-  return typeof window !== 'undefined' && window.innerWidth < 680;
+  return typeof window !== 'undefined' && window.innerWidth < 480;
 }
