@@ -1,5 +1,23 @@
 # @xellar/kit
 
+## 1.1.8
+
+### Patch Changes
+
+- 0501ec3: Fix Styled
+
+## 1.1.7
+
+### Patch Changes
+
+- 66b539b: Fix Styled Components
+
+## 1.1.6
+
+### Patch Changes
+
+- 8412f0e: Add Story Aeneid and Story Mainnet
+
 ## 1.1.5
 
 ### Patch Changes

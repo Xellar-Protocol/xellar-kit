@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 import { useChainId, useChains, useSwitchChain } from 'wagmi';
 
 import { SpinnerIcon } from '@/assets/spinner';
+import { styled } from '@/styles/styled';
 
 import { Separator, Title } from '../styled';
 

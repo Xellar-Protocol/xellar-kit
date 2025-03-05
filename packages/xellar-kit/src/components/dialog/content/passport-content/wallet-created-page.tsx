@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from 'motion/react';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 
 import { StyledButton } from '@/components/ui/button';
 import { useXellarContext } from '@/providers/xellar-kit';
+import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../../store';
 import { AnimatedContainer, Description } from '../styled';

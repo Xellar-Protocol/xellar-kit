@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 import {
   AppleIcon,
   GoogleIcon,
@@ -11,6 +9,7 @@ import { SocialItem } from '@/components/ui/social-item';
 import { TextInput } from '@/components/ui/text-input';
 import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
+import { styled } from '@/styles/styled';
 
 import { useSocialLogin } from '../hooks/social-login';
 import { useConnectModalStore } from '../store';

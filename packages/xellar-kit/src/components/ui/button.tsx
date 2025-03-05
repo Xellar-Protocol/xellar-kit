@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from '@/styles/styled';
 
 export const StyledButton = styled.div`
   background-color: ${({ theme }) => theme.colors.PRIMARY};

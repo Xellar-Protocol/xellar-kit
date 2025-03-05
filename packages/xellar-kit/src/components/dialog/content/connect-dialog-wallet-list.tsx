@@ -1,10 +1,10 @@
-import styled from 'styled-components';
 import { useConnect } from 'wagmi';
 
 import { BackIcon } from '@/assets/back-icon';
 import { useWalletConnectModal } from '@/hooks/wallet-connect';
 import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
+import { styled } from '@/styles/styled';
 import { isMobileDevice } from '@/utils/is-mobile';
 import { useWallets } from '@/wallets/use-wallet';
 

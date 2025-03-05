@@ -1,7 +1,7 @@
 {
   "name": "@xellar/kit",
   "description": "Xellar Kit is a plug-and-play wallet connection solution designed for seamless integration with Xellar Passport and various other wallets, including MetaMask (injector) and WalletConnect.",
-  "version": "1.1.5",
+  "version": "1.1.8",
   "type": "module",
   "license": "Apache-2.0",
   "exports": {
@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "lint": "eslint . --max-warnings 0",
-    "lint:fix": "eslint . --fix --max-warnings 0",
+    "lint:fix": "eslint . --fix",
     "check-types": "tsc --noEmit",
     "dev": "tsup --watch",
     "build": "tsup"
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
-    "@xellar/sdk": "^4.2.11",
+    "@xellar/sdk": "4.2.12",
     "clsx": "^2.1.1",
     "js-cookie": "^3.0.5",
     "motion": "^11.17.0",

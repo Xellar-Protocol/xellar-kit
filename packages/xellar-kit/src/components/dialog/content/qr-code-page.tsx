@@ -1,8 +1,7 @@
-import styled from 'styled-components';
-
 import { BackIcon } from '@/assets/back-icon';
 import { QRCode } from '@/components/qr-code/qr-code';
 import { useWeb3 } from '@/providers/web3-provider';
+import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../store';
 import {

@@ -1,6 +1,5 @@
-import styled from 'styled-components';
-
 import { StyledButton } from '@/components/ui/button';
+import { styled } from '@/styles/styled';
 
 export const PassportContainer = styled.div`
   display: flex;
