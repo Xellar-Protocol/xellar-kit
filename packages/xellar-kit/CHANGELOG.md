@@ -1,5 +1,15 @@
 # @xellar/kit
 
+## 1.2.0
+
+### Minor Changes
+
+- 0174dc2: New Look
+
+### Patch Changes
+
+- 0174dc2: Fix OTP Field and Countown
+
 ## 1.1.8
 
 ### Patch Changes
