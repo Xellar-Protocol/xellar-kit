@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 
 import { SpinnerIcon } from '@/assets/spinner';
+import { Footer } from '@/components/ui/footer';
 import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../store';
@@ -39,6 +40,8 @@ export function ConnectDialogContent() {
           </LoadingContainer>
         )}
       </AnimatePresence>
+
+      <Footer />
     </Cointainer>
   );
 }
@@ -55,7 +58,7 @@ const LoadingContainer = styled(motion.div)`
   width: 100%;
   height: 100%;
   z-index: 10;
-  background-color: rgba(0, 0, 0, 0.35);
+  background-color: transparent;
   backdrop-filter: blur(1px);
   display: flex;
   align-items: center;

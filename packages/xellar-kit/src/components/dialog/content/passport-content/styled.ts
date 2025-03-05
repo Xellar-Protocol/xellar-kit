@@ -75,7 +75,7 @@ export const PassportButton = styled(StyledButton)`
   font-weight: 600;
   font-size: 13px;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.BG_SECONDARY};
+  background-color: ${({ theme }) => theme.colors.BACKGROUND};
   color: ${({ theme }) => theme.colors.TEXT};
   transition: background-color 0.2s ease-in-out;
 
