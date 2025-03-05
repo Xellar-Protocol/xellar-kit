@@ -111,7 +111,7 @@ export const IconWrapper = styled.div<{ $size?: number; $br?: number }>`
   width: ${({ $size }) => $size || 28}px;
   height: ${({ $size }) => $size || 28}px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  background-color: ${({ theme }) => theme.colors.BG_SECONDARY};
+  background-color: ${({ theme }) => theme.colors.BACKGROUND};
   border-radius: ${({ $br }) => $br || 6}px;
   display: flex;
   align-items: center;

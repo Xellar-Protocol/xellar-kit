@@ -107,7 +107,7 @@ const DownloadORCopyButton = styled(StyledButton)`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.BG_SECONDARY};
+  background-color: ${({ theme }) => theme.colors.BACKGROUND};
   flex: 1;
   padding: 0 0;
   font-size: 12px;

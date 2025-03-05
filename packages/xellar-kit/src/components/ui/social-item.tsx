@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const SocialItem = styled.div`
   height: 42px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  background-color: ${({ theme }) => theme.colors.BG_SECONDARY};
+  background-color: ${({ theme }) => theme.colors.BACKGROUND};
   border-radius: 12px;
   display: flex;
   align-items: center;

@@ -4,7 +4,7 @@ import { useChainId, useChains, useSwitchChain } from 'wagmi';
 import { SpinnerIcon } from '@/assets/spinner';
 import { styled } from '@/styles/styled';
 
-import { Separator, Title } from '../styled';
+import { Title } from '../styled';
 
 export function ChainDialogContent() {
   const chains = useChains();
@@ -28,7 +28,6 @@ export function ChainDialogContent() {
   return (
     <Wrapper>
       <Title>Switch Chain</Title>
-      <Separator style={{ margin: '0' }} />
       {chains.map(chain => (
         <ChainItem
           key={chain.id}
@@ -65,7 +64,7 @@ export const ChainItem = styled.div<{ selected?: boolean }>`
     selected ? theme.colors.PRIMARY : 'transparent'};
   &:hover {
     background-color: ${({ theme, selected }) =>
-      selected ? theme.colors.PRIMARY : theme.colors.BG_SECONDARY};
+      selected ? theme.colors.PRIMARY : theme.colors.BACKGROUND};
   }
 `;
 

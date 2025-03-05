@@ -19,6 +19,10 @@ interface StoreState {
   direction: Direction;
   history: ModalPage[];
   wallet: WalletProps | null;
+  email: string | null;
+  setEmail: (email: string) => void;
+  whatsapp: string | null;
+  setWhatsapp: (whatsapp: string) => void;
   setWallet: (wallet: WalletProps) => void;
   otpType: 'email' | 'whatsapp';
   setOtpType: (otpType: 'email' | 'whatsapp') => void;
@@ -41,9 +45,13 @@ export const useConnectModalStore = create<StoreState>()(set => ({
   recoverySecret: null,
   codeVerifier: null,
   otpType: 'email',
+  email: null,
+  whatsapp: null,
   wallet: null,
   setWallet: wallet => set({ wallet }),
   setOtpType: otpType => set({ otpType }),
+  setEmail: email => set({ email }),
+  setWhatsapp: whatsapp => set({ whatsapp }),
   push: page =>
     set(state => ({
       page,

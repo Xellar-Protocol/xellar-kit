@@ -9,7 +9,7 @@ import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
 import { truncateAddress } from '@/utils/string';
 
-import { Separator, Title } from '../styled';
+import { Title } from '../styled';
 
 export function ProfileDialogContent() {
   const { closeModal } = useXellarContext();
@@ -40,7 +40,6 @@ export function ProfileDialogContent() {
     <Wrapper>
       <div>
         <Title>Connected</Title>
-        <Separator style={{ margin: '12px 0 0 0' }} />
       </div>
 
       <AvatarWrapper>

@@ -20,7 +20,7 @@ import {
 const phoneRegex = /^[1-9]\d{1,14}$/;
 
 export function WhatsappLoginPage() {
-  const { back, direction, setCodeVerifier, push, setOtpType } =
+  const { back, direction, setCodeVerifier, push, setOtpType, setWhatsapp } =
     useConnectModalStore();
 
   const handleBack = () => {
@@ -63,6 +63,7 @@ export function WhatsappLoginPage() {
       setIsLoading(false);
       setCodeVerifier(result.verifyToken);
       setOtpType('whatsapp');
+      setWhatsapp(phoneNumber);
       push('otp');
     } catch (error) {
       console.log({ error });

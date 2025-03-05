@@ -2,14 +2,13 @@ export const baseTheme = {
   scheme: 'dark',
   colors: {
     BACKGROUND_TRANSPARENT: 'rgba(0, 0, 0, 0.5)',
-    PRIMARY: '#006FEE',
+    PRIMARY: '#028BED',
     PRIMARY_ACCENT: '#2AABEE',
-    BACKGROUND: '#000000',
+    BACKGROUND: '#131418',
     TEXT: '#FFFFFF',
-    TEXT_SECONDARY: '#737373',
+    TEXT_SECONDARY: '#949494',
     SHADOW: '#475D81',
-    BORDER: '#262626',
-    BG_SECONDARY: '#171717'
+    BORDER: '#272831'
   }
 };
 
@@ -24,7 +23,6 @@ export const lightTheme = {
     BACKGROUND: '#fafafa',
     TEXT: '#171717',
     TEXT_SECONDARY: '#a3a3a3',
-    BG_SECONDARY: '#d4d4d4',
     BORDER: '#a3a3a3',
     SHADOW: '#a5f3fc',
     BACKGROUND_TRANSPARENT: 'rgba(255, 255, 255, 0.5)'

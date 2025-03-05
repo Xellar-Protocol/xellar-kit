@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   AppleIcon,
   GoogleIcon,
@@ -7,13 +9,15 @@ import {
 import { StyledButton } from '@/components/ui/button';
 import { SocialItem } from '@/components/ui/social-item';
 import { TextInput } from '@/components/ui/text-input';
-import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
 
 import { useSocialLogin } from '../hooks/social-login';
 import { useConnectModalStore } from '../store';
-import { Container, Description, Separator, Title, Wrapper } from './styled';
+import { useXellarSDK } from './passport-content/hooks';
+import { Container, Title, Wrapper } from './styled';
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function ConnectDialogHome() {
   const {
@@ -22,11 +26,16 @@ export function ConnectDialogHome() {
     enableWhatsappLogin,
     appleLoginConfig
   } = useXellarContext();
-  const { connect } = useWeb3();
 
-  const uri = connect.getUri();
-
-  const { push, setDirection, direction } = useConnectModalStore();
+  const {
+    push,
+    setDirection,
+    direction,
+    setCodeVerifier,
+    setOtpType,
+    setEmail: setEmailStore,
+    email: emailStore
+  } = useConnectModalStore();
 
   const { handleGoogleLogin, handleTelegramLogin, handleAppleLogin } =
     useSocialLogin();
@@ -40,6 +49,41 @@ export function ConnectDialogHome() {
     exit: { opacity: 0, x: direction === 'back' ? 200 : -200 }
   });
 
+  const { xellarSDK } = useXellarSDK();
+
+  const [email, setEmail] = useState(emailStore || '');
+  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isValidEmail) {
+      setIsValidEmail(true);
+    }
+
+    setEmail(e.target.value);
+  };
+
+  const handleSignIn = async () => {
+    try {
+      if (isLoading) return;
+      if (!emailRegex.test(email)) {
+        setIsValidEmail(false);
+        return;
+      }
+
+      setIsLoading(true);
+      const result = await xellarSDK.auth.email.login(email);
+      setIsLoading(false);
+      setCodeVerifier(result);
+      setEmailStore(email);
+      setOtpType('email');
+      push('otp');
+    } catch (error) {
+      console.log({ error });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <Wrapper
       {...getAnimationProps()}
@@ -51,46 +95,72 @@ export function ConnectDialogHome() {
     >
       <Container $isMobile={false}>
         <Title>Sign Up</Title>
-        <Separator />
 
-        <Description>
-          You can use social account to instantly connect with your wallet or
-          use your existing web3 wallets
-        </Description>
-        <SocialList>
-          {googleClientId && (
-            <SocialItem style={{ flex: 1 }} onClick={() => handleGoogleLogin()}>
-              <GoogleIcon />
-            </SocialItem>
-          )}
-          {telegramConfig && (
-            <SocialItem
-              style={{ flex: 1 }}
-              onClick={() => handleTelegramLogin()}
-            >
-              <TelegramIcon />
-            </SocialItem>
-          )}
-          {appleLoginConfig && (
-            <SocialItem style={{ flex: 1 }} onClick={() => handleAppleLogin()}>
-              <AppleIcon />
-            </SocialItem>
-          )}
-          {enableWhatsappLogin && (
-            <SocialItem
-              style={{ flex: 1 }}
-              onClick={() => {
-                setDirection('forward');
-                push('whatsapp');
-              }}
-            >
-              <WhatsappIcon />
-            </SocialItem>
-          )}
-        </SocialList>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <SocialList>
+            {googleClientId && (
+              <SocialItem
+                style={{ flex: 1 }}
+                onClick={() => handleGoogleLogin()}
+              >
+                <GoogleIcon />
+              </SocialItem>
+            )}
+            {telegramConfig && (
+              <SocialItem
+                style={{ flex: 1 }}
+                onClick={() => handleTelegramLogin()}
+              >
+                <TelegramIcon />
+              </SocialItem>
+            )}
+            {appleLoginConfig && (
+              <SocialItem
+                style={{ flex: 1 }}
+                onClick={() => handleAppleLogin()}
+              >
+                <AppleIcon />
+              </SocialItem>
+            )}
+            {enableWhatsappLogin && (
+              <SocialItem
+                style={{ flex: 1 }}
+                onClick={() => {
+                  setDirection('forward');
+                  push('whatsapp');
+                }}
+              >
+                <WhatsappIcon />
+              </SocialItem>
+            )}
+          </SocialList>
 
-        <TextInput placeholder="Enter your email" />
-        <StyledButton>Sign Up</StyledButton>
+          <TextInput
+            placeholder="Enter your email"
+            value={email}
+            onChange={handleChangeEmail}
+          />
+          {!isValidEmail && <ErrorText>Invalid email</ErrorText>}
+          <StyledButton
+            variant="primary"
+            onClick={handleSignIn}
+            style={{ marginTop: 8 }}
+          >
+            Continue
+          </StyledButton>
+
+          <Or>Or</Or>
+
+          <StyledButton
+            variant="outline"
+            onClick={() => {
+              setDirection('forward');
+              push('wallet');
+            }}
+          >
+            Connect Wallet
+          </StyledButton>
+        </div>
       </Container>
     </Wrapper>
   );
@@ -102,4 +172,20 @@ const SocialList = styled.div`
   align-items: center;
   gap: 6px;
   padding-bottom: 8px;
+  margin-top: 16px;
+`;
+
+const Or = styled.p`
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
+`;
+
+const ErrorText = styled.p`
+  color: #ff4040;
+  font-size: 12px;
+  margin-left: 2px;
+  margin-top: 0;
+  margin-bottom: 0;
 `;
