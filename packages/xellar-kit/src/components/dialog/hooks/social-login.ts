@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useGoogleLogin } from '@react-oauth/google';
+import { useState } from 'react';
 import { getAddress } from 'viem';
 import { useConnect } from 'wagmi';
 
@@ -20,6 +21,7 @@ export function useSocialLogin() {
   const setRefreshToken = useBoundStore(state => state.setRefreshToken);
   const setAddress = useBoundStore(state => state.setAddress);
   const { closeModal, telegramConfig, appleLoginConfig } = useXellarContext();
+  const [socialError, setSocialError] = useState('');
 
   const { connectAsync } = useConnect();
 
@@ -67,6 +69,14 @@ export function useSocialLogin() {
         closeModal();
         setIsLoading(false);
       }
+    },
+    onError: error => {
+      setSocialError('Something went wrong');
+      setTimeout(() => {
+        setSocialError('');
+      }, 3000);
+      console.error(error);
+      setIsLoading(false);
     }
   });
 
@@ -157,6 +167,10 @@ export function useSocialLogin() {
               document.body.removeChild(script);
             })
             .catch(err => {
+              setSocialError('Something went wrong');
+              setTimeout(() => {
+                setSocialError('');
+              }, 3000);
               console.error(err);
               setIsLoading(false);
             });
@@ -233,10 +247,18 @@ export function useSocialLogin() {
           })
           .catch(err => {
             console.error(err);
+            setSocialError('Something went wrong');
+            setTimeout(() => {
+              setSocialError('');
+            }, 3000);
             setIsLoading(false);
           });
       } catch (error) {
         console.error('error:', error);
+        setSocialError('Something went wrong');
+        setTimeout(() => {
+          setSocialError('');
+        }, 3000);
         setIsLoading(false);
       } finally {
         document.body.removeChild(script);
@@ -250,6 +272,7 @@ export function useSocialLogin() {
   return {
     handleGoogleLogin,
     handleTelegramLogin,
-    handleAppleLogin
+    handleAppleLogin,
+    socialError
   };
 }
