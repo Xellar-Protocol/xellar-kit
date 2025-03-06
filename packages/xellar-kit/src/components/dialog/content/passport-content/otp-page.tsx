@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { OTPInput, SlotProps } from 'input-otp';
 import { useEffect, useState } from 'react';
 import { useConnect } from 'wagmi';
@@ -170,8 +171,15 @@ export function OTPPage() {
           closeModal();
           window.location.reload();
         }
-      } catch (e) {
-        setError('Failed Submit OTP');
+      } catch (e: any) {
+        setError(
+          e?.response?.data?.message || e?.message || 'Something went wrong'
+        );
+        console.log({ e });
+
+        setTimeout(() => {
+          setError('');
+        }, 3000);
       } finally {
         setIsLoading(false);
       }
@@ -215,8 +223,15 @@ export function OTPPage() {
           closeModal();
           window.location.reload();
         }
-      } catch (e) {
-        setError('Failed Submit OTP');
+      } catch (e: any) {
+        setError(
+          e?.response?.data?.message || e?.message || 'Something went wrong'
+        );
+        console.log({ e });
+
+        setTimeout(() => {
+          setError('');
+        }, 3000);
       } finally {
         setIsLoading(false);
       }

@@ -9,7 +9,7 @@ const config = defaultConfig({
   appName: "Xellar",
   walletConnectProjectId,
   xellarAppId: import.meta.env.VITE_XELLAR_APP_ID,
-  xellarEnv: "sandbox",
+  xellarEnv: "production",
 }) as Config;
 
 const queryClient = new QueryClient();
@@ -25,6 +25,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
             botId: import.meta.env.VITE_TELEGRAM_BOT_ID,
             botUsername: import.meta.env.VITE_TELEGRAM_BOT_USERNAME,
           }}
+          enableWhatsappLogin
         >
           {children}
         </XellarKitProvider>

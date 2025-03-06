@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
 import {
@@ -6,6 +7,7 @@ import {
   TelegramIcon,
   WhatsappIcon
 } from '@/assets/socials';
+import { SpinnerIcon } from '@/assets/spinner';
 import { StyledButton } from '@/components/ui/button';
 import { SocialItem } from '@/components/ui/social-item';
 import { TextInput } from '@/components/ui/text-input';
@@ -42,7 +44,8 @@ export function ConnectDialogHome() {
     handleGoogleLogin,
     handleTelegramLogin,
     handleAppleLogin,
-    socialError
+    socialError,
+    setSocialError
   } = useSocialLogin();
 
   const getAnimationProps = () => ({
@@ -83,7 +86,16 @@ export function ConnectDialogHome() {
       setEmailStore(email);
       setOtpType('email');
       push('otp');
-    } catch (error) {
+    } catch (error: any) {
+      setSocialError(
+        error?.response?.data?.message ||
+          error?.message ||
+          'Something went wrong'
+      );
+      setTimeout(() => {
+        setSocialError('');
+      }, 3000);
+
       console.log({ error });
     } finally {
       setIsLoading(false);
@@ -152,7 +164,7 @@ export function ConnectDialogHome() {
             onClick={handleSignIn}
             style={{ marginTop: 8 }}
           >
-            Continue
+            {isLoading ? <SpinnerIcon /> : 'Continue'}
           </StyledButton>
 
           <Or>Or</Or>

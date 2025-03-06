@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
 import { BackIcon } from '@/assets/back-icon';
 import { SpinnerIcon } from '@/assets/spinner';
+import { StyledButton } from '@/components/ui/button';
 import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../../store';
@@ -10,7 +12,6 @@ import { useXellarSDK } from './hooks';
 import {
   BackButton,
   Header,
-  PassportButton,
   PassportContainer,
   RootContainer,
   TextInput,
@@ -41,6 +42,7 @@ export function WhatsappLoginPage() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChangePhoneNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isValidPhoneNumber) {
@@ -65,8 +67,17 @@ export function WhatsappLoginPage() {
       setOtpType('whatsapp');
       setWhatsapp(phoneNumber);
       push('otp');
-    } catch (error) {
+    } catch (error: any) {
+      setError(
+        error?.response?.data?.message ||
+          error?.message ||
+          'Something went wrong'
+      );
       console.log({ error });
+
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     } finally {
       setIsLoading(false);
     }
@@ -115,14 +126,15 @@ export function WhatsappLoginPage() {
                 }
               }}
             />
-            {!isValidPhoneNumber && <ErrorText>Invalid phone number</ErrorText>}{' '}
-            <PassportButton
+            {!isValidPhoneNumber && <ErrorText>Invalid phone number</ErrorText>}
+            {error && <ErrorText>{error}</ErrorText>}
+            <StyledButton
               onClick={handleSignIn}
               style={{ marginTop: 'auto' }}
               aria-disabled={isLoading}
             >
               {isLoading ? <SpinnerIcon /> : 'Sign In'}
-            </PassportButton>
+            </StyledButton>
           </div>
         </PassportContainer>
       </RootContainer>
