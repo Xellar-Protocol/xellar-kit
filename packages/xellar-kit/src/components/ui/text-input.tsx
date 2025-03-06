@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from '@/styles/styled';
 
 export const TextInput = styled.input`
   height: 42px;
