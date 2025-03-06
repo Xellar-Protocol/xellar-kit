@@ -1,5 +1,12 @@
 # @xellar/kit
 
+## 1.2.1
+
+### Patch Changes
+
+- 916cc8c: Fix Responsiveness
+- 0953b54: Fix Build Error
+
 ## 1.2.0
 
 ### Minor Changes
