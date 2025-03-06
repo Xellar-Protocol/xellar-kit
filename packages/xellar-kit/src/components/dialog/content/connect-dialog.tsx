@@ -1,5 +1,4 @@
 import { AnimatePresence, motion } from 'motion/react';
-import React from 'react';
 
 import { SpinnerIcon } from '@/assets/spinner';
 import { Footer } from '@/components/ui/footer';
