@@ -38,8 +38,12 @@ export function ConnectDialogHome() {
     email: emailStore
   } = useConnectModalStore();
 
-  const { handleGoogleLogin, handleTelegramLogin, handleAppleLogin } =
-    useSocialLogin();
+  const {
+    handleGoogleLogin,
+    handleTelegramLogin,
+    handleAppleLogin,
+    socialError
+  } = useSocialLogin();
 
   const getAnimationProps = () => ({
     initial: {
@@ -142,6 +146,7 @@ export function ConnectDialogHome() {
             onChange={handleChangeEmail}
           />
           {!isValidEmail && <ErrorText>Invalid email</ErrorText>}
+          {socialError && <ErrorText>{socialError}</ErrorText>}
           <StyledButton
             variant="primary"
             onClick={handleSignIn}
@@ -180,6 +185,8 @@ const Or = styled.p`
   text-align: center;
   font-size: 12px;
   font-weight: 600;
+  margin-top: 8px;
+  margin-bottom: 8px;
   color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
 `;
 
