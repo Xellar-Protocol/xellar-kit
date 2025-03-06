@@ -273,6 +273,7 @@ export function useSocialLogin() {
     handleGoogleLogin,
     handleTelegramLogin,
     handleAppleLogin,
-    socialError
+    socialError,
+    setSocialError
   };
 }
