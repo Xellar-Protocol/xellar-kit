@@ -1,5 +1,10 @@
 import { Network, XellarSDK } from '@xellar/sdk';
-import { EIP1193Parameters, PublicRpcSchema, WalletRpcSchema } from 'viem';
+import {
+  EIP1193Parameters,
+  hexToString,
+  PublicRpcSchema,
+  WalletRpcSchema
+} from 'viem';
 
 import { chainMap } from '@/utils/chain-map';
 
@@ -40,13 +45,39 @@ export async function handleRequest(
   { method, params }: EIP1193Parameters<RPCSchema>
 ) {
   switch (method) {
-    case 'personal_sign':
+    case 'personal_sign': {
+      try {
+        const { token, refreshToken, chainId } = getStoreState();
+
+        const result = await xellarSDK?.wallet?.signMessage({
+          message: hexToString(params[0]),
+          network: chainMap[chainId] as Network,
+          walletToken: token,
+          refreshToken
+        });
+
+        if (!result) {
+          throw new Error('Failed to sign message');
+        }
+
+        useBoundStore.setState({
+          refreshToken: result.refreshToken,
+          token: result.walletToken
+        });
+
+        return result.signature;
+      } catch (error) {
+        await handleRefreshToken(xellarSDK);
+
+        throw error;
+      }
+    }
     case 'eth_sign': {
       try {
         const { token, refreshToken, chainId } = getStoreState();
 
         const result = await xellarSDK?.wallet?.signMessage({
-          message: params[1],
+          message: hexToString(params[1]),
           network: chainMap[chainId] as Network,
           walletToken: token,
           refreshToken
