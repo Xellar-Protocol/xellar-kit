@@ -1,5 +1,12 @@
 # @xellar/kit
 
+## 1.2.2
+
+### Patch Changes
+
+- 034d307: Enhance Error State
+- f124c2b: Fix Build Error
+
 ## 1.2.1
 
 ### Patch Changes
