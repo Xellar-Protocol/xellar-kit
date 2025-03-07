@@ -1,5 +1,12 @@
 # @xellar/kit
 
+## 1.2.3
+
+### Patch Changes
+
+- a674e2d: Fix Sign Message Mappings
+- a674e2d: Enhance Error State
+
 ## 1.2.2
 
 ### Patch Changes
