@@ -3,6 +3,7 @@ import { useChainId, useChains, useSwitchChain } from 'wagmi';
 
 import { SpinnerIcon } from '@/assets/spinner';
 import { styled } from '@/styles/styled';
+import { isMobile } from '@/utils/is-mobile';
 
 import { Title } from '../styled';
 
@@ -43,7 +44,7 @@ export function ChainDialogContent() {
 }
 
 const Wrapper = styled.div`
-  width: 280px;
+  width: ${() => (isMobile() ? '100%' : '280px')};
   display: flex;
   flex-direction: column;
   gap: 12px;

@@ -7,6 +7,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { StyledButton } from '@/components/ui/button';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
+import { isMobile } from '@/utils/is-mobile';
 import { truncateAddress } from '@/utils/string';
 
 import { Title } from '../styled';
@@ -73,7 +74,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 280px;
+  width: ${() => (isMobile() ? '100%' : '280px')};
 `;
 
 const AddressField = styled.div`
