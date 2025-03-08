@@ -1,5 +1,13 @@
 # @xellar/kit
 
+## 1.2.4
+
+### Patch Changes
+
+- 91ed533: Fix Sign Message Mappings
+- 91ed533: Enhance Error State
+- 91ed533: Fix Fallback to default RPCs
+
 ## 1.2.3
 
 ### Patch Changes
