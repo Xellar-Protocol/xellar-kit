@@ -160,7 +160,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
         appId,
         env,
         request: (params: EIP1193Parameters<RPCSchema>) =>
-          handleRequest(xellarSDK, params)
+          handleRequest(xellarSDK, params, config.chains)
       } as WalletProvider;
 
       if (!xellarProvider) {
