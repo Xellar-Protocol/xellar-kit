@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
-import {
-  AppleIcon,
-  GoogleIcon,
-  TelegramIcon,
-  WhatsappIcon
-} from '@/assets/socials';
+import { AppleIcon, TelegramIcon, WhatsappIcon } from '@/assets/socials';
 import { SpinnerIcon } from '@/assets/spinner';
 import { StyledButton } from '@/components/ui/button';
 import { SocialItem } from '@/components/ui/social-item';
@@ -17,6 +12,7 @@ import { isMobile } from '@/utils/is-mobile';
 
 import { useSocialLogin } from '../hooks/social-login';
 import { useConnectModalStore } from '../store';
+import { GoogleLoginItem } from './google-login-item';
 import { useXellarSDK } from './passport-content/hooks';
 import { Container, Title, Wrapper } from './styled';
 
@@ -40,13 +36,8 @@ export function ConnectDialogHome() {
     email: emailStore
   } = useConnectModalStore();
 
-  const {
-    handleGoogleLogin,
-    handleTelegramLogin,
-    handleAppleLogin,
-    socialError,
-    setSocialError
-  } = useSocialLogin();
+  const { handleTelegramLogin, handleAppleLogin, socialError, setSocialError } =
+    useSocialLogin();
 
   const getAnimationProps = () => ({
     initial: {
@@ -115,14 +106,7 @@ export function ConnectDialogHome() {
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <SocialList>
-            {googleClientId && (
-              <SocialItem
-                style={{ flex: 1 }}
-                onClick={() => handleGoogleLogin()}
-              >
-                <GoogleIcon />
-              </SocialItem>
-            )}
+            {googleClientId && <GoogleLoginItem onError={setSocialError} />}
             {telegramConfig && (
               <SocialItem
                 style={{ flex: 1 }}

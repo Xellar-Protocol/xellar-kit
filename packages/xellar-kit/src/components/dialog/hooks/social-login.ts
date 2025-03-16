@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { getAddress } from 'viem';
 import { useConnect } from 'wagmi';
@@ -29,56 +28,7 @@ export function useSocialLogin() {
 
   const { push, setDirection, setIsLoading, setRecoverySecret } =
     useConnectModalStore();
-  const { xellarSDK, verifyGoogle } = useXellarSDK();
-
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: async ({ access_token }) => {
-      setIsLoading(true);
-      const result = await verifyGoogle(access_token);
-
-      if (!result.data.isWalletCreated) {
-        const createWalletResult = await xellarSDK.account.wallet.create({
-          accessToken: result.data.accessToken
-        });
-
-        setToken(createWalletResult.walletToken);
-        setRefreshToken(createWalletResult.refreshToken);
-        setRecoverySecret(createWalletResult.secret0);
-        setAddress(
-          createWalletResult.address.find(n => n.network === 'evm')
-            ?.address as `0x${string}`
-        );
-        await connectAsync({ connector });
-
-        push('wallet-created');
-        setDirection('forward');
-        setIsLoading(false);
-      } else {
-        const address = getAddress(
-          result.data.addresses.find(n => n.network === 'evm')
-            ?.address as `0x${string}`
-        );
-        setAddress(address);
-        setToken(result.data.walletToken);
-        setRefreshToken(result.data.refreshToken);
-
-        await wait(200);
-        await connectAsync({ connector });
-
-        closeModal();
-        closeModal();
-        setIsLoading(false);
-      }
-    },
-    onError: error => {
-      setSocialError('Something went wrong');
-      setTimeout(() => {
-        setSocialError('');
-      }, 3000);
-      console.error(error);
-      setIsLoading(false);
-    }
-  });
+  const { xellarSDK } = useXellarSDK();
 
   const handleTelegramLogin = () => {
     const scriptUrl = 'https://telegram.org/js/telegram-widget.js';
@@ -270,7 +220,6 @@ export function useSocialLogin() {
   };
 
   return {
-    handleGoogleLogin,
     handleTelegramLogin,
     handleAppleLogin,
     socialError,
