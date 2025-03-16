@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.2.5
+
+### Patch Changes
+
+- bf4e0ab: Fix Google Login Crash if not defined
+
 ## 1.2.4
 
 ### Patch Changes
