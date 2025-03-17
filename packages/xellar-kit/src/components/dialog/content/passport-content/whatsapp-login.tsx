@@ -171,4 +171,5 @@ const ErrorText = styled.p`
   margin-left: 2px;
   margin-bottom: 0;
   margin-right: 0;
+  max-width: 170px;
 `;

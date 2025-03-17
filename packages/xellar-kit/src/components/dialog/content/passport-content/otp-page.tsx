@@ -344,4 +344,5 @@ const ErrorText = styled.p`
   margin-left: 2px;
   margin-top: 0;
   margin-bottom: 0;
+  max-width: 170px;
 `;
