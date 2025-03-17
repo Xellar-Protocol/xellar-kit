@@ -6,6 +6,7 @@ type Web3ContextType = {
   connect: {
     getUri: (id?: string) => string;
   };
+  error: string | undefined;
 };
 
 const Web3Context = React.createContext<Web3ContextType>(undefined as never);
@@ -17,7 +18,7 @@ export const Web3ContextProvider = ({
   enabled?: boolean;
   children: React.ReactNode;
 }) => {
-  const { uri: walletConnectUri } = useWalletConnectUri({
+  const { uri: walletConnectUri, error } = useWalletConnectUri({
     enabled
   });
 
@@ -26,7 +27,8 @@ export const Web3ContextProvider = ({
       getUri: () => {
         return walletConnectUri;
       }
-    }
+    },
+    error
   } as Web3ContextType;
 
   return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>;

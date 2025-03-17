@@ -31,6 +31,7 @@ type AddressResponse = {
 };
 
 const FIVEMINUTES_IN_SECONDS = 60 * 5;
+const THIRTY_SECONDS = 30;
 
 export function OTPPage() {
   const setToken = useBoundStore(state => state.setToken);
@@ -72,7 +73,9 @@ export function OTPPage() {
   const { xellarSDK } = useXellarSDK();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [countdown, setCountdown] = useState(FIVEMINUTES_IN_SECONDS);
+  const [countdown, setCountdown] = useState(
+    otpType === 'email' ? THIRTY_SECONDS : FIVEMINUTES_IN_SECONDS
+  );
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -83,7 +86,9 @@ export function OTPPage() {
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
-      const seconds = FIVEMINUTES_IN_SECONDS - Math.floor(elapsed / 1000);
+      const seconds =
+        (otpType === 'email' ? THIRTY_SECONDS : FIVEMINUTES_IN_SECONDS) -
+        Math.floor(elapsed / 1000);
 
       if (seconds <= 0) {
         setCountdown(0);
@@ -102,7 +107,7 @@ export function OTPPage() {
     return () => {
       if (frameId) cancelAnimationFrame(frameId);
     };
-  }, [isResendDisabled]);
+  }, [isResendDisabled, otpType]);
 
   const handleResend = async () => {
     if (isResendDisabled) return;
@@ -344,4 +349,5 @@ const ErrorText = styled.p`
   margin-left: 2px;
   margin-top: 0;
   margin-bottom: 0;
+  max-width: 170px;
 `;

@@ -155,4 +155,5 @@ const ErrorText = styled.p`
   font-size: 12px;
   margin-top: 8px;
   margin-left: 2px;
+  max-width: 170px;
 `;

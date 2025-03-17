@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { Connector, useAccount, useConnect } from 'wagmi';
+import { Connector, useAccount, useConnect, useDisconnect } from 'wagmi';
 
 import { useWalletConnectConnector } from './connectors';
 
@@ -19,6 +19,8 @@ export function useWalletConnectUri(
 
   const { isConnected } = useAccount();
   const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (!enabled) return;
@@ -52,10 +54,12 @@ export function useWalletConnectUri(
 
     async function connectWalletConnect(connector: Connector) {
       try {
+        setUri(undefined);
         await connectWallet(connector);
       } catch (error: any) {
-        console.log('catch error');
-        console.log(error);
+        await disconnectAsync({
+          connector
+        });
         if (error.code) {
           switch (error.code) {
             case 4001:
@@ -64,6 +68,12 @@ export function useWalletConnectUri(
               break;
             default:
               console.log('error.code - Unknown Error');
+              setError(
+                'Failed to connect, please refresh the page and try again.'
+              );
+              setTimeout(() => {
+                setError(undefined);
+              }, 5000);
               break;
           }
         } else {
@@ -92,6 +102,7 @@ export function useWalletConnectUri(
   }, [enabled, connector, isConnected]);
 
   return {
-    uri
+    uri,
+    error
   };
 }

@@ -16,7 +16,7 @@ import { AnimatedContainer } from './styled';
 export function QRCodePage() {
   const { back, direction, wallet } = useConnectModalStore();
 
-  const { connect } = useWeb3();
+  const { connect, error } = useWeb3();
 
   const handleBack = () => {
     back();
@@ -65,6 +65,8 @@ export function QRCodePage() {
             icon={<IconWrapper>{wallet!.icon}</IconWrapper>}
           />
 
+          {error && <ErrorText>{error}</ErrorText>}
+
           {desktopUri && (
             <LinkButton onClick={() => window.open(desktopUri, '_blank')}>
               Open in Browser
@@ -106,4 +108,14 @@ const LinkButton = styled.div`
   line-height: 24px;
   text-align: center;
   margin-top: 12px;
+`;
+
+const ErrorText = styled.p`
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 8px;
+  margin-left: 2px;
+  margin-bottom: 0;
+  margin-right: 0;
+  max-width: 180px;
 `;
