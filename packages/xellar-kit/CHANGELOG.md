@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.2.6
+
+### Patch Changes
+
+- 60357bd: Fix UI
+
 ## 1.2.5
 
 ### Patch Changes
