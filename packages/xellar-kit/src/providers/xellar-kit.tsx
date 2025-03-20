@@ -5,6 +5,7 @@ import React, {
   createElement,
   Fragment,
   PropsWithChildren,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -16,10 +17,12 @@ import { useAccountEffect, useConfig, WagmiContext } from 'wagmi';
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
 import { ProfileDialogContent } from '@/components/dialog/content/profile-dialog/profile-dialog';
+import { TransactionConfirmationDialogContainer } from '@/components/dialog/content/transaction-confirmation-dialog-container';
 import { Dialog } from '@/components/dialog/dialog';
 import { useConnectModalStore } from '@/components/dialog/store';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
 import { darkTheme, Theme } from '@/styles/theme';
+import { setupTransactionConfirmation } from '@/xellar-connector/transaction-confirmation';
 
 import { Web3ContextProvider } from './web3-provider';
 
@@ -31,6 +34,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 interface XellarKitProviderProps {
+  showConfirmationModal?: boolean;
   theme?: Theme;
   googleClientId?: string;
   telegramConfig?: {
@@ -64,7 +68,8 @@ export function XellarKitProvider({
   googleClientId,
   telegramConfig,
   enableWhatsappLogin = false,
-  appleLoginConfig
+  appleLoginConfig,
+  showConfirmationModal = true
 }: PropsWithChildren<XellarKitProviderProps>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
@@ -92,18 +97,18 @@ export function XellarKitProvider({
     });
   }, [config.connectors]);
 
-  const handleOpenModal = (type: ModalType) => {
+  const handleOpenModal = useCallback((type: ModalType) => {
     setModalType(type);
     setModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setModalOpen(false);
     setModalType(null);
     setTimeout(() => {
       setPage('home');
     }, 50);
-  };
+  }, [setPage]);
 
   const modalContent = useMemo(() => {
     switch (modalType) {
@@ -113,6 +118,8 @@ export function XellarKitProvider({
         return <ChainDialogContent />;
       case MODAL_TYPE.PROFILE:
         return <ProfileDialogContent />;
+      case MODAL_TYPE.TRANSACTION_CONFIRMATION:
+        return <TransactionConfirmationDialogContainer />;
       case null:
         return null;
       default: {
@@ -139,6 +146,20 @@ export function XellarKitProvider({
       setModalOpen(false);
     }
   });
+
+  // Set up the transaction confirmation system
+  useEffect(() => {
+    setupTransactionConfirmation({
+      openModal: handleOpenModal,
+      closeModal: handleCloseModal
+    });
+  }, [handleOpenModal, handleCloseModal]);
+
+  useEffect(() => {
+    useConnectModalStore.setState({
+      showConfirmationModal: showConfirmationModal
+    });
+  }, [showConfirmationModal]);
 
   const GoogleProviderWrapper = googleClientId ? GoogleOAuthProvider : Fragment;
   const googleProviderProps = googleClientId

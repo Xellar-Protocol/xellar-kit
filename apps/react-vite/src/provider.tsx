@@ -10,7 +10,7 @@ const config = defaultConfig({
   appName: "Xellar",
   walletConnectProjectId,
   xellarAppId: import.meta.env.VITE_XELLAR_APP_ID,
-  xellarEnv: "production",
+  xellarEnv: "sandbox",
   chains: [polygonAmoy],
 }) as Config;
 
@@ -21,6 +21,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <XellarKitProvider
+          showConfirmationModal={false}
           theme={darkTheme}
           googleClientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
           telegramConfig={{
