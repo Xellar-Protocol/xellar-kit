@@ -7,9 +7,15 @@ import {
   WalletRpcSchema
 } from 'viem';
 
+import { useConnectModalStore } from '@/components/dialog/store';
 import { chainMap } from '@/utils/chain-map';
 
 import { useBoundStore } from './store';
+import {
+  completeTransaction,
+  showMessageConfirmation,
+  showTransactionConfirmation
+} from './transaction-confirmation';
 type RPCSchema = PublicRpcSchema | WalletRpcSchema;
 
 function getStoreState() {
@@ -48,13 +54,31 @@ export async function handleRequest(
   { method, params }: EIP1193Parameters<RPCSchema>,
   chains: readonly [Chain, ...Chain[]]
 ) {
+  const showConfirmationModal =
+    useConnectModalStore.getState().showConfirmationModal;
+
   switch (method) {
     case 'personal_sign': {
-      try {
-        const { token, refreshToken, chainId } = getStoreState();
+      const { token, refreshToken, chainId } = getStoreState();
 
+      const message = hexToString(params[0]);
+
+      if (showConfirmationModal) {
+        // Request confirmation before proceeding with message signing
+        const confirmed = await showMessageConfirmation(message, chainId);
+
+        // If user rejected the message signing, throw an error
+        if (!confirmed) {
+          throw new Error('Message signing rejected by user');
+        }
+      }
+
+      try {
+        // At this point, the dialog will show a loading indicator
+        // since the confirmation Promise has resolved but the
+        // dialog's onConfirm Promise is still pending
         const result = await xellarSDK?.wallet?.signMessage({
-          message: hexToString(params[0]),
+          message: message,
           network: chainMap[chainId] as Network,
           walletToken: token,
           refreshToken
@@ -69,19 +93,43 @@ export async function handleRequest(
           token: result.walletToken
         });
 
+        // Signal the transaction is complete
+        completeTransaction(true);
+
         return result.signature;
       } catch (error) {
+        // Signal transaction error with the error message
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        completeTransaction(false, errorMessage);
+
+        // Handle refresh token first if needed
         await handleRefreshToken(xellarSDK);
 
+        // Now throw so it propagates to the caller
         throw error;
       }
     }
     case 'eth_sign': {
-      try {
-        const { token, refreshToken, chainId } = getStoreState();
+      const { token, refreshToken, chainId } = getStoreState();
 
+      const message = hexToString(params[1]);
+      if (showConfirmationModal) {
+        // Request confirmation before proceeding with message signing
+        const confirmed = await showMessageConfirmation(message);
+
+        // If user rejected the message signing, throw an error
+        if (!confirmed) {
+          throw new Error('Message signing rejected by user');
+        }
+      }
+
+      try {
+        // At this point, the dialog will show a loading indicator
+        // since the confirmation Promise has resolved but the
+        // dialog's onConfirm Promise is still pending
         const result = await xellarSDK?.wallet?.signMessage({
-          message: hexToString(params[1]),
+          message: message,
           network: chainMap[chainId] as Network,
           walletToken: token,
           refreshToken
@@ -96,18 +144,56 @@ export async function handleRequest(
           token: result.walletToken
         });
 
+        // Signal the transaction is complete
+        completeTransaction(true);
+
         return result.signature;
       } catch (error) {
+        // Signal transaction error with the error message
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        completeTransaction(false, errorMessage);
+
+        // Handle refresh token first if needed
         await handleRefreshToken(xellarSDK);
 
+        // Now throw so it propagates to the caller
         throw error;
       }
     }
 
     case 'eth_signTypedData_v4': {
-      try {
-        const { token, refreshToken, chainId } = getStoreState();
+      const { token, refreshToken, chainId } = getStoreState();
 
+      // For typed data, let's show the raw JSON as the message
+      let typedDataString = '';
+      try {
+        // Try to parse and prettify
+        const parsedData = JSON.parse(params[1]);
+        typedDataString = JSON.stringify(parsedData, null, 2);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (e) {
+        // If parsing fails, just use the raw string
+        typedDataString = params[1];
+      }
+
+      if (showConfirmationModal) {
+        // Request confirmation before proceeding with typed data signing
+        const confirmed = await showMessageConfirmation(
+          typedDataString,
+          chainId
+        );
+
+        // If user rejected the typed data signing, throw an error
+        if (!confirmed) {
+          throw new Error('Typed data signing rejected by user');
+        }
+      }
+
+      try {
+        // At this point, the dialog will show a loading indicator
+        // since the confirmation Promise has resolved but the
+        // dialog's onConfirm Promise is still pending
         const result = await xellarSDK?.wallet?.signTypedData({
           data: params[1],
           network: chainMap[chainId] as Network,
@@ -124,20 +210,51 @@ export async function handleRequest(
           token: result.walletToken
         });
 
+        // Signal the transaction is complete
+        completeTransaction(true);
+
         return result.signature;
       } catch (error) {
+        // Signal transaction error with the error message
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        completeTransaction(false, errorMessage);
+
+        // Handle refresh token first if needed
         await handleRefreshToken(xellarSDK);
 
+        // Now throw so it propagates to the caller
         throw error;
       }
     }
 
     case 'eth_signTransaction': {
+      const { token, refreshToken, chainId } = getStoreState();
+
+      const request = params[0];
+
+      if (showConfirmationModal) {
+        // Request confirmation before proceeding with transaction signing
+        const confirmed = await showTransactionConfirmation({
+          from: request.from as string,
+          to: request.to as string,
+          value: request.value,
+          data: request.data,
+          nonce: request.nonce,
+          gasPrice: request.gasPrice,
+          chainId
+        });
+
+        // If user rejected the transaction, throw an error
+        if (!confirmed) {
+          throw new Error('Transaction rejected by user');
+        }
+      }
+
       try {
-        const { token, refreshToken, chainId } = getStoreState();
-
-        const request = params[0];
-
+        // At this point, the dialog will show a loading indicator
+        // since the confirmation Promise has resolved but the
+        // dialog's onConfirm Promise is still pending
         const result = await xellarSDK?.wallet?.signTransaction({
           transaction: {
             from: request.from as `0x${string}`,
@@ -161,19 +278,50 @@ export async function handleRequest(
           token: result.walletToken
         });
 
+        // Signal the transaction is complete
+        completeTransaction(true);
+
         return result.signature;
       } catch (error) {
+        // Signal transaction error with the error message
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        completeTransaction(false, errorMessage);
+
+        // Handle refresh token first if needed
         await handleRefreshToken(xellarSDK);
 
+        // Now throw so it propagates to the caller
         throw error;
       }
     }
 
     case 'eth_sendTransaction': {
       const { token, refreshToken, chainId } = getStoreState();
-      try {
-        const request = params[0];
+      const request = params[0];
 
+      if (showConfirmationModal) {
+        // Request confirmation before proceeding with transaction
+        const confirmed = await showTransactionConfirmation({
+          from: request.from as string,
+          to: request.to as string,
+          value: request.value,
+          data: request.data ?? '0x',
+          nonce: request.nonce,
+          gasPrice: request.gasPrice,
+          chainId
+        });
+
+        // If user rejected the transaction, throw an error
+        if (!confirmed) {
+          throw new Error('Transaction rejected by user');
+        }
+      }
+
+      try {
+        // At this point, the dialog will show a loading indicator
+        // since the confirmation Promise has resolved but the
+        // dialog's onConfirm Promise is still pending
         const result = await xellarSDK?.wallet?.sendTransaction({
           transaction: {
             from: request.from as `0x${string}`,
@@ -197,20 +345,30 @@ export async function handleRequest(
           token: result.walletToken
         });
 
+        // Signal the transaction is complete
+        completeTransaction(true);
+
         return result.txReceipt.hash;
       } catch (error) {
+        // Signal transaction error with the error message
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        completeTransaction(false, errorMessage);
+
+        // Handle refresh token first if needed
         await handleRefreshToken(xellarSDK);
 
+        // Now throw so it propagates to the caller
         throw error;
       }
     }
 
     case 'eth_estimateGas': {
+      const { token, refreshToken, chainId } = getStoreState();
+
+      const request = params[0];
+
       try {
-        const { token, refreshToken, chainId } = getStoreState();
-
-        const request = params[0];
-
         const result = await xellarSDK?.wallet?.estimateGas({
           type: 'custom',
           transaction: {
@@ -237,7 +395,6 @@ export async function handleRequest(
         return result.gasLimit;
       } catch (error) {
         await handleRefreshToken(xellarSDK);
-
         throw error;
       }
     }

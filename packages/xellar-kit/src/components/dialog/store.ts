@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 
+import { MODAL_TYPE, ModalType } from '@/constants/modal';
 import { WalletProps } from '@/wallets/use-wallet';
 
 type ModalPage =
@@ -13,6 +14,7 @@ type ModalPage =
 type Direction = 'back' | 'forward';
 
 interface StoreState {
+  showConfirmationModal: boolean;
   page: ModalPage;
   isLoading: boolean;
   recoverySecret: string | null;
@@ -35,9 +37,60 @@ interface StoreState {
   setCodeVerifier: (codeVerifier: string) => void;
   setRecoverySecret: (recoverySecret: string) => void;
   setIsLoading: (isLoading: boolean) => void;
+  setShowConfirmationModal: (showConfirmationModal: boolean) => void;
+}
+
+// Transaction payload type
+type TransactionPayload = {
+  from?: string;
+  to?: string;
+  value?: string;
+  data?: string;
+  nonce?: string;
+  gasPrice?: string;
+  message?: string;
+  chainId?: number;
+};
+
+// Define the transaction confirmation state and actions
+interface TransactionConfirmationState {
+  // State
+  isOpen: boolean;
+  type: 'transaction' | 'message';
+  payload: TransactionPayload;
+  error: string | null;
+  isLoading: boolean;
+
+  // Callbacks
+  userConfirmResolver: ((confirmed: boolean) => void) | null;
+  processCompleteResolver: ((success: boolean) => void) | null;
+
+  // Modal control functions
+  openModal: ((type: ModalType) => void) | null;
+  closeModal: (() => void) | null;
+
+  // Actions
+  showTransactionConfirmation: (
+    payload: TransactionPayload
+  ) => Promise<boolean>;
+  showMessageConfirmation: (
+    message: string,
+    chainId?: number
+  ) => Promise<boolean>;
+  completeTransaction: (success: boolean, errorMessage?: string) => void;
+  onConfirmAction: (setError: (error: string) => void) => Promise<void>;
+  onRejectAction: () => void;
+  setModalControls: (controls: {
+    openModal: (type: ModalType) => void;
+    closeModal: () => void;
+  }) => void;
+  resetState: () => void;
 }
 
 export const useConnectModalStore = create<StoreState>()(set => ({
+  showConfirmationModal: true,
+  setShowConfirmationModal: showConfirmationModal =>
+    set({ showConfirmationModal }),
   page: 'home',
   direction: 'forward',
   history: ['home'],
@@ -84,3 +137,174 @@ export const useConnectModalStore = create<StoreState>()(set => ({
   setRecoverySecret: recoverySecret => set({ recoverySecret }),
   setIsLoading: isLoading => set({ isLoading })
 }));
+
+export const useTransactionConfirmStore = create<TransactionConfirmationState>(
+  (set, get) => ({
+    // Initial state
+    isOpen: false,
+    type: 'transaction',
+    payload: {},
+    error: null,
+    isLoading: false,
+    userConfirmResolver: null,
+    processCompleteResolver: null,
+    openModal: null,
+    closeModal: null,
+
+    // Initialize modal controls
+    setModalControls: ({ openModal, closeModal }) =>
+      set({
+        openModal,
+        closeModal
+      }),
+
+    // Reset state function
+    resetState: () =>
+      set({
+        isOpen: false,
+        type: 'transaction',
+        payload: {},
+        error: null,
+        isLoading: false,
+        userConfirmResolver: null,
+        processCompleteResolver: null
+      }),
+
+    // Show transaction confirmation dialog
+    showTransactionConfirmation: payload => {
+      return new Promise<boolean>(resolve => {
+        const { openModal } = get();
+
+        if (!openModal) {
+          console.error(
+            'Modal controls not initialized! Call setModalControls first.'
+          );
+          resolve(false);
+          return;
+        }
+
+        // Set up the user confirmation promise
+        set({
+          type: 'transaction',
+          payload,
+          error: null,
+          isLoading: false,
+          userConfirmResolver: resolve
+        });
+
+        // Open the modal
+        openModal(MODAL_TYPE.TRANSACTION_CONFIRMATION);
+      });
+    },
+
+    // Show message confirmation dialog
+    showMessageConfirmation: (message, chainId) => {
+      return new Promise<boolean>(resolve => {
+        const { openModal } = get();
+
+        if (!openModal) {
+          console.error(
+            'Modal controls not initialized! Call setModalControls first.'
+          );
+          resolve(false);
+          return;
+        }
+
+        // Set up the user confirmation promise
+        set({
+          type: 'message',
+          payload: { message, chainId },
+          error: null,
+          isLoading: false,
+          userConfirmResolver: resolve
+        });
+
+        // Open the modal
+        openModal(MODAL_TYPE.TRANSACTION_CONFIRMATION);
+      });
+    },
+
+    // Handle user confirmation
+    onConfirmAction: async setError => {
+      const { userConfirmResolver, closeModal } = get();
+
+      // Set loading state
+      set({ isLoading: true, error: null });
+
+      // Resolve the user confirmation promise
+      if (userConfirmResolver) {
+        userConfirmResolver(true);
+      }
+
+      // Create a new promise for process completion
+      return new Promise<void>(resolve => {
+        // Store the resolver to be called when the process completes
+        set({
+          processCompleteResolver: success => {
+            if (success) {
+              // If successful, close the modal after a small delay
+              if (closeModal) {
+                setTimeout(() => {
+                  closeModal();
+                  resolve();
+                }, 500);
+              } else {
+                resolve();
+              }
+            } else {
+              // If failed, keep the modal open and resolve the promise
+              // The error will be displayed in the modal
+              set({ isLoading: false });
+              resolve();
+            }
+          }
+        });
+      });
+    },
+
+    // Handle user rejection
+    onRejectAction: () => {
+      const { userConfirmResolver, closeModal } = get();
+
+      // Resolve the user confirmation promise with false
+      if (userConfirmResolver) {
+        userConfirmResolver(false);
+      }
+
+      // Reset the state
+      set({
+        userConfirmResolver: null,
+        processCompleteResolver: null
+      });
+
+      // Close the modal
+      if (closeModal) {
+        closeModal();
+      }
+    },
+
+    // Complete the transaction (called after processing)
+    completeTransaction: (success, errorMessage) => {
+      const { processCompleteResolver } = get();
+
+      if (success) {
+        // Transaction succeeded
+        if (processCompleteResolver) {
+          processCompleteResolver(true);
+        }
+      } else {
+        // Transaction failed, show error
+        if (errorMessage) {
+          set({ error: errorMessage });
+        }
+
+        if (processCompleteResolver) {
+          processCompleteResolver(false);
+        }
+      }
+
+      // Clear the resolver
+      set({ processCompleteResolver: null });
+    }
+  })
+);

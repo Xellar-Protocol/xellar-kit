@@ -24,7 +24,7 @@ export const StyledButton = styled.div<StyledButtonProps>`
   align-items: center;
   justify-content: center;
   transition: background-color 0.15s ease-in-out;
-
+  gap: 8px;
   &:hover {
     background-color: ${({ theme, variant = 'primary' }) =>
       variant === 'primary'
