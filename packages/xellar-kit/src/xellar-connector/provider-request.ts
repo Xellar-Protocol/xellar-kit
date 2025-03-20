@@ -37,15 +37,31 @@ function getStoreState() {
 let id = 0;
 
 async function handleRefreshToken(xellarSDK: XellarSDK | undefined) {
-  const { refreshToken } = getStoreState();
-  const refreshTokenResult =
-    await xellarSDK?.wallet?.refreshToken(refreshToken);
+  try {
+    const { refreshToken } = getStoreState();
+    const refreshTokenResult =
+      await xellarSDK?.wallet?.refreshToken(refreshToken);
 
-  if (refreshTokenResult) {
-    useBoundStore.setState({
-      refreshToken: refreshTokenResult.refreshToken,
-      token: refreshTokenResult.walletToken
-    });
+    if (!refreshTokenResult) {
+      useBoundStore.getState().clearToken();
+      useBoundStore.getState().clearAddress();
+      useBoundStore.getState().clearRefreshToken();
+
+      throw new Error('Failed to refresh token');
+    }
+
+    if (refreshTokenResult) {
+      useBoundStore.setState({
+        refreshToken: refreshTokenResult.refreshToken,
+        token: refreshTokenResult.walletToken
+      });
+    }
+  } catch (error) {
+    useBoundStore.getState().clearToken();
+    useBoundStore.getState().clearAddress();
+    useBoundStore.getState().clearRefreshToken();
+
+    throw error;
   }
 }
 
