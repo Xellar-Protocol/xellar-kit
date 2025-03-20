@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.3.1
+
+### Patch Changes
+
+- 879b6e2: Force Logout when refresh token invalid
+
 ## 1.3.0
 
 ### Minor Changes
