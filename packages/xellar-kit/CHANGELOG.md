@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.3.0
+
+### Minor Changes
+
+- 6073410: Add Modal Confirmation Dialog
+
 ## 1.2.6
 
 ### Patch Changes
