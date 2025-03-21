@@ -13,6 +13,7 @@ import React, {
 } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { useAccountEffect, useConfig, WagmiContext } from 'wagmi';
+import { useShallow } from 'zustand/react/shallow';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
@@ -88,7 +89,11 @@ export function XellarKitProvider({
   const [modalType, setModalType] = useState<ModalType | null>(null);
   const [wcProjectId, setWcProjectId] = useState('');
 
-  const { setPage } = useConnectModalStore();
+  const { setPage } = useConnectModalStore(
+    useShallow(state => ({
+      setPage: state.setPage
+    }))
+  );
 
   useEffect(() => {
     const wcConnector = config.connectors.find(c => c.id === 'walletConnect');

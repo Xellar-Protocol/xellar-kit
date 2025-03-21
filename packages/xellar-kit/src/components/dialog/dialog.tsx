@@ -7,9 +7,12 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { RemoveScroll } from 'react-remove-scroll';
+import { useShallow } from 'zustand/react/shallow';
 
 import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
+
+import { useTransactionConfirmStore } from './store';
 
 interface DialogProps {
   isOpen: boolean;
@@ -25,6 +28,12 @@ export function Dialog({
   const [mounted, setMounted] = React.useState(false);
   const [isBottomSheet, setIsBottomSheet] = useState(false);
 
+  const { enableModalClose } = useTransactionConfirmStore(
+    useShallow(state => ({
+      enableModalClose: state.enableModalClose
+    }))
+  );
+
   useEffect(() => {
     const checkMobile = () => setIsBottomSheet(isMobile());
     checkMobile();
@@ -33,13 +42,17 @@ export function Dialog({
   }, []);
 
   useEffect(() => {
+    if (!enableModalClose) {
+      return;
+    }
+
     const handleEscape = (event: KeyboardEvent) =>
       isOpen && event.key === 'Escape' && onClose();
 
     document.addEventListener('keydown', handleEscape);
 
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, enableModalClose]);
 
   const [bodyScrollable, setBodyScrollable] = useState(true);
 
@@ -47,7 +60,11 @@ export function Dialog({
     setBodyScrollable(isOpen);
   }, [isOpen]);
 
-  const handleBackdropClick = useCallback(() => onClose(), [onClose]);
+  const handleBackdropClick = useCallback(() => {
+    if (enableModalClose) {
+      onClose();
+    }
+  }, [onClose, enableModalClose]);
 
   React.useEffect(() => {
     setMounted(true);

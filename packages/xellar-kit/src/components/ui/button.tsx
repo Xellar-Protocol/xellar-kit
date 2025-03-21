@@ -7,7 +7,17 @@ export interface StyledButtonProps {
 export const StyledButton = styled.div<StyledButtonProps>`
   background-color: ${({ theme, variant = 'primary' }) =>
     variant === 'primary' ? theme.colors.PRIMARY : theme.colors.BACKGROUND};
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme, variant = 'primary' }) => {
+    if (variant === 'primary') {
+      return theme.colors.BUTTON_TEXT_PRIMARY;
+    }
+
+    if (theme.scheme === 'light') {
+      return theme.colors.BUTTON_TEXT_SECONDARY;
+    }
+
+    return theme.colors.BUTTON_TEXT_PRIMARY;
+  }};
   height: 42px;
   padding-left: 16px;
   padding-right: 16px;

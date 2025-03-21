@@ -102,7 +102,7 @@ export function ConnectDialogHome() {
       }}
     >
       <Container $isMobile={isMobile()}>
-        <Title>Sign Up</Title>
+        <Title>Login / Register</Title>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <SocialList>
