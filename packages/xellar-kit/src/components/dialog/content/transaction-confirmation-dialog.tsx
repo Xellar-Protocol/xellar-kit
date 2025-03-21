@@ -272,7 +272,7 @@ const MessageBox = styled.div`
   padding: 12px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
+  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
   word-break: break-all;
   max-height: 150px;
   overflow: auto;

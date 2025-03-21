@@ -61,6 +61,9 @@ interface TransactionConfirmationState {
   error: string | null;
   isLoading: boolean;
 
+  enableModalClose: boolean;
+  setEnableModalClose: (enableModalClose: boolean) => void;
+
   // Callbacks
   userConfirmResolver: ((confirmed: boolean) => void) | null;
   processCompleteResolver: ((success: boolean) => void) | null;
@@ -150,6 +153,8 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
     processCompleteResolver: null,
     openModal: null,
     closeModal: null,
+    enableModalClose: true,
+    setEnableModalClose: enableModalClose => set({ enableModalClose }),
 
     // Initialize modal controls
     setModalControls: ({ openModal, closeModal }) =>
@@ -167,7 +172,8 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
         error: null,
         isLoading: false,
         userConfirmResolver: null,
-        processCompleteResolver: null
+        processCompleteResolver: null,
+        enableModalClose: true
       }),
 
     // Show transaction confirmation dialog
@@ -189,7 +195,8 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
           payload,
           error: null,
           isLoading: false,
-          userConfirmResolver: resolve
+          userConfirmResolver: resolve,
+          enableModalClose: false
         });
 
         // Open the modal
@@ -216,7 +223,8 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
           payload: { message, chainId },
           error: null,
           isLoading: false,
-          userConfirmResolver: resolve
+          userConfirmResolver: resolve,
+          enableModalClose: false
         });
 
         // Open the modal
@@ -240,6 +248,7 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
       return new Promise<void>(resolve => {
         // Store the resolver to be called when the process completes
         set({
+          enableModalClose: true,
           processCompleteResolver: success => {
             if (success) {
               // If successful, close the modal after a small delay
@@ -277,6 +286,8 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
         processCompleteResolver: null
       });
 
+      set({ enableModalClose: true });
+
       // Close the modal
       if (closeModal) {
         closeModal();
@@ -302,6 +313,7 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
           processCompleteResolver(false);
         }
       }
+      set({ enableModalClose: true });
 
       // Clear the resolver
       set({ processCompleteResolver: null });
