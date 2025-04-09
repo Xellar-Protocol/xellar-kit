@@ -1,18 +1,18 @@
 import { styled } from '@/styles/styled';
 
 export const SocialItem = styled.div`
-  height: 42px;
+  height: 60px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border-radius: 12px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: ${({ theme }) => theme.colors.TEXT};
   cursor: pointer;
   svg {
-    width: 21px !important;
-    height: 21px !important;
+    width: 32px !important;
+    height: 32px !important;
   }
 `;
 

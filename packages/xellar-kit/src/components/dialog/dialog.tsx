@@ -12,6 +12,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
+import { Footer } from '../ui/footer';
 import { useTransactionConfirmStore } from './store';
 
 interface DialogProps {
@@ -91,26 +92,18 @@ export function Dialog({
               animate="animate"
               exit="exit"
               transition={{
+                duration: 0.2,
                 type: 'spring',
-                bounce: 0,
-                damping: 20,
-                mass: 0.5,
-                stiffness: 250
+                bounce: 0
               }}
+              layout
               onClick={stopPropagation}
               $isMobile={isBottomSheet}
             >
-              <InnerDialogContent
-                $isMobile={isBottomSheet}
-                layout
-                transition={{
-                  duration: 0.2,
-                  type: 'spring',
-                  bounce: 0
-                }}
-              >
+              <InnerDialogContent $isMobile={isBottomSheet}>
                 {children}
               </InnerDialogContent>
+              <Footer />
             </DialogContent>
           </Backdrop>
         )}
@@ -159,14 +152,21 @@ const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
     left: 0;
     right: 0;
   `}
+  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
+  border-left: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border-right: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border-radius: ${({ $isMobile }) => ($isMobile ? '16px 16px 0 0' : '16px')};
 `;
 
 const InnerDialogContent = styled(motion.div)<{ $isMobile: boolean }>`
   padding: 24px;
   overflow-y: auto;
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border: 2px solid ${({ theme }) => theme.colors.BORDER};
-  border-radius: ${({ $isMobile }) => ($isMobile ? '20px 20px 0 0' : '20px')};
+  border: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border-left: none;
+  border-right: none;
+  border-radius: ${({ $isMobile }) => ($isMobile ? '16px 16px 0 0' : '16px')};
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 

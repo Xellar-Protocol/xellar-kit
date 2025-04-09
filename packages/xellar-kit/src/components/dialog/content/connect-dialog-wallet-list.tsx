@@ -12,7 +12,6 @@ import { useConnectModalStore } from '../store';
 import { BackButton, Header, RootContainer } from './passport-content/styled';
 import {
   AnimatedContainer,
-  Description,
   IconWrapper,
   Title,
   WalletItem,
@@ -62,13 +61,8 @@ export function ConnectDialogWalletList() {
           <BackButton role="button" onClick={handleBack}>
             <BackIcon width={16} height={16} />
           </BackButton>
-          <Title>Connect Wallet</Title>
+          <Title>Select Your Log In Method</Title>
         </Header>
-
-        <Description>
-          Wallets are used to send, receive, store, and display digital assets
-          like Ethereum and NFTs.
-        </Description>
 
         <ConnectorList>
           {wallets.map(_wallet => (
@@ -121,7 +115,7 @@ export function ConnectDialogWalletList() {
                 }, 100);
               }}
             >
-              <IconWrapper $size={40}>{_wallet.icon}</IconWrapper>
+              {_wallet.icon}
               <WalletName>{_wallet.name}</WalletName>
             </WalletItem>
           ))}
@@ -132,7 +126,7 @@ export function ConnectDialogWalletList() {
 }
 
 const ConnectorList = styled.div`
-  margin-top: 16px;
+  margin-top: 32px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

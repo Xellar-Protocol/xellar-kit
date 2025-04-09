@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useChainId, useChains, useSwitchChain } from 'wagmi';
 
 import { SpinnerIcon } from '@/assets/spinner';
+import { MODAL_WIDTH } from '@/constants/modal';
 import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
@@ -44,7 +45,7 @@ export function ChainDialogContent() {
 }
 
 const Wrapper = styled.div`
-  width: ${() => (isMobile() ? '100%' : '280px')};
+  width: ${() => (isMobile() ? '100%' : `${MODAL_WIDTH}px`)};
   display: flex;
   flex-direction: column;
   gap: 12px;

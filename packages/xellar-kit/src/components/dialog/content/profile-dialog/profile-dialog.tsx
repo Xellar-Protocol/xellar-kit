@@ -5,6 +5,7 @@ import { useAccount, useDisconnect } from 'wagmi';
 import { CopyIcon } from '@/assets/copy-icon';
 import { Avatar } from '@/components/ui/avatar';
 import { StyledButton } from '@/components/ui/button';
+import { MODAL_WIDTH } from '@/constants/modal';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
@@ -74,7 +75,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: ${() => (isMobile() ? '100%' : '280px')};
+  width: ${() => (isMobile() ? '100%' : `${MODAL_WIDTH}px`)};
 `;
 
 const AddressField = styled.div`

@@ -6,22 +6,20 @@ export interface StyledButtonProps {
 
 export const StyledButton = styled.div<StyledButtonProps>`
   background-color: ${({ theme, variant = 'primary' }) =>
-    variant === 'primary' ? theme.colors.PRIMARY : theme.colors.BACKGROUND};
+    variant === 'primary'
+      ? theme.colors.BUTTON_BACKGROUND
+      : theme.colors.BACKGROUND};
   color: ${({ theme, variant = 'primary' }) => {
     if (variant === 'primary') {
       return theme.colors.BUTTON_TEXT_PRIMARY;
     }
 
-    if (theme.scheme === 'light') {
-      return theme.colors.BUTTON_TEXT_SECONDARY;
-    }
-
-    return theme.colors.BUTTON_TEXT_PRIMARY;
+    return theme.colors.BUTTON_TEXT_SECONDARY;
   }};
-  height: 42px;
+  height: 48px;
   padding-left: 16px;
   padding-right: 16px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: ${({ theme, variant = 'primary' }) =>
     variant === 'outline'
       ? `1px solid ${theme.colors.BORDER}`
@@ -33,13 +31,10 @@ export const StyledButton = styled.div<StyledButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s ease-in-out;
+  transition: opacity 0.15s ease-in-out;
   gap: 8px;
   &:hover {
-    background-color: ${({ theme, variant = 'primary' }) =>
-      variant === 'primary'
-        ? theme.colors.PRIMARY_ACCENT
-        : theme.colors.BORDER};
+    opacity: 0.8;
   }
 `;
 

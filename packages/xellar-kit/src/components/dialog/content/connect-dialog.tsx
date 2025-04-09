@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'motion/react';
 
 import { SpinnerIcon } from '@/assets/spinner';
 import { Footer } from '@/components/ui/footer';
+import { useAppConfig } from '@/hooks/use-app-config';
 import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../store';
@@ -16,16 +17,37 @@ import { QRCodePage } from './qr-code-page';
 export function ConnectDialogContent() {
   const { page, isLoading } = useConnectModalStore();
 
+  const { isLoading: isAppConfigLoading } = useAppConfig();
+
   return (
     <Cointainer>
       <AnimatePresence mode="wait" initial={false}>
-        {page === 'home' && <ConnectDialogHome />}
-        {page === 'mail' && <LoginPage />}
-        {page === 'otp' && <OTPPage />}
-        {page === 'wallet-created' && <WalletCreatedPage />}
-        {page === 'wallet' && <ConnectDialogWalletList />}
-        {page === 'whatsapp' && <WhatsappLoginPage />}
-        {page === 'qr-code' && <QRCodePage />}
+        {isAppConfigLoading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              width: 280,
+              height: 200,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <SpinnerIcon />
+          </motion.div>
+        ) : (
+          <>
+            {page === 'home' && <ConnectDialogHome />}
+            {page === 'mail' && <LoginPage />}
+            {page === 'otp' && <OTPPage />}
+            {page === 'wallet-created' && <WalletCreatedPage />}
+            {page === 'wallet' && <ConnectDialogWalletList />}
+            {page === 'whatsapp' && <WhatsappLoginPage />}
+            {page === 'qr-code' && <QRCodePage />}
+          </>
+        )}
       </AnimatePresence>
 
       <AnimatePresence>
@@ -39,8 +61,6 @@ export function ConnectDialogContent() {
           </LoadingContainer>
         )}
       </AnimatePresence>
-
-      <Footer />
     </Cointainer>
   );
 }
