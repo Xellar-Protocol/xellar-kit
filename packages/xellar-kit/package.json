@@ -1,7 +1,7 @@
 {
   "name": "@xellar/kit",
   "description": "Xellar Kit is a plug-and-play wallet connection solution designed for seamless integration with Xellar Passport and various other wallets, including MetaMask (injector) and WalletConnect.",
-  "version": "1.3.1",
+  "version": "1.3.2-rc.0",
   "type": "module",
   "license": "Apache-2.0",
   "exports": {
