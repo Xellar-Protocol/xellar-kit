@@ -1,8 +1,10 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { useEffect } from 'react';
 
 import { SpinnerIcon } from '@/assets/spinner';
 import { Footer } from '@/components/ui/footer';
 import { useAppConfig } from '@/hooks/use-app-config';
+import { useWeb3 } from '@/providers/web3-provider';
 import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../store';
@@ -66,6 +68,12 @@ export function ConnectDialogContent() {
 }
 
 export function ConnectDialogStandAlone() {
+  const { setAutoEnabled } = useWeb3();
+
+  useEffect(() => {
+    setAutoEnabled(true);
+  }, [setAutoEnabled]);
+
   return (
     <DialogContent
       transition={{
