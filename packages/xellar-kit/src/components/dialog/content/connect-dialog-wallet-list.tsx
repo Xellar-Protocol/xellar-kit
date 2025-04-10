@@ -10,13 +10,7 @@ import { useWallets } from '@/wallets/use-wallet';
 
 import { useConnectModalStore } from '../store';
 import { BackButton, Header, RootContainer } from './passport-content/styled';
-import {
-  AnimatedContainer,
-  IconWrapper,
-  Title,
-  WalletItem,
-  WalletName
-} from './styled';
+import { AnimatedContainer, Title, WalletItem, WalletName } from './styled';
 
 export function ConnectDialogWalletList() {
   const { back, direction, push, setDirection, setWallet } =

@@ -112,7 +112,7 @@ export const WalletName = styled.div`
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
-  flex: 1;
+  text-align: left;
 `;
 
 export const IconWrapper = styled.div<{ $size?: number; $br?: number }>`
