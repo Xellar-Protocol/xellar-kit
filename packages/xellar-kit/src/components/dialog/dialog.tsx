@@ -13,6 +13,7 @@ import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
 import { Footer } from '../ui/footer';
+import { DialogWrapper } from './dialog-wrapper';
 import { useTransactionConfirmStore } from './store';
 
 interface DialogProps {
@@ -86,25 +87,27 @@ export function Dialog({
             exit={{ opacity: 0 }}
             onClick={handleBackdropClick}
           >
-            <DialogContent
-              variants={variants[isBottomSheet ? 'mobile' : 'desktop']}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{
-                duration: 0.2,
-                type: 'spring',
-                bounce: 0
+            <DialogWrapper
+              contentProps={{
+                variants: variants[isBottomSheet ? 'mobile' : 'desktop'],
+                initial: 'initial',
+                animate: 'animate',
+                exit: 'exit',
+                transition: {
+                  duration: 0.2,
+                  type: 'spring',
+                  bounce: 0
+                },
+                layout: true,
+                onClick: stopPropagation
               }}
-              layout
-              onClick={stopPropagation}
-              $isMobile={isBottomSheet}
+              innerContentProps={{
+                $isMobile: isBottomSheet
+              }}
             >
-              <InnerDialogContent $isMobile={isBottomSheet}>
-                {children}
-              </InnerDialogContent>
+              {children}
               <Footer />
-            </DialogContent>
+            </DialogWrapper>
           </Backdrop>
         )}
       </AnimatePresence>
@@ -126,48 +129,6 @@ const Backdrop = styled(motion.div)`
   align-items: center;
   justify-content: center;
   z-index: 1000;
-`;
-
-const DialogContent = styled(motion.div)<{ $isMobile: boolean }>`
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Open Sans',
-    'Helvetica Neue',
-    sans-serif;
-  position: ${({ $isMobile }) => ($isMobile ? 'fixed' : 'relative')};
-  max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '90%')};
-  max-height: ${({ $isMobile }) => ($isMobile ? '85vh' : '90vh')};
-  margin-top: ${({ $isMobile }) => ($isMobile ? 'auto' : '0')};
-  ${({ $isMobile }) =>
-    $isMobile &&
-    `
-    bottom: 0;
-    left: 0;
-    right: 0;
-  `}
-  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
-  border-left: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-right: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-radius: ${({ $isMobile }) => ($isMobile ? '16px 16px 0 0' : '16px')};
-`;
-
-const InnerDialogContent = styled(motion.div)<{ $isMobile: boolean }>`
-  padding: 24px;
-  overflow-y: auto;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-left: none;
-  border-right: none;
-  border-radius: ${({ $isMobile }) => ($isMobile ? '16px 16px 0 0' : '16px')};
-  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const variants = {

@@ -65,6 +65,56 @@ export function ConnectDialogContent() {
   );
 }
 
+export function ConnectDialogStandAlone() {
+  return (
+    <DialogContent
+      transition={{
+        duration: 0.2,
+        type: 'spring',
+        bounce: 0
+      }}
+      layout
+    >
+      <InnerDialogContent>
+        <ConnectDialogContent />
+      </InnerDialogContent>
+      <Footer />
+    </DialogContent>
+  );
+}
+
+const DialogContent = styled(motion.div)`
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Open Sans',
+    'Helvetica Neue',
+    sans-serif;
+
+  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
+  border-left: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border-right: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border-radius: 16px;
+`;
+
+const InnerDialogContent = styled(motion.div)`
+  padding: 24px;
+  overflow-y: auto;
+  background-color: ${({ theme }) => theme.colors.BACKGROUND};
+  border: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border-left: none;
+  border-right: none;
+  border-radius: 16px;
+  color: ${({ theme }) => theme.colors.TEXT};
+`;
+
 const Cointainer = styled.div`
   position: relative;
   overflow: hidden;
