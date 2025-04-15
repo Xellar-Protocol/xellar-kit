@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 1.3.3
+
+### Patch Changes
+
+- 92d4058: Fix Injected Connection
+
 ## 1.3.2
 
 ### Patch Changes
