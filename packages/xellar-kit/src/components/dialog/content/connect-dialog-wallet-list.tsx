@@ -76,10 +76,7 @@ export function ConnectDialogWalletList() {
               key={_wallet.id}
               onClick={() => {
                 if (_wallet.connector.type === 'injected') {
-                  if (
-                    _wallet.id.toLowerCase().includes('metamask') &&
-                    _wallet.isInstalled
-                  ) {
+                  if (_wallet.isInstalled) {
                     connect(
                       { connector: _wallet.connector },
                       {
