@@ -12,7 +12,6 @@ import { useShallow } from 'zustand/react/shallow';
 import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
-import { Footer } from '../ui/footer';
 import { DialogWrapper } from './dialog-wrapper';
 import { useTransactionConfirmStore } from './store';
 
@@ -106,7 +105,6 @@ export function Dialog({
               }}
             >
               {children}
-              {/* <Footer /> */}
             </DialogWrapper>
           </Backdrop>
         )}
