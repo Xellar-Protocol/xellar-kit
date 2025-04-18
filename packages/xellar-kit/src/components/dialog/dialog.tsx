@@ -106,7 +106,7 @@ export function Dialog({
               }}
             >
               {children}
-              <Footer />
+              {/* <Footer /> */}
             </DialogWrapper>
           </Backdrop>
         )}

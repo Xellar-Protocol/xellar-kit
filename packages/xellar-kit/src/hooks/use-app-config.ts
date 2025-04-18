@@ -30,6 +30,7 @@ export type AppConfig = {
     clientId: string;
     redirectUri: string;
   };
+  useEmailLogin: boolean;
 };
 
 export function useAppConfig() {

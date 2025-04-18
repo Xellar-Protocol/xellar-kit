@@ -16,7 +16,7 @@ export const StyledButton = styled.div<StyledButtonProps>`
 
     return theme.colors.BUTTON_TEXT_SECONDARY;
   }};
-  height: 48px;
+  height: 40px;
   padding-left: 16px;
   padding-right: 16px;
   border-radius: 8px;

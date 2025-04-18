@@ -3,6 +3,7 @@ import { useChainId, useChains, useSwitchChain } from 'wagmi';
 
 import { SpinnerIcon } from '@/assets/spinner';
 import { MODAL_WIDTH } from '@/constants/modal';
+import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
@@ -13,6 +14,8 @@ export function ChainDialogContent() {
   const chainId = useChainId();
   const { switchChain, isPending } = useSwitchChain();
 
+  const { closeModal } = useXellarContext();
+
   const [selectedChain, setSelectedChain] = useState<number | null>(chainId);
 
   const handleSwitchChain = (chainIdToSwitch: number) => {
@@ -22,6 +25,9 @@ export function ChainDialogContent() {
       {
         onError: () => {
           setSelectedChain(chainId);
+        },
+        onSuccess: () => {
+          closeModal();
         }
       }
     );
@@ -61,9 +67,10 @@ export const ChainItem = styled.div<{ selected?: boolean }>`
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  color: ${({ theme, selected }) => (selected ? '#fff' : theme.colors.TEXT)};
+  color: ${({ theme, selected }) =>
+    selected ? theme.colors.BUTTON_TEXT_PRIMARY : theme.colors.TEXT};
   background-color: ${({ theme, selected }) =>
-    selected ? theme.colors.PRIMARY : 'transparent'};
+    selected ? theme.colors.BUTTON_BACKGROUND : 'transparent'};
   &:hover {
     background-color: ${({ theme, selected }) =>
       selected ? theme.colors.PRIMARY : theme.colors.BACKGROUND};

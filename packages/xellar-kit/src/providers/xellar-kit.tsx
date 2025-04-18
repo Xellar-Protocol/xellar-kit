@@ -48,6 +48,7 @@ interface XellarKitContextType extends XellarKitProviderProps {
   telegramConfig?: AppConfig['telegram'];
   whatsappConfig?: AppConfig['whatsapp'];
   appleConfig?: AppConfig['apple'];
+  useEmailLogin?: boolean;
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -133,7 +134,8 @@ export function XellarKitProvider({
     googleConfig: appConfig?.data?.google,
     telegramConfig: appConfig?.data?.telegram,
     whatsappConfig: appConfig?.data?.whatsapp,
-    appleConfig: appConfig?.data?.apple
+    appleConfig: appConfig?.data?.apple,
+    useEmailLogin: appConfig?.data?.useEmailLogin
   };
 
   useAccountEffect({

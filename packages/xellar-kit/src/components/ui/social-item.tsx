@@ -1,7 +1,8 @@
 import { styled } from '@/styles/styled';
+import { isMobile } from '@/utils/is-mobile';
 
 export const SocialItem = styled.div`
-  height: 60px;
+  height: ${() => (isMobile() ? '32px' : '48px')};
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
   border-radius: 8px;
@@ -10,9 +11,14 @@ export const SocialItem = styled.div`
   justify-content: center;
   color: ${({ theme }) => theme.colors.TEXT};
   cursor: pointer;
+  font-size: 12px;
   svg {
-    width: 32px !important;
-    height: 32px !important;
+    width: ${() => (isMobile() ? '16px' : '24px')} !important;
+    height: ${() => (isMobile() ? '16px' : '24px')} !important;
+  }
+  img {
+    width: ${() => (isMobile() ? '16px' : '24px')} !important;
+    height: ${() => (isMobile() ? '16px' : '24px')} !important;
   }
 `;
 

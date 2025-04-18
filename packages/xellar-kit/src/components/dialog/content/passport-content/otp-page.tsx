@@ -25,7 +25,7 @@ import {
 
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-type AddressResponse = {
+export type AddressResponse = {
   network: string;
   address: string;
 };

@@ -91,7 +91,7 @@ export const WalletItem = styled.div<{ selected?: boolean }>`
   transition: background-color 0.15s ease-in-out;
   background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
   padding: 0 16px;
-  height: 60px;
+  height: ${() => (isMobile() ? '48px' : '60px')};
   border-radius: 8px;
   display: flex;
   gap: 16px;
@@ -99,8 +99,12 @@ export const WalletItem = styled.div<{ selected?: boolean }>`
   align-items: center;
   cursor: pointer;
   svg {
-    width: 32px !important;
-    height: 32px !important;
+    width: ${() => (isMobile() ? '24px' : '32px')} !important;
+    height: ${() => (isMobile() ? '24px' : '32px')} !important;
+  }
+  img {
+    width: ${() => (isMobile() ? '24px' : '32px')} !important;
+    height: ${() => (isMobile() ? '24px' : '32px')} !important;
   }
 `;
 
