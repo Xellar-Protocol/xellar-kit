@@ -273,30 +273,30 @@ export function ConnectDialogHome() {
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <SocialList>
-            {/* {useEmailLogin && ( */}
-            <SocialItem
-              style={{ flex: 1 }}
-              onClick={() => {
-                setIsEmail(!isEmail);
-              }}
-            >
-              {isEmail ? (
-                <KeyIcon
-                  style={{
-                    width: isMobile() ? 16 : 24,
-                    height: isMobile() ? 16 : 24
-                  }}
-                />
-              ) : (
-                <MailIcon
-                  style={{
-                    width: isMobile() ? 16 : 24,
-                    height: isMobile() ? 16 : 24
-                  }}
-                />
-              )}
-            </SocialItem>
-            {/* )} */}
+            {useEmailLogin && (
+              <SocialItem
+                style={{ flex: 1 }}
+                onClick={() => {
+                  setIsEmail(!isEmail);
+                }}
+              >
+                {isEmail ? (
+                  <KeyIcon
+                    style={{
+                      width: isMobile() ? 16 : 24,
+                      height: isMobile() ? 16 : 24
+                    }}
+                  />
+                ) : (
+                  <MailIcon
+                    style={{
+                      width: isMobile() ? 16 : 24,
+                      height: isMobile() ? 16 : 24
+                    }}
+                  />
+                )}
+              </SocialItem>
+            )}
             {googleConfig?.enabled && (
               <GoogleLoginItem onError={setSocialError} />
             )}
