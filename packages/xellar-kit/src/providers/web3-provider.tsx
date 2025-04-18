@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useWalletConnectUri } from '@/hooks/use-walletconnect-uri';
 
@@ -7,6 +7,7 @@ type Web3ContextType = {
     getUri: (id?: string) => string;
   };
   error: string | undefined;
+  setAutoEnabled: (enabled: boolean) => void;
 };
 
 const Web3Context = React.createContext<Web3ContextType>(undefined as never);
@@ -18,8 +19,10 @@ export const Web3ContextProvider = ({
   enabled?: boolean;
   children: React.ReactNode;
 }) => {
+  const [autoEnabled, setAutoEnabled] = useState(false);
+
   const { uri: walletConnectUri, error } = useWalletConnectUri({
-    enabled
+    enabled: enabled || autoEnabled
   });
 
   const value = {
@@ -28,7 +31,8 @@ export const Web3ContextProvider = ({
         return walletConnectUri;
       }
     },
-    error
+    error,
+    setAutoEnabled
   } as Web3ContextType;
 
   return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>;

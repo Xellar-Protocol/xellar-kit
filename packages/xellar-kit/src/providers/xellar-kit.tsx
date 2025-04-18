@@ -22,6 +22,7 @@ import { TransactionConfirmationDialogContainer } from '@/components/dialog/cont
 import { Dialog } from '@/components/dialog/dialog';
 import { useConnectModalStore } from '@/components/dialog/store';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
+import { AppConfig, useAppConfig } from '@/hooks/use-app-config';
 import { darkTheme, Theme } from '@/styles/theme';
 import { setupTransactionConfirmation } from '@/xellar-connector/transaction-confirmation';
 
@@ -37,26 +38,17 @@ const GlobalStyle = createGlobalStyle`
 interface XellarKitProviderProps {
   showConfirmationModal?: boolean;
   theme?: Theme;
-  googleClientId?: string;
-  telegramConfig?: {
-    /** Telegram bot ID */
-    botId: string;
-    /** Telegram bot username */
-    botUsername: string;
-  };
-  enableWhatsappLogin?: boolean;
-  appleLoginConfig?: {
-    /** Client ID - eg: 'com.example.com' */
-    clientId: string;
-    /** Apple's redirectURI - must be one of the URIs you added to the serviceID - the undocumented trick in apple docs is that you should call auth from a page that is listed as a redirectURI, localhost fails */
-    redirectUri: string;
-  };
 }
 
 interface XellarKitContextType extends XellarKitProviderProps {
   modalOpen: boolean;
   openModal: (type: ModalType) => void;
   closeModal: () => void;
+  googleConfig?: AppConfig['google'];
+  telegramConfig?: AppConfig['telegram'];
+  whatsappConfig?: AppConfig['whatsapp'];
+  appleConfig?: AppConfig['apple'];
+  useEmailLogin?: boolean;
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -66,10 +58,6 @@ const XellarKitContext = createContext<XellarKitContextType>(
 export function XellarKitProvider({
   children,
   theme = darkTheme as Theme,
-  googleClientId,
-  telegramConfig,
-  enableWhatsappLogin = false,
-  appleLoginConfig,
   showConfirmationModal = true
 }: PropsWithChildren<XellarKitProviderProps>) {
   if (!useContext(WagmiContext)) {
@@ -82,6 +70,8 @@ export function XellarKitProvider({
     );
   }
 
+  const { data: appConfig, isLoading, error } = useAppConfig();
+
   // Get the config from Wagmi
   const config = useConfig();
 
@@ -91,7 +81,8 @@ export function XellarKitProvider({
 
   const { setPage } = useConnectModalStore(
     useShallow(state => ({
-      setPage: state.setPage
+      setPage: state.setPage,
+      page: state.page
     }))
   );
 
@@ -140,10 +131,11 @@ export function XellarKitProvider({
     closeModal: handleCloseModal,
     theme,
     walletConnectProjectId: wcProjectId,
-    googleClientId,
-    telegramConfig,
-    enableWhatsappLogin,
-    appleLoginConfig
+    googleConfig: appConfig?.data?.google,
+    telegramConfig: appConfig?.data?.telegram,
+    whatsappConfig: appConfig?.data?.whatsapp,
+    appleConfig: appConfig?.data?.apple,
+    useEmailLogin: appConfig?.data?.useEmailLogin
   };
 
   useAccountEffect({
@@ -166,10 +158,29 @@ export function XellarKitProvider({
     });
   }, [showConfirmationModal]);
 
-  const GoogleProviderWrapper = googleClientId ? GoogleOAuthProvider : Fragment;
-  const googleProviderProps = googleClientId
-    ? { clientId: googleClientId }
-    : {};
+  const GoogleProviderWrapper = useMemo(() => {
+    if (!appConfig?.data?.google?.enabled) return Fragment;
+    if (!appConfig?.data?.google?.clientId) return Fragment;
+    return GoogleOAuthProvider;
+  }, [appConfig?.data?.google?.enabled, appConfig?.data?.google?.clientId]);
+
+  const googleProviderProps = useMemo(() => {
+    if (!appConfig?.data?.google?.enabled) return {};
+    if (!appConfig?.data?.google?.clientId) return {};
+    return { clientId: appConfig?.data?.google?.clientId };
+  }, [appConfig?.data?.google?.enabled, appConfig?.data?.google?.clientId]);
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (error) {
+    throw error;
+  }
+
+  if (!appConfig?.data.isEmbeddedWalletEnabled) {
+    throw new Error('Embedded wallet is not enabled');
+  }
 
   return createElement(
     XellarKitContext.Provider,

@@ -55,18 +55,18 @@ export function WalletCreatedPage() {
             Wallet Created Successfully! 🎉
           </Title>
 
-          <Description style={{ textAlign: 'center', margin: '24px 0' }}>
+          <Description style={{ textAlign: 'center', margin: '24px auto' }}>
             Please save your recovery secret in a safe place. {"You'll"} need it
             to recover your wallet if you lose access.
           </Description>
 
           <ButtonWrapper>
-            <DownloadORCopyButton onClick={handleCopy}>
+            <StyledButton style={{ flex: 1 }} onClick={handleCopy}>
               Copy
-            </DownloadORCopyButton>
-            <DownloadORCopyButton onClick={handleDownload}>
+            </StyledButton>
+            <StyledButton style={{ flex: 1 }} onClick={handleDownload}>
               Download
-            </DownloadORCopyButton>
+            </StyledButton>
           </ButtonWrapper>
 
           <AnimatePresence>

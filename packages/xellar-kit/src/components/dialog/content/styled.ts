@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 
+import { MODAL_WIDTH } from '@/constants/modal';
 import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
@@ -32,7 +33,7 @@ export const InnerQRCodeWrapper = styled.div`
 
 export const Container = styled.div<{ $isMobile: boolean }>`
   width: 100%;
-  min-width: ${({ $isMobile }) => ($isMobile ? '100%' : '280px')};
+  min-width: ${({ $isMobile }) => ($isMobile ? '100%' : `${MODAL_WIDTH}px`)};
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -78,7 +79,7 @@ export const EmptyStateWrapper = styled.div`
 export const AnimatedContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: ${() => (isMobile() ? '100%' : '280px')};
+  width: ${() => (isMobile() ? '100%' : `${MODAL_WIDTH}px`)};
   height: 100%;
 `;
 
@@ -88,12 +89,23 @@ export const TitleSpan = styled.span`
 
 export const WalletItem = styled.div<{ selected?: boolean }>`
   transition: background-color 0.15s ease-in-out;
+  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
+  padding: 0 16px;
+  height: ${() => (isMobile() ? '48px' : '60px')};
   border-radius: 8px;
   display: flex;
-  gap: 8px;
+  gap: 16px;
   flex-direction: row;
   align-items: center;
   cursor: pointer;
+  svg {
+    width: ${() => (isMobile() ? '24px' : '32px')} !important;
+    height: ${() => (isMobile() ? '24px' : '32px')} !important;
+  }
+  img {
+    width: ${() => (isMobile() ? '24px' : '32px')} !important;
+    height: ${() => (isMobile() ? '24px' : '32px')} !important;
+  }
 `;
 
 WalletItem.defaultProps = {
@@ -101,11 +113,10 @@ WalletItem.defaultProps = {
 };
 
 export const WalletName = styled.div`
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 500;
   line-height: 20px;
-  font-weight: 600;
-  flex: 1;
+  text-align: left;
 `;
 
 export const IconWrapper = styled.div<{ $size?: number; $br?: number }>`

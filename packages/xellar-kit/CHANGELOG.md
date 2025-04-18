@@ -1,17 +1,18 @@
 # @xellar/kit
 
-## 1.3.3
+## 2.0.0
 
 ### Patch Changes
 
-- 92d4058: Fix Injected Connection
+- be53a57: Fix Theming Issues
+- 2c72305: Force Logout when refresh token invalid
 
-## 1.3.2
+## 1.3.2-rc.0
 
 ### Patch Changes
 
-- 020c146: Fix Theming Issues
-- 020c146: Force Logout when refresh token invalid
+- be53a57: Fix Theming Issues
+- 2c72305: Force Logout when refresh token invalid
 
 ## 1.3.1
 

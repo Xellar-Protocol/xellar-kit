@@ -19,7 +19,7 @@ export function useSocialLogin() {
   const setToken = useBoundStore(state => state.setToken);
   const setRefreshToken = useBoundStore(state => state.setRefreshToken);
   const setAddress = useBoundStore(state => state.setAddress);
-  const { closeModal, telegramConfig, appleLoginConfig } = useXellarContext();
+  const { closeModal, telegramConfig, appleConfig } = useXellarContext();
   const [socialError, setSocialError] = useState('');
 
   const { connectAsync } = useConnect();
@@ -34,6 +34,9 @@ export function useSocialLogin() {
     const scriptUrl = 'https://telegram.org/js/telegram-widget.js';
 
     if (!telegramConfig) return;
+    if (!telegramConfig.enabled) return;
+    if (!telegramConfig?.botId) return;
+    if (!telegramConfig?.botUsername) return;
     setIsLoading(true);
 
     const script = document.createElement('script');
@@ -132,7 +135,9 @@ export function useSocialLogin() {
   };
 
   const handleAppleLogin = () => {
-    if (!appleLoginConfig) return;
+    if (!appleConfig) return;
+    if (!appleConfig.enabled) return;
+    if (!appleConfig?.clientId) return;
 
     const script = document.createElement('script');
     script.src =
@@ -142,9 +147,9 @@ export function useSocialLogin() {
 
     script.onload = async () => {
       (window as any).AppleID.auth.init({
-        clientId: appleLoginConfig.clientId,
+        clientId: appleConfig.clientId,
         scope: 'name email',
-        redirectURI: appleLoginConfig.redirectUri,
+        redirectURI: appleConfig.redirectUri,
         state: 'state',
         usePopup: true
       });

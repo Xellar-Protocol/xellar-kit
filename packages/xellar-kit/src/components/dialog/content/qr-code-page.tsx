@@ -61,7 +61,7 @@ export function QRCodePage() {
         <PassportContainer style={{ paddingTop: 24 }}>
           <QRCode
             uri={qrCodeUri}
-            size={280}
+            size={400}
             icon={<IconWrapper>{wallet!.icon}</IconWrapper>}
           />
 

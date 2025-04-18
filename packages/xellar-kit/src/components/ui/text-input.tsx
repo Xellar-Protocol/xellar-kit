@@ -1,10 +1,10 @@
 import { styled } from '@/styles/styled';
 
 export const TextInput = styled.input`
-  height: 42px;
-  border-radius: 12px;
+  height: 44px;
+  border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  padding: 0 12px;
+  padding: 0 16px;
   display: block;
   background-color: transparent;
   font-size: 14px;
