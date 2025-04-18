@@ -73,7 +73,7 @@ export function ConnectDialogHome() {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isEmail, setIsEmail] = useState(false);
+  const [isEmail, setIsEmail] = useState(true);
 
   const { connect, connectAsync } = useConnect();
 
@@ -273,7 +273,7 @@ export function ConnectDialogHome() {
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <SocialList>
-            {useEmailLogin && (
+            {/* {useEmailLogin && (
               <SocialItem
                 style={{ flex: 1 }}
                 onClick={() => {
@@ -296,7 +296,7 @@ export function ConnectDialogHome() {
                   />
                 )}
               </SocialItem>
-            )}
+            )} */}
             {googleConfig?.enabled && (
               <GoogleLoginItem onError={setSocialError} />
             )}
