@@ -1,5 +1,12 @@
 # @xellar/kit
 
+## 2.0.0
+
+### Patch Changes
+
+- be53a57: Fix Theming Issues
+- 2c72305: Force Logout when refresh token invalid
+
 ## 1.3.2-rc.0
 
 ### Patch Changes
