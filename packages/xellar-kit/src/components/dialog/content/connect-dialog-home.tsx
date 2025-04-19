@@ -268,7 +268,7 @@ export function ConnectDialogHome() {
           Login or Sign Up
         </Title>
         <Description>
-          Control anything through the dashboard. Especially built for you
+          Your gateway to the decentralized world. Simple, powerful, yours
         </Description>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -451,7 +451,7 @@ const Description = styled.p`
   color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
   margin-bottom: 16px;
   text-align: center;
-  max-width: 200px;
+  max-width: 300px;
   margin: 0 auto;
 `;
 
