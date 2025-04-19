@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.0.1
+
+### Patch Changes
+
+- b730d5d: fix description, fix icon, expose some hooks
+
 ## 2.0.0
 
 ### Patch Changes
