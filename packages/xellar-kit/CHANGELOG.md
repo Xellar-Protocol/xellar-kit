@@ -1,5 +1,12 @@
 # @xellar/kit
 
+## 2.0.2
+
+### Patch Changes
+
+- 57ee52e: Fix useXellarAccount
+- 57ee52e: fix description, fix icon, expose some hooks
+
 ## 2.0.1
 
 ### Patch Changes
