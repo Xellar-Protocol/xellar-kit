@@ -95,6 +95,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
       useBoundStore.getState().clearToken();
       useBoundStore.getState().clearAddress();
       useBoundStore.getState().clearRefreshToken();
+      useXellarAccountStore.getState().clearAccount();
     },
 
     onMessage() {
