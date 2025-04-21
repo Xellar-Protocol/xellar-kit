@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.0.3
+
+### Patch Changes
+
+- 0c3e48d: Fix Disconnect
+
 ## 2.0.2
 
 ### Patch Changes
