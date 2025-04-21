@@ -8,8 +8,10 @@ import {
   WalletRpcSchema
 } from 'viem';
 
+import { decodeJWT } from '@/utils/string';
+
 import { handleRequest } from './provider-request';
-import { useBoundStore } from './store';
+import { useBoundStore, useXellarAccountStore, XellarAccount } from './store';
 
 export interface XellarConnectorOptions {
   appId: string;
@@ -73,6 +75,15 @@ export function xellarConnector(options: XellarConnectorOptions) {
       }
 
       if (!targetChainId) throw new Error('No chains found on connector.');
+
+      try {
+        const decodedJWT = decodeJWT(walletToken);
+        useXellarAccountStore.setState({
+          account: decodedJWT as XellarAccount
+        });
+      } catch (error) {
+        console.error(error);
+      }
 
       return {
         accounts: [getAddress(address)],

@@ -2,7 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import { ConnectButton, ConnectDialogStandAlone } from "@xellar/kit";
+import { ConnectButton, ConnectDialogStandAlone, useXellarAccount } from "@xellar/kit";
 import { useAccount, useChainId, useSignMessage, useSignTypedData, useWriteContract } from "wagmi";
 import { erc20Abi } from "viem";
 
@@ -30,6 +30,10 @@ function App() {
       console.error("Error in transaction:", error);
     }
   };
+
+  const xellarAccount = useXellarAccount();
+
+  console.log("Xellar Account:", xellarAccount);
 
   const handleSignTypedData = async () => {
     try {

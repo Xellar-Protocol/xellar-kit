@@ -77,3 +77,34 @@ export const useBoundStore = create<StoreState>()(
     }
   )
 );
+
+export interface XellarAccount {
+  email: string;
+  provider: string;
+  uid: string;
+  address: {
+    network: string;
+    address: string;
+  }[];
+  mode: string;
+}
+
+interface XellarAccountStore {
+  account: XellarAccount | null;
+  setAccount: (account: XellarAccount | null) => void;
+  clearAccount: () => void;
+}
+
+export const useXellarAccountStore = create<XellarAccountStore>()(
+  persist(
+    set => ({
+      account: null,
+      setAccount: account => set({ account }),
+      clearAccount: () => set({ account: null })
+    }),
+    {
+      name: 'Xellar-Account-Storage',
+      storage: createJSONStorage(() => localStorage)
+    }
+  )
+);
