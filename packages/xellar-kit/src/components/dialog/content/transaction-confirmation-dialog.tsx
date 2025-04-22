@@ -286,6 +286,7 @@ const ErrorContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 16px;
+  overflow: auto;
 `;
 
 const ErrorMessage = styled.p`
