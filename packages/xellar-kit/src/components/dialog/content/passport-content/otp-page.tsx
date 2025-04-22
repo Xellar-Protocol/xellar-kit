@@ -321,17 +321,16 @@ const Slot = (props: SlotProps) => {
 };
 
 const StyledSlot = styled.div<{ isActive: boolean }>`
-  width: 32px;
-  height: 42px;
+  height: 40px;
+  width: 40px;
   border-radius: 12px;
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border: ${({ theme, isActive }) =>
+    isActive ? `1px solid #0099FF` : `1px solid ${theme.colors.BORDER}`};
   background-color: transparent;
   color: ${({ theme }) => theme.colors.TEXT};
   text-align: center;
   font-size: 16px;
   font-weight: 600;
-  border-color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.PRIMARY : theme.colors.BORDER};
   display: flex;
   align-items: center;
   justify-content: center;
