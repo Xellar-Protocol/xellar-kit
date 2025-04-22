@@ -14,6 +14,6 @@ export const TextInput = styled.input`
   transition: all 0.1s ease-in-out;
 
   &:focus {
-    border: 1px solid ${({ theme }) => theme.colors.PRIMARY};
+    border: 1px solid ${({ theme }) => theme.colors.BORDER};
   }
 `;
