@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.0.6
+
+### Patch Changes
+
+- 42cdc53: Update SDK
+
 ## 2.0.5
 
 ### Patch Changes
