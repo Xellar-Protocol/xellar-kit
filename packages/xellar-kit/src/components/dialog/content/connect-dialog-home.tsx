@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
+import { useTheme } from 'styled-components';
 import { useConnect } from 'wagmi';
 
 import { KeyIcon, MailIcon } from '@/assets/mail-icon';
@@ -37,6 +38,7 @@ export function ConnectDialogHome() {
     useEmailLogin,
     closeModal
   } = useXellarContext();
+  const { scheme } = useTheme();
 
   const {
     push,
@@ -262,7 +264,10 @@ export function ConnectDialogHome() {
     >
       <Container $isMobile={isMobile()}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <XellarBrand color="white" size={100} />
+          <XellarBrand
+            color={scheme === 'dark' ? 'white' : 'black'}
+            size={100}
+          />
         </div>
         <Title style={{ textAlign: 'center', marginTop: 32 }}>
           Login or Sign Up

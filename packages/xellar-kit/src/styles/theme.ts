@@ -28,9 +28,12 @@ export const lightTheme = {
     BACKGROUND_SECONDARY: '#e4e4e7',
     TEXT: '#171717',
     TEXT_SECONDARY: '#71717a',
-    BORDER: '#d4d4d8',
+    BORDER: '#4B4B4B',
     SHADOW: '#a5f3fc',
-    BACKGROUND_TRANSPARENT: 'rgba(255, 255, 255, 0.5)'
+    BACKGROUND_TRANSPARENT: 'rgba(255, 255, 255, 0.5)',
+    BUTTON_BACKGROUND: '#0F0F0F',
+    BUTTON_TEXT_PRIMARY: '#FFFFFF',
+    BUTTON_TEXT_SECONDARY: '#FFFFFF'
   },
   scheme: 'light'
 } as Theme;
