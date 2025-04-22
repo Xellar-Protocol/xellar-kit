@@ -33,7 +33,7 @@ export const lightTheme = {
     BACKGROUND_TRANSPARENT: 'rgba(255, 255, 255, 0.5)',
     BUTTON_BACKGROUND: '#0F0F0F',
     BUTTON_TEXT_PRIMARY: '#FFFFFF',
-    BUTTON_TEXT_SECONDARY: '#FFFFFF'
+    BUTTON_TEXT_SECONDARY: '#0F0F0F'
   },
   scheme: 'light'
 } as Theme;
