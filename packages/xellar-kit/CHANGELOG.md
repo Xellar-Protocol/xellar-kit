@@ -1,5 +1,12 @@
 # @xellar/kit
 
+## 2.0.5
+
+### Patch Changes
+
+- 6f674fe: Fix Button on Light Theme
+- 66aaa25: Fix OTP Input
+
 ## 2.0.4
 
 ### Patch Changes
