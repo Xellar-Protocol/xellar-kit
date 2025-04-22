@@ -1,5 +1,12 @@
 # @xellar/kit
 
+## 2.0.4
+
+### Patch Changes
+
+- ef43922: Fix Disconnect
+- ef43922: Fix Light Theme
+
 ## 2.0.3
 
 ### Patch Changes
