@@ -1,5 +1,13 @@
 # example-react-vite
 
+## 0.0.32
+
+### Patch Changes
+
+- Updated dependencies [ef43922]
+- Updated dependencies [ef43922]
+  - @xellar/kit@2.0.4
+
 ## 0.0.31
 
 ### Patch Changes
