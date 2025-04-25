@@ -25,6 +25,7 @@ export const chainMap: Record<number, Network> = {
   [ChainId.POLYGON_MUMBAI]: Network.POLYGON_POS_TESTNET,
   [polygonAmoy.id]: 'polygon-pos-amoy-testnet' as Network,
   [ChainId.LISK_SEPOLIA]: Network.LISK_SEPOLIA,
+  [ChainId.BASE_SEPOLIA]: Network.BASE_SEPOLIA,
   [ChainId.STORY_TESTNET]: Network.STORY_TESTNET,
   [ChainId.STORY_AENEID]: Network.STORY_AENEID,
   [ChainId.STORY_ODYSSEY]: Network.STORY_ODYSSEY,
