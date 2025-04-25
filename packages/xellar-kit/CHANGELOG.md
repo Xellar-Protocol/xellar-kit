@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.0.8
+
+### Patch Changes
+
+- 5ab2b4b: Fix some UI
+
 ## 2.0.7
 
 ### Patch Changes
