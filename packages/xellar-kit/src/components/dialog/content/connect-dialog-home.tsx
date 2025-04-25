@@ -273,7 +273,7 @@ export function ConnectDialogHome() {
           Login or Sign Up
         </Title>
         <Description>
-          Your gateway to the decentralized world. Simple, powerful, yours
+          Your gateway to the decentralized world. Simple, Powerful, Yours.
         </Description>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -403,10 +403,10 @@ export function ConnectDialogHome() {
             </SocialItem>
           </SocialList>
 
-          <Or>Or</Or>
+          <Or>OR</Or>
 
           {!isEmail && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <TextInput
                 placeholder="Enter your username"
                 value={username}
@@ -440,7 +440,7 @@ export function ConnectDialogHome() {
                 handleSignInUsernamePassword();
               }
             }}
-            style={{ marginTop: 8 }}
+            style={{ marginTop: 14 }}
           >
             {isLoading ? <SpinnerIcon /> : 'Continue'}
           </StyledButton>
@@ -473,8 +473,8 @@ const Or = styled.p`
   text-align: center;
   font-size: 12px;
   font-weight: 600;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-top: 24px;
+  margin-bottom: 24px;
   color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
 `;
 
