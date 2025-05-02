@@ -405,45 +405,62 @@ export function ConnectDialogHome() {
 
           <Or>OR</Or>
 
-          {!isEmail && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <TextInput
-                placeholder="Enter your username"
-                value={username}
-                onChange={handleChangeUsername}
-              />
-
-              <TextInput
-                placeholder="Enter your password"
-                type="password"
-                value={password}
-                onChange={handleChangePassword}
-              />
-            </div>
-          )}
-
-          {isEmail && (
-            <TextInput
-              placeholder="Enter your email"
-              value={email}
-              onChange={handleChangeEmail}
-            />
-          )}
-          {!isValidEmail && <ErrorText>Invalid email</ErrorText>}
-          {socialError && <ErrorText>{socialError}</ErrorText>}
-          <StyledButton
-            variant="primary"
-            onClick={() => {
+          <form
+            style={{ width: '100%' }}
+            onSubmit={e => {
+              e.preventDefault();
               if (isEmail) {
                 handleSignIn();
               } else {
                 handleSignInUsernamePassword();
               }
             }}
-            style={{ marginTop: 14 }}
           >
-            {isLoading ? <SpinnerIcon /> : 'Continue'}
-          </StyledButton>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 14,
+                width: '100%'
+              }}
+            >
+              {!isEmail && (
+                <>
+                  <TextInput
+                    placeholder="Enter your username"
+                    value={username}
+                    onChange={handleChangeUsername}
+                  />
+
+                  <TextInput
+                    placeholder="Enter your password"
+                    type="password"
+                    value={password}
+                    onChange={handleChangePassword}
+                  />
+                </>
+              )}
+
+              {isEmail && (
+                <TextInput
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={handleChangeEmail}
+                />
+              )}
+            </div>
+
+            {!isValidEmail && <ErrorText>Invalid email</ErrorText>}
+            {socialError && <ErrorText>{socialError}</ErrorText>}
+            <StyledButton
+              variant="primary"
+              style={{ marginTop: 14 }}
+              // @ts-expect-error Ingore TypeScript error
+              type="submit"
+            >
+              {isLoading ? <SpinnerIcon /> : 'Continue'}
+            </StyledButton>
+          </form>
         </div>
       </Container>
     </Wrapper>

@@ -8,6 +8,10 @@ export const PassportContainer = styled.div`
   justify-content: center;
   height: 100%;
   gap: 12px;
+
+  > .input-container {
+    width: 100%;
+  }
 `;
 
 export const PassportTitle = styled.h3`

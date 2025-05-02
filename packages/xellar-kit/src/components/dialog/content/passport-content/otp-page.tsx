@@ -267,10 +267,17 @@ export function OTPPage() {
           <OTPInput
             onComplete={setOtp}
             disabled={isLoading}
+            containerClassName="input-container"
             maxLength={6}
             render={({ slots }) => {
               return (
-                <div style={{ display: 'flex', gap: 8, width: '100%' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 8,
+                    width: '100%'
+                  }}
+                >
                   {slots.map((slot, idx) => (
                     <Slot key={idx} {...slot} />
                   ))}
@@ -321,8 +328,8 @@ const Slot = (props: SlotProps) => {
 };
 
 const StyledSlot = styled.div<{ isActive: boolean }>`
-  height: 40px;
-  width: 40px;
+  aspect-ratio: 1;
+  flex: 1;
   border-radius: 12px;
   border: ${({ theme, isActive }) =>
     isActive ? `1px solid #0099FF` : `1px solid ${theme.colors.BORDER}`};
