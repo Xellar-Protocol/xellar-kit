@@ -454,8 +454,8 @@ export function ConnectDialogHome() {
             {socialError && <ErrorText>{socialError}</ErrorText>}
             <StyledButton
               variant="primary"
-              style={{ marginTop: 14 }}
-              // @ts-expect-error Ingore TypeScript error
+              role="button"
+              style={{ marginTop: 14, width: '100%' }}
               type="submit"
             >
               {isLoading ? <SpinnerIcon /> : 'Continue'}

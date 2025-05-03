@@ -295,7 +295,8 @@ export function OTPPage() {
                 marginTop: 12,
                 border: 'none',
                 opacity: isResendDisabled ? 0.5 : 1,
-                cursor: isResendDisabled ? 'not-allowed' : 'pointer'
+                cursor: isResendDisabled ? 'not-allowed' : 'pointer',
+                width: '100%'
               }}
               onClick={handleResend}
               aria-disabled={isLoading}
@@ -306,7 +307,7 @@ export function OTPPage() {
             </StyledButton>
 
             <StyledButton
-              style={{ marginTop: 12 }}
+              style={{ marginTop: 12, width: '100%' }}
               onClick={onSubmit}
               aria-disabled={isLoading}
             >

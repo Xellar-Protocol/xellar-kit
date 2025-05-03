@@ -4,7 +4,7 @@ export interface StyledButtonProps {
   variant?: 'primary' | 'outline';
 }
 
-export const StyledButton = styled.div<StyledButtonProps>`
+export const StyledButton = styled.button<StyledButtonProps>`
   background-color: ${({ theme, variant = 'primary' }) =>
     variant === 'primary'
       ? theme.colors.BUTTON_BACKGROUND
@@ -17,6 +17,7 @@ export const StyledButton = styled.div<StyledButtonProps>`
     return theme.colors.BUTTON_TEXT_SECONDARY;
   }};
   height: 40px;
+  display: block;
   padding-left: 16px;
   padding-right: 16px;
   border-radius: 8px;
@@ -27,6 +28,8 @@ export const StyledButton = styled.div<StyledButtonProps>`
   cursor: pointer;
   text-align: center;
   font-size: 14px;
+  outline: none;
+  border: none;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -35,6 +38,19 @@ export const StyledButton = styled.div<StyledButtonProps>`
   gap: 8px;
   &:hover {
     opacity: 0.8;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  &:active {
+    opacity: 0.6;
+    border: none;
+    outline: none;
+  }
+  &:focus {
+    border: none;
+    outline: none;
   }
 `;
 

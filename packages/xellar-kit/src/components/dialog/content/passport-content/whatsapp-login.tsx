@@ -100,7 +100,14 @@ export function WhatsappLoginPage() {
           <Title>Whatsapp Login</Title>
         </Header>
 
-        <Description style={{ margin: 0, marginTop: 24, textAlign: 'left' }}>
+        <Description
+          style={{
+            margin: 0,
+            marginTop: 24,
+            textAlign: 'left',
+            maxWidth: 'unset'
+          }}
+        >
           Enter your phone number without the &apos;+&apos; symbol to sign in to
           your account. Make sure your phone number is registered with WhatsApp.
         </Description>
