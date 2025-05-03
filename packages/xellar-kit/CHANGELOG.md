@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.0.10
+
+### Patch Changes
+
+- 401e74c: Fix Button not Pressable
+
 ## 2.0.9
 
 ### Patch Changes
