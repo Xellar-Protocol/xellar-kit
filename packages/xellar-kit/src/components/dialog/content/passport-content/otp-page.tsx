@@ -333,9 +333,11 @@ const StyledSlot = styled.div<{ isActive: boolean }>`
   flex: 1;
   border-radius: 12px;
   border: ${({ theme, isActive }) =>
-    isActive ? `1px solid #0099FF` : `1px solid ${theme.colors.BORDER}`};
+    isActive
+      ? `1px solid ${theme.general.accent}`
+      : `1px solid ${theme.general.border}`};
   background-color: transparent;
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
   text-align: center;
   font-size: 16px;
   font-weight: 600;
@@ -351,7 +353,7 @@ const StyledSlot = styled.div<{ isActive: boolean }>`
 `;
 
 const ErrorText = styled.p`
-  color: #ff4040;
+  color: ${({ theme }) => theme.danger};
   font-size: 12px;
   margin-left: 2px;
   margin-top: 0;

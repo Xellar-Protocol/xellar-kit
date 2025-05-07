@@ -121,7 +121,7 @@ const Backdrop = styled(motion.div)`
   left: 0;
   width: 100%;
   height: 100%;
-  background: ${({ theme }) => theme.colors.BACKGROUND_TRANSPARENT};
+  background: ${({ theme }) => `${theme.general.modalBackground}80`};
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;

@@ -81,7 +81,13 @@ export function WalletCreatedPage() {
             )}
           </AnimatePresence>
 
-          <DoneButton onClick={closeModal}>Done</DoneButton>
+          <StyledButton
+            variant="outline"
+            style={{ marginTop: 12, width: '100%' }}
+            onClick={closeModal}
+          >
+            Done
+          </StyledButton>
         </Container>
       </RootContainer>
     </AnimatedContainer>
@@ -100,49 +106,9 @@ const ButtonWrapper = styled.div`
   margin-top: 12px;
 `;
 
-const DownloadORCopyButton = styled(StyledButton)`
-  height: 42px;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  flex: 1;
-  padding: 0 0;
-  font-size: 12px;
-
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.PRIMARY};
-  }
-`;
-
-DownloadORCopyButton.defaultProps = {
-  role: 'button'
-};
-
 const CopiedText = styled(motion.p)`
   font-size: 10px;
-  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
+  color: ${({ theme }) => theme.texts.secondary};
   text-align: center;
   margin-top: 12px;
 `;
-
-const DoneButton = styled.div`
-  height: 42px;
-  color: ${({ theme }) => theme.colors.PRIMARY};
-  margin-top: 12px;
-  cursor: pointer;
-  font-size: 12px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
-
-DoneButton.defaultProps = {
-  role: 'button'
-};

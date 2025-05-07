@@ -333,64 +333,60 @@ export function ConnectDialogHome() {
               </SocialItem>
             )}
 
-            {!isMobile() &&
-              wallets
-                .filter(wallet => wallet.connector.type === 'injected')
-                .slice(0, 2)
-                .map(_wallet => (
-                  <SocialItem
-                    style={{ flex: 1 }}
-                    key={_wallet.id}
-                    onClick={() => {
-                      if (_wallet.connector.type === 'injected') {
-                        if (
-                          _wallet.id.toLowerCase().includes('metamask') &&
-                          _wallet.isInstalled
-                        ) {
-                          connect(
-                            { connector: _wallet.connector },
-                            {
-                              onSuccess: () => {
-                                closeModal();
-                              }
-                            }
-                          );
-                          return;
+            {wallets.slice(0, isMobile() ? 1 : 2).map(_wallet => (
+              <SocialItem
+                style={{ flex: 1 }}
+                key={_wallet.id}
+                onClick={() => {
+                  if (_wallet.connector.type === 'injected') {
+                    if (
+                      _wallet.id.toLowerCase().includes('metamask') &&
+                      _wallet.isInstalled
+                    ) {
+                      connect(
+                        { connector: _wallet.connector },
+                        {
+                          onSuccess: () => {
+                            closeModal();
+                          }
                         }
-                      }
+                      );
+                      return;
+                    }
+                  }
 
-                      if (isMobileDevice()) {
-                        if (
-                          _wallet.id === 'walletConnect' ||
-                          _wallet.id === 'reown'
-                        ) {
-                          open();
-                          return;
-                        }
+                  if (isMobileDevice()) {
+                    if (
+                      _wallet.id === 'walletConnect' ||
+                      _wallet.id === 'reown'
+                    ) {
+                      open();
+                      return;
+                    }
 
-                        const deeplink = _wallet?.getWalletConnectDeeplink
-                          ? _wallet.getWalletConnectDeeplink(uri)
-                          : null;
+                    const deeplink = _wallet?.getWalletConnectDeeplink
+                      ? _wallet.getWalletConnectDeeplink(uri)
+                      : null;
 
-                        if (deeplink) {
-                          const anchor = document.createElement('a');
-                          anchor.href = deeplink;
-                          anchor.click();
-                        }
+                    if (deeplink) {
+                      const anchor = document.createElement('a');
+                      anchor.href = deeplink;
+                      anchor.click();
+                    }
 
-                        return;
-                      }
+                    return;
+                  }
 
-                      setWallet(_wallet);
-                      setTimeout(() => {
-                        setDirection('forward');
-                        push('qr-code');
-                      }, 100);
-                    }}
-                  >
-                    {_wallet.icon}
-                  </SocialItem>
-                ))}
+                  setWallet(_wallet);
+                  setTimeout(() => {
+                    setDirection('forward');
+                    push('qr-code');
+                  }, 100);
+                }}
+              >
+                {_wallet.icon}
+              </SocialItem>
+            ))}
 
             <SocialItem
               style={{ flex: 2 }}
@@ -443,6 +439,7 @@ export function ConnectDialogHome() {
 
               {isEmail && (
                 <TextInput
+                  invalid={!isValidEmail}
                   placeholder="Enter your email"
                   value={email}
                   onChange={handleChangeEmail}
@@ -470,7 +467,7 @@ export function ConnectDialogHome() {
 const Description = styled.p`
   font-size: 14px;
   font-weight: 400;
-  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
+  color: ${({ theme }) => theme.texts.secondary};
   margin-bottom: 16px;
   text-align: center;
   max-width: 300px;
@@ -492,11 +489,11 @@ const Or = styled.p`
   font-weight: 600;
   margin-top: 24px;
   margin-bottom: 24px;
-  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
+  color: ${({ theme }) => theme.texts.secondary};
 `;
 
 const ErrorText = styled.p`
-  color: #ff4040;
+  color: ${({ theme }) => theme.danger};
   font-size: 12px;
   margin-left: 2px;
   margin-top: 12px;

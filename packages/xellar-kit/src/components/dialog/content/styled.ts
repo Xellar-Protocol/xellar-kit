@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 
-import { MODAL_WIDTH } from '@/constants/modal';
 import { styled } from '@/styles/styled';
 import { isMobile } from '@/utils/is-mobile';
 
@@ -33,7 +32,6 @@ export const InnerQRCodeWrapper = styled.div`
 
 export const Container = styled.div<{ $isMobile: boolean }>`
   width: 100%;
-  min-width: ${({ $isMobile }) => ($isMobile ? '100%' : `${MODAL_WIDTH}px`)};
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -47,7 +45,7 @@ export const Icon = styled.img`
 export const Separator = styled.div`
   width: 48px;
   height: 4px;
-  background-color: ${({ theme }) => theme.colors.TEXT};
+  background-color: ${({ theme }) => theme.general.separatorBorder};
   margin-left: 8px;
 `;
 
@@ -65,7 +63,7 @@ export const Description = styled.p`
   max-width: 250px;
   font-weight: 500;
   margin: 8px 0;
-  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
+  color: ${({ theme }) => theme.texts.secondary};
 `;
 
 export const EmptyStateWrapper = styled.div`
@@ -79,17 +77,22 @@ export const EmptyStateWrapper = styled.div`
 export const AnimatedContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: ${() => (isMobile() ? '100%' : `${MODAL_WIDTH}px`)};
+  width: 100%;
   height: 100%;
 `;
 
 export const TitleSpan = styled.span`
-  color: ${({ theme }) => theme.colors.PRIMARY_ACCENT};
+  color: ${({ theme }) => theme.texts.primary};
 `;
 
 export const WalletItem = styled.div<{ selected?: boolean }>`
   transition: background-color 0.15s ease-in-out;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
+  background-color: ${({ theme }) => theme.buttons.secondaryBackground};
+  border: 1px solid transparent;
+  &:hover {
+    background-color: ${({ theme }) => theme.buttons.secondaryHoverBackground};
+    border: 1px solid ${({ theme }) => theme.buttons.accentBackground};
+  }
   padding: 0 16px;
   height: ${() => (isMobile() ? '48px' : '60px')};
   border-radius: 8px;
@@ -98,6 +101,7 @@ export const WalletItem = styled.div<{ selected?: boolean }>`
   flex-direction: row;
   align-items: center;
   cursor: pointer;
+  transition: all 0.15s ease-in-out;
   svg {
     width: ${() => (isMobile() ? '24px' : '32px')} !important;
     height: ${() => (isMobile() ? '24px' : '32px')} !important;
@@ -122,13 +126,18 @@ export const WalletName = styled.div`
 export const IconWrapper = styled.div<{ $size?: number; $br?: number }>`
   width: ${({ $size }) => $size || 28}px;
   height: ${({ $size }) => $size || 28}px;
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
+  border: 1px solid ${({ theme }) => theme.general.border};
+  background-color: ${({ theme }) => theme.general.modalBackground};
+  transition: all 0.15s ease-in-out;
   border-radius: ${({ $br }) => $br || 6}px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};
+  }
 
   svg {
     width: 60% !important;

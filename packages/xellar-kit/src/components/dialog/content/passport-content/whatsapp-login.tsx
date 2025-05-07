@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { BackIcon } from '@/assets/back-icon';
 import { SpinnerIcon } from '@/assets/spinner';
 import { StyledButton } from '@/components/ui/button';
+import { TextInput } from '@/components/ui/text-input';
 import { styled } from '@/styles/styled';
 
 import { useConnectModalStore } from '../../store';
@@ -14,7 +15,6 @@ import {
   Header,
   PassportContainer,
   RootContainer,
-  TextInput,
   Title
 } from './styled';
 
@@ -149,30 +149,8 @@ export function WhatsappLoginPage() {
   );
 }
 
-export const IconWrapper = styled.div`
-  width: 42px;
-  height: 42px;
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${({ theme }) => theme.colors.TEXT};
-  cursor: pointer;
-
-  svg {
-    width: 50% !important;
-    height: auto !important;
-  }
-`;
-
-IconWrapper.defaultProps = {
-  role: 'button'
-};
-
 const ErrorText = styled.p`
-  color: #ff0000;
+  color: ${({ theme }) => theme.danger};
   font-size: 12px;
   margin-top: 8px;
   margin-left: 2px;

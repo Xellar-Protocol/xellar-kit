@@ -32,20 +32,9 @@ export function DialogWrapper({
 }
 
 const DialogContent = styled(motion.div)<{ $isMobile?: boolean }>`
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Open Sans',
-    'Helvetica Neue',
-    sans-serif;
   position: ${({ $isMobile }) => ($isMobile ? 'fixed' : 'relative')};
-  max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '90%')};
+  max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '400px')};
+  width: 100%;
   max-height: ${({ $isMobile }) => ($isMobile ? '85vh' : '90vh')};
   margin-top: ${({ $isMobile }) => ($isMobile ? 'auto' : '0')};
   ${({ $isMobile }) =>
@@ -55,20 +44,20 @@ const DialogContent = styled(motion.div)<{ $isMobile?: boolean }>`
     left: 0;
     right: 0;
   `}
-  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
-  border-left: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-right: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.BORDER};
+  background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};
+  border-left: 1px solid ${({ theme }) => theme.general.border};
+  border-right: 1px solid ${({ theme }) => theme.general.border};
+  border-bottom: 1px solid ${({ theme }) => theme.general.border};
   border-radius: ${({ $isMobile }) => ($isMobile ? '16px 16px 0 0' : '16px')};
 `;
 
 const InnerDialogContent = styled(motion.div)<{ $isMobile?: boolean }>`
   padding: 24px;
   overflow-y: auto;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
+  background-color: ${({ theme }) => theme.general.modalBackground};
+  border: 1px solid ${({ theme }) => theme.general.border};
   border-left: none;
   border-right: none;
   border-radius: ${({ $isMobile }) => ($isMobile ? '16px 16px 0 0' : '16px')};
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
 `;

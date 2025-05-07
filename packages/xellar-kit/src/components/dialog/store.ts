@@ -6,7 +6,6 @@ import { WalletProps } from '@/wallets/use-wallet';
 type ModalPage =
   | 'home'
   | 'whatsapp'
-  | 'mail'
   | 'wallet'
   | 'qr-code'
   | 'otp'

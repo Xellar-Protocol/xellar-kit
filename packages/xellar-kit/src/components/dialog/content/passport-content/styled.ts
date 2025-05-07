@@ -1,4 +1,3 @@
-import { StyledButton } from '@/components/ui/button';
 import { styled } from '@/styles/styled';
 
 export const PassportContainer = styled.div`
@@ -32,19 +31,10 @@ export const IconsContainer = styled.div`
   width: 100%;
 `;
 
-export const TextInput = styled.input`
-  height: 42px;
-  border-radius: 12px;
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  padding: 0 12px;
-  display: block;
-  background-color: transparent;
-`;
-
 export const Separator = styled.div`
   flex: 1;
   height: 1px;
-  background-color: ${({ theme }) => theme.colors.BORDER};
+  background-color: ${({ theme }) => theme.general.border};
 `;
 
 export const Row = styled.div`
@@ -57,26 +47,7 @@ export const Row = styled.div`
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
-  color: ${({ theme }) => theme.colors.TEXT};
-`;
-
-export const PassportButton = styled(StyledButton)`
-  height: 42px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px;
-  font-weight: 600;
-  font-size: 13px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  color: ${({ theme }) => theme.colors.TEXT};
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.PRIMARY};
-  }
+  color: ${({ theme }) => theme.texts.primary};
 `;
 
 export const RootContainer = styled.div`
@@ -95,7 +66,7 @@ export const Header = styled.div`
 export const Title = styled.h4`
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
   margin: 0;
 `;
 

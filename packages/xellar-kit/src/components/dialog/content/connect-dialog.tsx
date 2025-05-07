@@ -10,7 +10,6 @@ import { styled } from '@/styles/styled';
 import { useConnectModalStore } from '../store';
 import { ConnectDialogHome } from './connect-dialog-home';
 import { ConnectDialogWalletList } from './connect-dialog-wallet-list';
-import { LoginPage } from './passport-content/login-page';
 import { OTPPage } from './passport-content/otp-page';
 import { WalletCreatedPage } from './passport-content/wallet-created-page';
 import { WhatsappLoginPage } from './passport-content/whatsapp-login';
@@ -42,7 +41,6 @@ export function ConnectDialogContent() {
         ) : (
           <>
             {page === 'home' && <ConnectDialogHome />}
-            {page === 'mail' && <LoginPage />}
             {page === 'otp' && <OTPPage />}
             {page === 'wallet-created' && <WalletCreatedPage />}
             {page === 'wallet' && <ConnectDialogWalletList />}
@@ -104,23 +102,23 @@ const DialogContent = styled(motion.div)`
     'Open Sans',
     'Helvetica Neue',
     sans-serif;
-
-  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
-  border-left: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-right: 1px solid ${({ theme }) => theme.colors.BORDER};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.BORDER};
+  max-width: 400px;
+  background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};
+  border-left: 1px solid ${({ theme }) => theme.general.border};
+  border-right: 1px solid ${({ theme }) => theme.general.border};
+  border-bottom: 1px solid ${({ theme }) => theme.general.border};
   border-radius: 16px;
 `;
 
 const InnerDialogContent = styled(motion.div)`
   padding: 24px;
   overflow-y: auto;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
+  background-color: ${({ theme }) => theme.general.modalBackground};
+  border: 1px solid ${({ theme }) => theme.general.border};
   border-left: none;
   border-right: none;
   border-radius: 16px;
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
 `;
 
 const Cointainer = styled.div`

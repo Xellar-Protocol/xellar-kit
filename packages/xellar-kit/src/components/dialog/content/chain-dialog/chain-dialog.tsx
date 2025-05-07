@@ -2,10 +2,8 @@ import { useState } from 'react';
 import { useChainId, useChains, useSwitchChain } from 'wagmi';
 
 import { SpinnerIcon } from '@/assets/spinner';
-import { MODAL_WIDTH } from '@/constants/modal';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
-import { isMobile } from '@/utils/is-mobile';
 
 import { Title } from '../styled';
 
@@ -51,7 +49,7 @@ export function ChainDialogContent() {
 }
 
 const Wrapper = styled.div`
-  width: ${() => (isMobile() ? '100%' : `${MODAL_WIDTH}px`)};
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -68,12 +66,14 @@ export const ChainItem = styled.div<{ selected?: boolean }>`
   align-items: center;
   cursor: pointer;
   color: ${({ theme, selected }) =>
-    selected ? theme.colors.BUTTON_TEXT_PRIMARY : theme.colors.TEXT};
+    selected ? theme.buttons.primaryText : theme.texts.primary};
   background-color: ${({ theme, selected }) =>
-    selected ? theme.colors.BUTTON_BACKGROUND : 'transparent'};
+    selected ? theme.buttons.primaryBackground : 'transparent'};
   &:hover {
     background-color: ${({ theme, selected }) =>
-      selected ? theme.colors.PRIMARY : theme.colors.BACKGROUND};
+      selected
+        ? theme.buttons.primaryHoverBackground
+        : theme.general.modalBackgroundSecondary};
   }
 `;
 

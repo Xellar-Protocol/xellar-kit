@@ -23,6 +23,6 @@ const StyledFooter = styled.div`
 const FooterText = styled.p`
   font-size: 10px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
+  color: ${({ theme }) => theme.texts.secondary};
   margin: 0;
 `;

@@ -52,11 +52,7 @@ export function ProfileDialogContent() {
         <Address>{truncateAddress(address ?? '')}</Address>
 
         <CopyIconWrapper onClick={handleCopy}>
-          <CopyIcon
-            color={theme.colors.TEXT_SECONDARY}
-            width={12}
-            height={12}
-          />
+          <CopyIcon color={theme.texts.secondary} width={12} height={12} />
         </CopyIconWrapper>
       </AddressField>
 
@@ -75,7 +71,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: ${() => (isMobile() ? '100%' : `${MODAL_WIDTH}px`)};
+  width: 100%;
 `;
 
 const AddressField = styled.div`

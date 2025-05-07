@@ -61,7 +61,7 @@ export function QRCodePage() {
         <PassportContainer style={{ paddingTop: 24 }}>
           <QRCode
             uri={qrCodeUri}
-            size={400}
+            size={350}
             icon={<IconWrapper>{wallet!.icon}</IconWrapper>}
           />
 
@@ -81,13 +81,13 @@ export function QRCodePage() {
 export const IconWrapper = styled.div`
   width: 42px;
   height: 42px;
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
-  background-color: ${({ theme }) => theme.colors.BACKGROUND};
+  border: 1px solid ${({ theme }) => theme.general.border};
+  background-color: ${({ theme }) => theme.general.modalBackground};
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
   cursor: pointer;
 
   svg {
@@ -102,7 +102,7 @@ IconWrapper.defaultProps = {
 
 const LinkButton = styled.div`
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.PRIMARY};
+  color: ${({ theme }) => theme.texts.primary};
   font-size: 14px;
   font-weight: 600;
   line-height: 24px;
@@ -111,7 +111,7 @@ const LinkButton = styled.div`
 `;
 
 const ErrorText = styled.p`
-  color: #ff0000;
+  color: ${({ theme }) => theme.danger};
   font-size: 12px;
   margin-top: 8px;
   margin-left: 2px;

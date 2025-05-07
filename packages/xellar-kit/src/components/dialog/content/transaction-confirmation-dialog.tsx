@@ -3,9 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { useTransactionConfirmStore } from '@/components/dialog/store';
 import { StyledButton } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import { styled } from '@/styles/styled';
-import { isMobile } from '@/utils/is-mobile';
 
 // We need to make the payload properties optional to match the store's payload type
 interface TransactionPayload {
@@ -149,12 +147,11 @@ export function TransactionConfirmationDialog({
               </Row>
             )}
 
-            {payload.gasPrice && (
-              <Row>
-                <Label>Gas Price:</Label>
-                <Value>{payload.gasPrice}</Value>
-              </Row>
-            )}
+            <Row>
+              <Label>Gas Price:</Label>
+              <Value>{payload.gasPrice ?? 'Unknown'}</Value>
+            </Row>
+
             {payload.data && (
               <>
                 <MessageContent>
@@ -186,6 +183,7 @@ export function TransactionConfirmationDialog({
       <Footer>
         <StyledButton
           onClick={handleReject}
+          disabled={isLoading}
           aria-disabled={isLoading}
           variant="outline"
           style={{ flex: 1 }}
@@ -197,6 +195,7 @@ export function TransactionConfirmationDialog({
             style={{ flex: 1 }}
             onClick={handleConfirm}
             aria-disabled={isLoading}
+            disabled={isLoading}
           >
             Try Again
           </StyledButton>
@@ -206,14 +205,7 @@ export function TransactionConfirmationDialog({
             onClick={handleConfirm}
             aria-disabled={isLoading}
           >
-            {isLoading ? (
-              <>
-                <Spinner />
-                Confirming...
-              </>
-            ) : (
-              'Confirm'
-            )}
+            {isLoading ? <>Confirming...</> : 'Confirm'}
           </StyledButton>
         )}
       </Footer>
@@ -224,14 +216,14 @@ export function TransactionConfirmationDialog({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${() => (isMobile() ? '100%' : '320px')};
+  width: 100%;
 `;
 
 const Title = styled.h2`
   margin: 0;
   font-size: 20px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
 `;
 
 const Content = styled.div`
@@ -248,12 +240,12 @@ const Row = styled.div`
 const Label = styled.span`
   font-weight: 500;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
+  color: ${({ theme }) => theme.texts.secondary};
 `;
 
 const Value = styled.span`
   word-break: break-all;
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
   font-family: monospace;
 `;
 
@@ -265,19 +257,19 @@ const MessageLabel = styled.div`
   font-weight: 500;
   font-size: 14px;
   margin-bottom: 8px;
-  color: ${({ theme }) => theme.colors.TEXT_SECONDARY};
+  color: ${({ theme }) => theme.texts.secondary};
 `;
 
 const MessageBox = styled.div`
   padding: 12px;
-  border: 1px solid ${({ theme }) => theme.colors.BORDER};
+  border: 1px solid ${({ theme }) => theme.general.border};
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND_SECONDARY};
+  background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};
   word-break: break-all;
   max-height: 150px;
   overflow: auto;
   font-family: monospace;
-  color: ${({ theme }) => theme.colors.TEXT};
+  color: ${({ theme }) => theme.texts.primary};
   font-size: 12px;
 `;
 
@@ -290,7 +282,7 @@ const ErrorContainer = styled.div`
 `;
 
 const ErrorMessage = styled.p`
-  color: #f56565;
+  color: ${({ theme }) => theme.danger};
   font-size: 14px;
   text-align: center;
   margin: 0;
