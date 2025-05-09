@@ -77,7 +77,7 @@ function App() {
   };
 
   return (
-    <div className="w-full bg-red-500">
+    <div className="w-full bg-red-500 text-center">
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -103,9 +103,8 @@ function App() {
           <button onClick={handleWriteContract}>Write Contract</button>
         </>
       )}
-      <ConnectButton />
-      <div className="w-full bg-red-500">
-        <ConnectDialogStandAlone />
+      <div className="mt-4">
+        <ConnectButton />
       </div>
     </div>
   );

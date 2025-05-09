@@ -31,6 +31,8 @@ export type AppConfig = {
     redirectUri: string;
   };
   useEmailLogin: boolean;
+  isRampableEnabled: boolean;
+  rampableClientSecret: string;
 };
 
 export function useAppConfig() {

@@ -1,99 +1,174 @@
-import { useState } from 'react';
-import { useTheme } from 'styled-components';
-import { useAccount, useDisconnect } from 'wagmi';
+import { AnimatePresence } from 'motion/react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
-import { CopyIcon } from '@/assets/copy-icon';
-import { Avatar } from '@/components/ui/avatar';
-import { StyledButton } from '@/components/ui/button';
-import { MODAL_WIDTH } from '@/constants/modal';
-import { useXellarContext } from '@/providers/xellar-kit';
-import { styled } from '@/styles/styled';
-import { isMobile } from '@/utils/is-mobile';
-import { truncateAddress } from '@/utils/string';
+import { useDebounce } from '@/hooks/debounce';
+import { Crypto, useGetRampableCryptos } from '@/hooks/rampable/cryptos';
+import {
+  Currency,
+  useGetRampableCurrencies
+} from '@/hooks/rampable/currencies';
+import {
+  RampableQuoteResponse,
+  useGetRampableQuote
+} from '@/hooks/rampable/quote';
 
-import { Title } from '../styled';
+import { OnrampDialogContent } from './onramp-dialog-content';
+import { ProfileDialogContent } from './profile-dialog-content';
+import { ReceiveDialogContent } from './receive-dialog-content';
+import { SelectCryptoDialogContent } from './select-crypto';
+import { SelectCurrencyDialogContent } from './select-currency';
+import { useProfileDialogStore } from './store';
 
-export function ProfileDialogContent() {
-  const { closeModal } = useXellarContext();
-  const { disconnectAsync } = useDisconnect();
-  const { address } = useAccount();
-  const handleDisconnect = async () => {
-    await disconnectAsync();
-    closeModal();
-  };
+type ProfileDialogScreen =
+  | 'home'
+  | 'onramp'
+  | 'select-currency'
+  | 'select-crypto'
+  | 'receive';
 
-  const theme = useTheme();
+export type ProfileDialogContextType = {
+  screen: ProfileDialogScreen;
+  setScreen: (screen: ProfileDialogScreen) => void;
+  currencies: Currency[];
+  selectedCurrency: Currency | null;
+  setSelectedCurrency: (currency: Currency) => void;
+  cryptos: Crypto[];
+  selectedCrypto: Crypto | null;
+  setSelectedCrypto: (crypto: Crypto) => void;
+  quote: RampableQuoteResponse | null;
+  quoteError: Error | null;
+  inputAmount: string;
+  setInputAmount: (amount: string) => void;
+  isLoading: boolean;
+};
 
-  const [isCopied, setIsCopied] = useState(false);
-  const handleCopy = async () => {
-    if (isCopied) {
-      setIsCopied(false);
+export const ProfileDialogContext = createContext<ProfileDialogContextType>(
+  undefined as never
+);
+
+export const ProfileDialog = () => {
+  const [screen, setScreen] = useState<ProfileDialogScreen>('home');
+  const [availableCurrencies, setAvailableCurrencies] = useState<Currency[]>(
+    []
+  );
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(
+    null
+  );
+  const [selectedCrypto, setSelectedCrypto] = useState<Crypto | null>(null);
+  const setStoreState = useProfileDialogStore(
+    useShallow(state => state.setState)
+  );
+
+  const [inputAmount, setInputAmount] = useState<string>('');
+
+  const debouncedInputAmount = useDebounce(inputAmount, 500);
+
+  const { data: quote, error: quoteError } = useGetRampableQuote({
+    amount: debouncedInputAmount,
+    inputCurrency: selectedCurrency?.currency || '',
+    outputCurrency: selectedCrypto?.id || ''
+  });
+
+  const { data: currencies, isLoading: isCurrenciesLoading } =
+    useGetRampableCurrencies({
+      limit: 100
+    });
+
+  const { data: cryptos, isLoading: isCryptosLoading } =
+    useGetRampableCryptos();
+
+  const cryptoList = cryptos?.data?.filter(c =>
+    c.currencies?.includes(selectedCurrency?.currency || '')
+  );
+
+  useEffect(() => {
+    if (cryptos?.data.length && currencies?.data.length) {
+      setAvailableCurrencies(
+        getAvailableCurrencies(cryptos?.data, currencies?.data)
+      );
     }
-    if ('clipboard' in navigator) {
-      await navigator.clipboard.writeText(address ?? '');
-      setIsCopied(true);
-      setTimeout(() => {
-        setIsCopied(false);
-      }, 3000);
+  }, [cryptos, currencies]);
+
+  useEffect(() => {
+    if (availableCurrencies.length) {
+      const currency = availableCurrencies.find(
+        c => c.currency === 'IDR'
+      ) as Currency;
+      setSelectedCurrency(currency || null);
     }
-  };
+  }, [availableCurrencies]);
+
+  useEffect(() => {
+    if (cryptoList?.length) {
+      const crypto = cryptoList[0];
+      setSelectedCrypto(crypto || null);
+    }
+  }, [cryptoList, selectedCurrency]);
+
+  useEffect(() => {
+    setStoreState({ screen });
+  }, [screen, setStoreState]);
 
   return (
-    <Wrapper>
-      <div>
-        <Title>Connected</Title>
-      </div>
-
-      <AvatarWrapper>
-        <Avatar name={address ?? ''} size={80} />
-      </AvatarWrapper>
-
-      <AddressField>
-        <Address>{truncateAddress(address ?? '')}</Address>
-
-        <CopyIconWrapper onClick={handleCopy}>
-          <CopyIcon color={theme.texts.secondary} width={12} height={12} />
-        </CopyIconWrapper>
-      </AddressField>
-
-      <StyledButton onClick={handleDisconnect}>Disconnect</StyledButton>
-    </Wrapper>
+    <ProfileDialogContext.Provider
+      value={{
+        screen,
+        setScreen,
+        currencies: availableCurrencies,
+        selectedCurrency,
+        setSelectedCurrency,
+        cryptos: cryptoList || [],
+        selectedCrypto,
+        setSelectedCrypto,
+        quote: quote || null,
+        quoteError,
+        inputAmount,
+        setInputAmount,
+        isLoading: isCurrenciesLoading || isCryptosLoading
+      }}
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        {screen === 'home' && <ProfileDialogContent />}
+        {screen === 'onramp' && <OnrampDialogContent />}
+        {screen === 'select-currency' && <SelectCurrencyDialogContent />}
+        {screen === 'select-crypto' && <SelectCryptoDialogContent />}
+        {screen === 'receive' && <ReceiveDialogContent />}
+      </AnimatePresence>
+    </ProfileDialogContext.Provider>
   );
-}
+};
 
-const AvatarWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 12px;
-`;
+export const useProfileDialogContext = () => {
+  const context = useContext(ProfileDialogContext);
+  if (!context) {
+    throw new Error(
+      'useProfileDialogContext must be used within a ProfileDialogContext'
+    );
+  }
+  return context;
+};
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-`;
+const getAvailableCurrencies = (cryptos: Crypto[], currencies: Currency[]) => {
+  const arr: Currency[] = [];
 
-const AddressField = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  height: 32px;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px;
-`;
+  for (let i = 0; i < cryptos.length; i++) {
+    const cryptoList = cryptos[i];
+    if (cryptoList?.currencies && cryptoList?.currencies?.length) {
+      for (let i = 0; i < cryptoList?.currencies?.length; i++) {
+        const element = cryptoList?.currencies[i];
 
-const Address = styled.p`
-  font-size: 16px;
-  font-weight: 500;
-  margin: 0;
-`;
+        const currency = currencies.find((c: Currency) => {
+          const cValue = c;
+          return cValue.currency === element;
+        });
 
-const CopyIconWrapper = styled.div`
-  cursor: pointer;
-`;
+        if (currency && !arr.includes(currency)) {
+          arr.push(currency);
+        }
+      }
+    }
+  }
 
-CopyIconWrapper.defaultProps = {
-  role: 'button'
+  return arr;
 };

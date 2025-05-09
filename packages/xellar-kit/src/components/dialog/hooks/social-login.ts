@@ -17,6 +17,7 @@ const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export function useSocialLogin() {
   const setToken = useBoundStore(state => state.setToken);
+
   const setRefreshToken = useBoundStore(state => state.setRefreshToken);
   const setAddress = useBoundStore(state => state.setAddress);
   const { closeModal, telegramConfig, appleConfig } = useXellarContext();
@@ -108,7 +109,6 @@ export function useSocialLogin() {
                 setAddress(address);
                 setToken(result.walletToken);
                 setRefreshToken(res.refreshToken);
-
                 await wait(200);
                 await connectAsync({ connector });
 
@@ -190,7 +190,6 @@ export function useSocialLogin() {
               setAddress(address);
               setToken(result.walletToken);
               setRefreshToken(res.refreshToken);
-
               await wait(200);
               await connectAsync({ connector });
 

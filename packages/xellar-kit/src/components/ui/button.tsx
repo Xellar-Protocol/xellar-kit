@@ -57,10 +57,18 @@ export const StyledButton = styled.button<StyledButtonProps>`
   &:active {
     border: none;
     outline: none;
+    border: ${({ theme, variant = 'primary' }) =>
+      variant === 'outline'
+        ? `1px solid ${theme.buttons.accentBackground}`
+        : '1px solid transparent'};
   }
   &:focus {
     border: none;
     outline: none;
+    border: ${({ theme, variant = 'primary' }) =>
+      variant === 'outline'
+        ? `1px solid ${theme.buttons.accentBackground}`
+        : '1px solid transparent'};
   }
 `;
 

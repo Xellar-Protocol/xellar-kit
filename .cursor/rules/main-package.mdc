@@ -1,0 +1,26 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Xellar-Kit Package Structure
+
+The main Xellar-Kit package is organized as follows:
+
+## Core Components
+
+- **src/components/** - UI components including the Connect Button and dialogs
+- **src/providers/** - React providers including the main XellarKitProvider
+- **src/hooks/** - React hooks for integrating with wallets and UI state
+- **src/config/** - Configuration utilities and defaults
+- **src/styles/** - Theming and styling
+
+## Key Files
+
+- [packages/xellar-kit/src/components/connect-button/connect-button.tsx](mdc:packages/xellar-kit/src/components/connect-button/connect-button.tsx) - Main button component for wallet connections
+- [packages/xellar-kit/src/providers/xellar-kit.tsx](mdc:packages/xellar-kit/src/providers/xellar-kit.tsx) - Main provider component
+- [packages/xellar-kit/src/config/default-config.ts](mdc:packages/xellar-kit/src/config/default-config.ts) - Default configuration
+
+## Entry Point
+
+The main entry point [packages/xellar-kit/src/index.ts](mdc:packages/xellar-kit/src/index.ts) exports all public APIs.

@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Xellar-Kit Project Overview
+
+Xellar-Kit is a plug-and-play wallet connection solution designed for seamless integration with Xellar Passport and various other wallets, including MetaMask (injector) and WalletConnect. It provides a smooth developer experience for integrating multi-wallet authentication into decentralized applications (dApps).
+
+## Project Structure
+
+This is a monorepo using PNPM workspaces with the following structure:
+
+- **packages/xellar-kit/** - The main package containing the Xellar-Kit implementation
+- **packages/eslint-config/** - Shared ESLint configuration
+- **packages/prettier-config/** - Shared Prettier configuration
+- **packages/typescript-config/** - Shared TypeScript configuration
+- **apps/react-vite/** - Example implementation using React and Vite
+- **apps/next-app/** - Example implementation using Next.js
+
+## Key Files
+
+- [packages/xellar-kit/src/index.ts](mdc:packages/xellar-kit/src/index.ts) - Main exports of the package
+- [package.json](mdc:package.json) - Root package configuration
+- [pnpm-workspace.yaml](mdc:pnpm-workspace.yaml) - PNPM workspace configuration

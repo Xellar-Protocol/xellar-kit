@@ -17,7 +17,8 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
-import { ProfileDialogContent } from '@/components/dialog/content/profile-dialog/profile-dialog';
+import { ProfileDialog } from '@/components/dialog/content/profile-dialog/profile-dialog';
+import { useProfileDialogStore } from '@/components/dialog/content/profile-dialog/store';
 import { TransactionConfirmationDialogContainer } from '@/components/dialog/content/transaction-confirmation-dialog-container';
 import { Dialog } from '@/components/dialog/dialog';
 import { useConnectModalStore } from '@/components/dialog/store';
@@ -86,6 +87,8 @@ export function XellarKitProvider({
     }))
   );
 
+  useProfileDialogStore(useShallow(state => state.screen));
+
   useEffect(() => {
     const wcConnector = config.connectors.find(c => c.id === 'walletConnect');
     wcConnector?.getProvider().then((p: any) => {
@@ -113,7 +116,7 @@ export function XellarKitProvider({
       case MODAL_TYPE.CHAIN:
         return <ChainDialogContent />;
       case MODAL_TYPE.PROFILE:
-        return <ProfileDialogContent />;
+        return <ProfileDialog />;
       case MODAL_TYPE.TRANSACTION_CONFIRMATION:
         return <TransactionConfirmationDialogContainer />;
       case null:

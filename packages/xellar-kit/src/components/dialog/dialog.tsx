@@ -93,7 +93,7 @@ export function Dialog({
                 animate: 'animate',
                 exit: 'exit',
                 transition: {
-                  duration: 0.2,
+                  duration: 0.1,
                   type: 'spring',
                   bounce: 0
                 },

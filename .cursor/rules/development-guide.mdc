@@ -1,0 +1,34 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Development Guide
+
+## Getting Started
+
+1. This is a PNPM monorepo - use PNPM for package management
+2. Node.js 18+ is required as specified in [package.json](mdc:package.json)
+
+## Key Commands
+
+- `pnpm dev` - Run development environment for all packages
+- `pnpm dev:kit` - Run development for just the main kit package
+- `pnpm build` - Build all packages
+- `pnpm release` - Release packages with changesets
+
+## Technology Stack
+
+- **React** - UI framework
+- **TypeScript** - Programming language
+- **Wagmi** - Ethereum hooks library
+- **TanStack Query** - Data fetching library
+- **Viem** - Ethereum interaction primitives
+
+## Package Structure
+
+The project uses [pnpm workspaces](mdc:pnpm-workspace.yaml) to manage multiple packages.
+
+## Changesets
+
+The project uses [Changesets](mdc:.changeset) for versioning and publishing.

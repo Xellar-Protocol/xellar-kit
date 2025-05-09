@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Wallet Connectors
+
+Xellar-Kit provides several wallet connection options:
+
+## Supported Wallets
+
+- **Xellar Passport**: Main wallet integration in [src/xellar-connector/](mdc:packages/xellar-kit/src/xellar-connector)
+- **MetaMask (Injected)**: Support for injected web3 wallets
+- **WalletConnect**: QR code-based connection
+
+## Key Components
+
+- [packages/xellar-kit/src/wallets/](mdc:packages/xellar-kit/src/wallets) - Contains wallet implementations
+- [packages/xellar-kit/src/components/dialog/content/connect-dialog.tsx](mdc:packages/xellar-kit/src/components/dialog/content/connect-dialog.tsx) - Main connection dialog
+- [packages/xellar-kit/src/hooks/use-xellar-account.ts](mdc:packages/xellar-kit/src/hooks/use-xellar-account.ts) - Hook for accessing Xellar account data
+
+## Configuration
+
+The wallet connection can be configured using the `defaultConfig` function exported from [packages/xellar-kit/src/config/default-config.ts](mdc:packages/xellar-kit/src/config/default-config.ts)

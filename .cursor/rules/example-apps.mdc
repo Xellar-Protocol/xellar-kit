@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Example Applications
+
+The project includes example applications demonstrating how to integrate Xellar-Kit:
+
+## React + Vite Example
+
+The [apps/react-vite/](mdc:apps/react-vite) directory contains a React application using Vite that demonstrates how to integrate Xellar-Kit in a standard React application.
+
+Key files:
+- [apps/react-vite/src/App.tsx](mdc:apps/react-vite/src/App.tsx) - Main application component
+- [apps/react-vite/src/main.tsx](mdc:apps/react-vite/src/main.tsx) - Entry point with provider setup
+
+## Next.js Example
+
+The [apps/next-app/](mdc:apps/next-app) directory contains a Next.js application demonstrating how to integrate Xellar-Kit in a Next.js project.
+
+Key files:
+- [apps/next-app/app/page.tsx](mdc:apps/next-app/app/page.tsx) - Main page component
+- [apps/next-app/app/providers.tsx](mdc:apps/next-app/app/providers.tsx) - Provider configuration
