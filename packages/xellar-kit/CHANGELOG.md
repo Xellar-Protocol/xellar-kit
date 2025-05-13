@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.1.0
+
+### Minor Changes
+
+- cdafcbc: Can Buy Crypto Assets directly from Kit, powered by Rampable
+
 ## 2.0.10
 
 ### Patch Changes
