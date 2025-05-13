@@ -76,7 +76,7 @@ export function OnrampDialogContent() {
           placeholder="0"
           value={inputAmount}
           onChange={e => setInputAmount(e.target.value)}
-          type="number"
+          inputMode="decimal"
         />
         <CurrencySelectorWrapper
           role="button"
@@ -231,6 +231,7 @@ const SectionTitle = styled.div`
   font-size: 14px;
   font-weight: 500;
   color: ${({ theme }) => theme.texts.secondary};
+  margin-bottom: 8px;
 `;
 
 const InputOuterWrapper = styled.div`
@@ -251,6 +252,7 @@ const AmountInput = styled.input`
   background-color: transparent;
   color: ${({ theme }) => theme.texts.primary};
   padding: 12px 16px;
+
   &::placeholder {
     color: ${({ theme }) => theme.texts.secondary};
   }

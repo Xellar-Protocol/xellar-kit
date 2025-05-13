@@ -37,10 +37,11 @@ export function xellarConnector(options: XellarConnectorOptions) {
     name: 'Xellar Passport',
     async setup() {
       useBoundStore.setState({ appId, env });
-      const chainId = config.chains[0]?.id;
-      if (chainId) {
-        useBoundStore.setState({ chainId });
-      }
+      const storedChainId =
+        useBoundStore.getState().chainId ?? config.chains[0]?.id;
+
+      useBoundStore.setState({ chainId: storedChainId });
+
       if (!xellarSDK) {
         xellarSDK = new XellarSDK({
           appId,
@@ -64,7 +65,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
       const address = useBoundStore.getState().address;
 
       let targetChainId = chainId;
-      targetChainId = config.chains[0]?.id;
+      targetChainId = useBoundStore.getState().chainId ?? config.chains[0]?.id;
 
       if (!walletToken) {
         throw new Error('No token found');
@@ -149,6 +150,7 @@ export function xellarConnector(options: XellarConnectorOptions) {
 
       config.emitter.emit('change', { chainId });
       useBoundStore.setState({ chainId });
+      config.storage?.setItem('chainId', chainId.toString());
 
       return chain;
     },

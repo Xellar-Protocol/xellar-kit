@@ -51,7 +51,7 @@ export function ReceiveDialogContent() {
         <Title>Receive</Title>
       </Header>
       <QRCodeContainer>
-        <QRCode uri={address ?? ''} size={300} />
+        <QRCode uri={address ?? ''} size={350} />
       </QRCodeContainer>
       <AddressInfo onClick={handleCopy} role="button">
         <AddressText>{truncateAddress(address ?? '')}</AddressText>

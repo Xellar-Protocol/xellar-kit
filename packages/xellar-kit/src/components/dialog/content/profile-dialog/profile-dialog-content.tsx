@@ -5,12 +5,14 @@ import { formatUnits } from 'viem';
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
 
 import { BuyIcon } from '@/assets/buy-icon';
+import { ChevronDownIcon } from '@/assets/chevron-down';
 import { CopyIcon } from '@/assets/copy-icon';
 import { ReceiveIcon } from '@/assets/receive-icon';
 import { SendIcon } from '@/assets/send-icon';
 import { abbreviateETHBalance } from '@/components/connect-button/abbreviate-balance';
 import { Avatar } from '@/components/ui/avatar';
 import { StyledButton } from '@/components/ui/button';
+import { ChainImage } from '@/components/ui/chain-image';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
 import { truncateAddress } from '@/utils/string';
@@ -18,12 +20,12 @@ import { truncateAddress } from '@/utils/string';
 import { useProfileDialogContext } from './profile-dialog';
 
 export function ProfileDialogContent() {
-  const { setScreen, isLoading } = useProfileDialogContext();
+  const { setScreen, isLoading, selectedCrypto, selectedCurrency } =
+    useProfileDialogContext();
 
   const { closeModal } = useXellarContext();
   const { disconnectAsync } = useDisconnect();
-  const { address } = useAccount();
-
+  const { address, chain } = useAccount();
   const { data: balanceData } = useBalance({
     address
   });
@@ -69,7 +71,7 @@ export function ProfileDialogContent() {
       </Header>
 
       <ActionButtons>
-        <ActionButton
+        {/* <ActionButton
           variant="outline"
           onClick={() => {
             // setScreen('offramp');
@@ -77,7 +79,7 @@ export function ProfileDialogContent() {
         >
           <SendIcon color={theme.texts.primary} />
           Send
-        </ActionButton>
+        </ActionButton> */}
         <ActionButton
           variant="outline"
           onClick={() => {
@@ -90,7 +92,7 @@ export function ProfileDialogContent() {
         <ActionButton
           variant="outline"
           onClick={() => {
-            if (isLoading) {
+            if (isLoading || !selectedCrypto || !selectedCurrency) {
               return;
             }
             setScreen('onramp');
@@ -101,33 +103,26 @@ export function ProfileDialogContent() {
         </ActionButton>
       </ActionButtons>
 
-      <AssetList>
-        <AssetItem>
-          <AssetInfo>
-            <p>Balance</p>
-          </AssetInfo>
+      <AssetItem onClick={() => setScreen('chain')}>
+        <ChainImage id={chain?.id ?? 0} />
+        <div style={{ flex: 1 }}>
           <AssetBalance>
-            {balanceData
-              ? abbreviateETHBalance(
-                  Number(formatUnits(balanceData.value, balanceData.decimals))
+            {abbreviateETHBalance(
+              Number(
+                formatUnits(
+                  balanceData?.value ?? 0n,
+                  balanceData?.decimals ?? 18
                 )
-              : '0.00'}{' '}
+              )
+            )}{' '}
             {balanceData?.symbol}
           </AssetBalance>
-        </AssetItem>
-      </AssetList>
-
-      {/* <MenuList>
-        <MenuItem>
-          <MenuItemText>Transactions</MenuItemText>
-        </MenuItem>
-        <MenuItem>
-          <MenuItemText>View Funds</MenuItemText>
-        </MenuItem>
-        <MenuItem>
-          <MenuItemText>Manage Wallet</MenuItemText>
-        </MenuItem>
-      </MenuList> */}
+          <ChainName>{chain?.name}</ChainName>
+        </div>
+        <div style={{ transform: 'rotate(-90deg)' }}>
+          <ChevronDownIcon color={theme.texts.secondary} />
+        </div>
+      </AssetItem>
 
       <DisconnectButton onClick={handleDisconnect}>
         Disconnect Wallet
@@ -144,7 +139,7 @@ const Wrapper = styled(motion.div)`
 `;
 
 const Header = styled.div`
-  padding: 16px 0;
+  padding: 0 0 16px 0;
   border-bottom: 1px solid ${({ theme }) => theme.general.border};
 `;
 
@@ -190,23 +185,18 @@ const ActionButton = styled(StyledButton)`
   height: 38px;
 `;
 
-const AssetList = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid ${({ theme }) => theme.general.border};
-`;
-
 const AssetItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 16px;
+  padding: 12px;
   align-items: center;
-`;
-
-const AssetInfo = styled.div`
   display: flex;
-  align-items: center;
+  margin-bottom: 12px;
   gap: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  border-radius: 12px;
+  &:hover {
+    background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};
+  }
 `;
 
 const AssetBalance = styled.p`
@@ -216,6 +206,13 @@ const AssetBalance = styled.p`
   color: ${({ theme }) => theme.texts.primary};
 `;
 
+const ChainName = styled.p`
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+  color: ${({ theme }) => theme.texts.secondary};
+`;
+
 const DisconnectButton = styled.div`
   padding: 14px 16px;
   cursor: pointer;
@@ -223,6 +220,7 @@ const DisconnectButton = styled.div`
   font-size: 14px;
   font-weight: 500;
   text-align: center;
+  border-radius: 12px;
 
   &:hover {
     background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};

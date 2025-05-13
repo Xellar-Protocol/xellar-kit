@@ -14,6 +14,7 @@ import {
 } from '@/hooks/rampable/quote';
 
 import { OnrampDialogContent } from './onramp-dialog-content';
+import { ProfileChainDialogContent } from './profile-chain-dialog';
 import { ProfileDialogContent } from './profile-dialog-content';
 import { ReceiveDialogContent } from './receive-dialog-content';
 import { SelectCryptoDialogContent } from './select-crypto';
@@ -25,7 +26,8 @@ type ProfileDialogScreen =
   | 'onramp'
   | 'select-currency'
   | 'select-crypto'
-  | 'receive';
+  | 'receive'
+  | 'chain';
 
 export type ProfileDialogContextType = {
   screen: ProfileDialogScreen;
@@ -134,6 +136,7 @@ export const ProfileDialog = () => {
         {screen === 'select-currency' && <SelectCurrencyDialogContent />}
         {screen === 'select-crypto' && <SelectCryptoDialogContent />}
         {screen === 'receive' && <ReceiveDialogContent />}
+        {screen === 'chain' && <ProfileChainDialogContent />}
       </AnimatePresence>
     </ProfileDialogContext.Provider>
   );

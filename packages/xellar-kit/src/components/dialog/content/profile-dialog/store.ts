@@ -5,7 +5,8 @@ type ProfileDialogScreen =
   | 'onramp'
   | 'select-currency'
   | 'select-crypto'
-  | 'receive';
+  | 'receive'
+  | 'chain';
 
 interface ProfileDialogState {
   screen: ProfileDialogScreen;
