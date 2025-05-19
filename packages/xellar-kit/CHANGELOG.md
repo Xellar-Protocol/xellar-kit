@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.1.1
+
+### Patch Changes
+
+- fec4f19: fix: ensure script cleanup in social login and add account check in provider
+
 ## 2.1.0
 
 ### Minor Changes
