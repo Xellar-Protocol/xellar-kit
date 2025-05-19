@@ -23,6 +23,7 @@ import { TransactionConfirmationDialogContainer } from '@/components/dialog/cont
 import { Dialog } from '@/components/dialog/dialog';
 import { useConnectModalStore } from '@/components/dialog/store';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
+import { useCheckAccount } from '@/hooks/check-account';
 import { AppConfig, useAppConfig } from '@/hooks/use-app-config';
 import { darkTheme, Theme } from '@/styles/theme';
 import { setupTransactionConfirmation } from '@/xellar-connector/transaction-confirmation';
@@ -72,6 +73,8 @@ export function XellarKitProvider({
   }
 
   const { data: appConfig, isLoading, error } = useAppConfig();
+
+  useCheckAccount();
 
   // Get the config from Wagmi
   const config = useConfig();

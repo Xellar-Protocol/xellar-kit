@@ -116,8 +116,6 @@ export function useSocialLogin() {
                 closeModal();
                 setIsLoading(false);
               }
-
-              document.body.removeChild(script);
             })
             .catch(err => {
               setSocialError('Something went wrong');
@@ -126,6 +124,9 @@ export function useSocialLogin() {
               }, 3000);
               console.error(err);
               setIsLoading(false);
+            })
+            .finally(() => {
+              document.body.removeChild(script);
             });
         }
       );
