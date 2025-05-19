@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.1.2
+
+### Patch Changes
+
+- c034166: Remove useCheckAccount, fix Standalone Dialog
+
 ## 2.1.1
 
 ### Patch Changes
