@@ -74,7 +74,7 @@ export function XellarKitProvider({
 
   const { data: appConfig, isLoading, error } = useAppConfig();
 
-  useCheckAccount();
+  // useCheckAccount();
 
   // Get the config from Wagmi
   const config = useConfig();

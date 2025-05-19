@@ -102,7 +102,8 @@ const DialogContent = styled(motion.div)`
     'Open Sans',
     'Helvetica Neue',
     sans-serif;
-  max-width: 400px;
+  max-width: 450px;
+  width: 100%;
   background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};
   border-left: 1px solid ${({ theme }) => theme.general.border};
   border-right: 1px solid ${({ theme }) => theme.general.border};

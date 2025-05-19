@@ -106,6 +106,7 @@ function App() {
       <div className="mt-4">
         <ConnectButton />
       </div>
+      <ConnectDialogStandAlone />
     </div>
   );
 }
