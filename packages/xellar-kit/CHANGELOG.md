@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.1.3
+
+### Patch Changes
+
+- fa4af11: Fix Endpoint URL
+
 ## 2.1.2
 
 ### Patch Changes
