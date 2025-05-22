@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.2.0
+
+### Minor Changes
+
+- 935e729: Can Now Display Custom Branding
+
 ## 2.1.3
 
 ### Patch Changes
