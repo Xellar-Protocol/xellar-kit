@@ -32,6 +32,7 @@ export type AppConfig = {
   };
   useEmailLogin: boolean;
   isRampableEnabled: boolean;
+  isAAEnabled: boolean;
   rampableClientSecret: string;
 };
 

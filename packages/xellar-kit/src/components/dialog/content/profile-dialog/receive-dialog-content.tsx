@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { useTheme } from 'styled-components';
-import { useAccount } from 'wagmi';
 
 import { BackIcon } from '@/assets/back-icon';
 import { CopyIcon } from '@/assets/copy-icon';
@@ -14,14 +13,12 @@ import { Title } from '../styled';
 import { useProfileDialogContext } from './profile-dialog';
 
 export function ReceiveDialogContent() {
-  const { setScreen } = useProfileDialogContext();
+  const { setScreen, activeAddress } = useProfileDialogContext();
   const theme = useTheme();
 
   const handleBack = () => {
     setScreen('home');
   };
-
-  const { address } = useAccount();
 
   const [isCopied, setIsCopied] = useState(false);
   const handleCopy = async () => {
@@ -29,7 +26,7 @@ export function ReceiveDialogContent() {
       setIsCopied(false);
     }
     if ('clipboard' in navigator) {
-      await navigator.clipboard.writeText(address ?? '');
+      await navigator.clipboard.writeText(activeAddress ?? '');
       setIsCopied(true);
       setTimeout(() => {
         setIsCopied(false);
@@ -51,10 +48,10 @@ export function ReceiveDialogContent() {
         <Title>Receive</Title>
       </Header>
       <QRCodeContainer>
-        <QRCode uri={address ?? ''} size={350} />
+        <QRCode uri={activeAddress ?? '-'} size={350} />
       </QRCodeContainer>
       <AddressInfo onClick={handleCopy} role="button">
-        <AddressText>{truncateAddress(address ?? '')}</AddressText>
+        <AddressText>{truncateAddress(activeAddress ?? '')}</AddressText>
         <CopyIcon color={theme.texts.secondary} width={14} height={14} />
       </AddressInfo>
       {isCopied && <CopiedText>Copied to clipboard</CopiedText>}

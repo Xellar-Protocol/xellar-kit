@@ -34,14 +34,9 @@ export function useXellarSDK() {
   };
 
   const xellarSDK = useMemo(() => {
-    if (!appId) {
-      throw new Error('appId is required');
-    }
-
     return new XellarSDK({
-      appId,
-      clientSecret: '',
-      env
+      appId: appId ?? '',
+      env: env ?? 'sandbox'
     });
   }, [appId, env]);
 

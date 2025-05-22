@@ -1,21 +1,15 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AACreateAccountResponse } from '@xellar/sdk';
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from 'styled-components';
-import { formatUnits } from 'viem';
-import {
-  useAccount,
-  useBalance,
-  useChainId,
-  useChains,
-  useDisconnect
-} from 'wagmi';
+import { useAccount, useDisconnect } from 'wagmi';
 
 import { BuyIcon } from '@/assets/buy-icon';
 import { ChevronDownIcon } from '@/assets/chevron-down';
 import { CopyIcon } from '@/assets/copy-icon';
 import { ReceiveIcon } from '@/assets/receive-icon';
 // import { SendIcon } from '@/assets/send-icon';
-import { abbreviateETHBalance } from '@/components/connect-button/abbreviate-balance';
 import { Avatar } from '@/components/ui/avatar';
 import { StyledButton } from '@/components/ui/button';
 import { ChainImage } from '@/components/ui/chain-image';
@@ -26,7 +20,22 @@ import { truncateAddress } from '@/utils/string';
 
 import { useProfileDialogContext } from './profile-dialog';
 
-export function ProfileDialogContent() {
+const chainNameMap = {
+  1: 'Ethereum',
+  137: 'Polygon',
+  56: 'BSC',
+  8453: 'Base',
+  17000: 'Holesky',
+  11155111: 'Sepolia'
+};
+
+const statusMap = {
+  not_deployed: 'Not Activated',
+  deployed: 'Activated',
+  deploying: 'Activating'
+};
+
+export function ProfileSmartAccountContent() {
   const {
     setScreen,
     setActiveAddress,
@@ -34,22 +43,15 @@ export function ProfileDialogContent() {
     selectedCrypto,
     selectedCurrency
   } = useProfileDialogContext();
+  const queryClient = useQueryClient();
 
-  const { smartAccount } = useSmartAccount();
+  const { activateAccount, smartAccount } = useSmartAccount();
 
   const aaAddress = smartAccount?.accounts[0]?.aaAddress;
 
   const { closeModal } = useXellarContext();
   const { disconnectAsync } = useDisconnect();
   const { address } = useAccount();
-  const chainId = useChainId();
-  const chains = useChains();
-  const { data: balanceData } = useBalance({
-    address,
-    chainId
-  });
-
-  const chain = chains.find(chain => chain.id === chainId);
 
   const handleDisconnect = async () => {
     await disconnectAsync();
@@ -64,13 +66,20 @@ export function ProfileDialogContent() {
       setIsCopied(false);
     }
     if ('clipboard' in navigator) {
-      await navigator.clipboard.writeText(address ?? '');
+      await navigator.clipboard.writeText(aaAddress ?? '');
       setIsCopied(true);
       setTimeout(() => {
         setIsCopied(false);
       }, 3000);
     }
   };
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (accountId: string) => activateAccount(accountId),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['get-smart-account'] });
+    }
+  });
 
   return (
     <Wrapper
@@ -81,19 +90,17 @@ export function ProfileDialogContent() {
     >
       <Header>
         <HeaderInfo>
-          <Avatar name={address ?? ''} size={36} />
+          <Avatar name={aaAddress ?? ''} size={36} />
           <TitleWrapper>
-            <TitleText style={{ fontWeight: 'bold' }}>
-              Personal Wallet
-            </TitleText>
+            <TitleText style={{ fontWeight: 'bold' }}>Smart Wallet</TitleText>
             <TitleText style={{ fontSize: 12, color: theme.texts.secondary }}>
-              Default EOA Wallet
+              Enhanced Security, Gasless Transactions
             </TitleText>
           </TitleWrapper>
         </HeaderInfo>
 
         <AddressWrapper>
-          <AddressText>{truncateAddress(address ?? '')}</AddressText>
+          <AddressText>{truncateAddress(aaAddress ?? '')}</AddressText>
           <CopyIconButton onClick={handleCopy}>
             <CopyIcon color={theme.texts.secondary} width={14} height={14} />
           </CopyIconButton>
@@ -101,20 +108,11 @@ export function ProfileDialogContent() {
       </Header>
 
       <ActionButtons>
-        {/* <ActionButton
-          variant="outline"
-          onClick={() => {
-            // setScreen('offramp');
-          }}
-        >
-          <SendIcon color={theme.texts.primary} />
-          Send
-        </ActionButton> */}
         <ActionButton
           variant="outline"
           onClick={() => {
             setScreen('receive');
-            setActiveAddress(address ?? '');
+            setActiveAddress(aaAddress ?? '');
           }}
         >
           <ReceiveIcon color={theme.texts.primary} />
@@ -127,7 +125,7 @@ export function ProfileDialogContent() {
               return;
             }
             setScreen('onramp');
-            setActiveAddress(address ?? '');
+            setActiveAddress(aaAddress ?? '');
           }}
         >
           <BuyIcon color={theme.texts.primary} />
@@ -135,40 +133,62 @@ export function ProfileDialogContent() {
         </ActionButton>
       </ActionButtons>
 
-      <AssetItem onClick={() => setScreen('chain')}>
-        <ChainImage id={chainId ?? 0} />
+      <p
+        style={{
+          fontSize: 14,
+          fontWeight: 500,
+          margin: 0,
+          marginBottom: 12,
+          color: theme.texts.primary
+        }}
+      >
+        Chains
+      </p>
+
+      {smartAccount?.accounts?.map(aa => {
+        return (
+          <AssetItem
+            style={{
+              cursor: 'default',
+              backgroundColor: theme.general.modalBackgroundSecondary
+            }}
+            key={aa.id}
+          >
+            <ChainImage id={aa?.chainId ?? 0} />
+            <div style={{ flex: 1 }}>
+              <AssetBalance>
+                {chainNameMap[aa.chainId as keyof typeof chainNameMap] ||
+                  aa.network}
+              </AssetBalance>
+              <ChainName>
+                {statusMap[aa.status as keyof typeof statusMap] || 'Unknown'}
+              </ChainName>
+            </div>
+            {aa.status === 'not_deployed' && (
+              <StyledButton
+                style={{ height: 32, fontSize: 12 }}
+                disabled={isPending}
+                onClick={() => mutate(aa.id)}
+              >
+                {isPending ? 'Activating...' : 'Activate'}
+              </StyledButton>
+            )}
+          </AssetItem>
+        );
+      })}
+
+      <AssetItem onClick={() => setScreen('home')}>
+        <Avatar name={address ?? ''} size={24} />
         <div style={{ flex: 1 }}>
-          <AssetBalance>
-            {abbreviateETHBalance(
-              Number(
-                formatUnits(
-                  balanceData?.value ?? 0n,
-                  balanceData?.decimals ?? 18
-                )
-              )
-            )}{' '}
-            {balanceData?.symbol}
-          </AssetBalance>
-          <ChainName>{chain?.name}</ChainName>
+          <AssetBalance>Personal Wallet</AssetBalance>
+          <ChainName style={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
+            {truncateAddress(address ?? '')}
+          </ChainName>
         </div>
         <div style={{ transform: 'rotate(-90deg)' }}>
           <ChevronDownIcon color={theme.texts.secondary} />
         </div>
       </AssetItem>
-      {aaAddress && (
-        <AssetItem onClick={() => setScreen('smart-account')}>
-          <Avatar name={aaAddress ?? ''} size={24} />
-          <div style={{ flex: 1 }}>
-            <AssetBalance>Smart Wallet</AssetBalance>
-            <ChainName style={{ fontFamily: 'monospace', fontWeight: 'bold' }}>
-              {truncateAddress(aaAddress)}
-            </ChainName>
-          </div>
-          <div style={{ transform: 'rotate(-90deg)' }}>
-            <ChevronDownIcon color={theme.texts.secondary} />
-          </div>
-        </AssetItem>
-      )}
 
       <DisconnectButton onClick={handleDisconnect}>
         Disconnect Wallet

@@ -39,6 +39,7 @@ const GlobalStyle = createGlobalStyle`
 
 interface XellarKitProviderProps {
   showConfirmationModal?: boolean;
+  useSmartAccount?: boolean;
   theme?: Theme;
 }
 
@@ -51,6 +52,7 @@ interface XellarKitContextType extends XellarKitProviderProps {
   whatsappConfig?: AppConfig['whatsapp'];
   appleConfig?: AppConfig['apple'];
   useEmailLogin?: boolean;
+  useSmartAccount?: boolean;
 }
 
 const XellarKitContext = createContext<XellarKitContextType>(
@@ -60,7 +62,8 @@ const XellarKitContext = createContext<XellarKitContextType>(
 export function XellarKitProvider({
   children,
   theme = darkTheme as Theme,
-  showConfirmationModal = true
+  showConfirmationModal = true,
+  useSmartAccount = false
 }: PropsWithChildren<XellarKitProviderProps>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
@@ -141,7 +144,8 @@ export function XellarKitProvider({
     telegramConfig: appConfig?.data?.telegram,
     whatsappConfig: appConfig?.data?.whatsapp,
     appleConfig: appConfig?.data?.apple,
-    useEmailLogin: appConfig?.data?.useEmailLogin
+    useEmailLogin: appConfig?.data?.useEmailLogin,
+    useSmartAccount
   };
 
   useAccountEffect({
@@ -176,15 +180,11 @@ export function XellarKitProvider({
     return { clientId: appConfig?.data?.google?.clientId };
   }, [appConfig?.data?.google?.enabled, appConfig?.data?.google?.clientId]);
 
-  if (isLoading) {
-    return null;
-  }
-
   if (error) {
     throw error;
   }
 
-  if (!appConfig?.data.isEmbeddedWalletEnabled) {
+  if (!appConfig?.data.isEmbeddedWalletEnabled && !isLoading) {
     throw new Error('Embedded wallet is not enabled');
   }
 

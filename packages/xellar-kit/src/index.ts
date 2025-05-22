@@ -1,6 +1,7 @@
 export { ConnectButton } from './components/connect-button/connect-button';
 export { ConnectDialogStandAlone } from './components/dialog/content/connect-dialog';
 export { defaultConfig } from './config/default-config';
+export { useSmartAccount } from './hooks/account-abstraction';
 export { useConnectModal } from './hooks/use-connect-modal';
 export { useXellarAccount } from './hooks/use-xellar-account';
 export { useChainModal } from './hooks/useChainModal';

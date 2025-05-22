@@ -19,6 +19,7 @@ import { ProfileDialogContent } from './profile-dialog-content';
 import { ReceiveDialogContent } from './receive-dialog-content';
 import { SelectCryptoDialogContent } from './select-crypto';
 import { SelectCurrencyDialogContent } from './select-currency';
+import { ProfileSmartAccountContent } from './smart-account-content';
 import { useProfileDialogStore } from './store';
 
 type ProfileDialogScreen =
@@ -27,7 +28,8 @@ type ProfileDialogScreen =
   | 'select-currency'
   | 'select-crypto'
   | 'receive'
-  | 'chain';
+  | 'chain'
+  | 'smart-account';
 
 export type ProfileDialogContextType = {
   screen: ProfileDialogScreen;
@@ -43,6 +45,8 @@ export type ProfileDialogContextType = {
   inputAmount: string;
   setInputAmount: (amount: string) => void;
   isLoading: boolean;
+  activeAddress: string | null;
+  setActiveAddress: (address: string) => void;
 };
 
 export const ProfileDialogContext = createContext<ProfileDialogContextType>(
@@ -54,6 +58,7 @@ export const ProfileDialog = () => {
   const [availableCurrencies, setAvailableCurrencies] = useState<Currency[]>(
     []
   );
+  const [activeAddress, setActiveAddress] = useState<string | null>(null);
   const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(
     null
   );
@@ -127,7 +132,9 @@ export const ProfileDialog = () => {
         quoteError,
         inputAmount,
         setInputAmount,
-        isLoading: isCurrenciesLoading || isCryptosLoading
+        isLoading: isCurrenciesLoading || isCryptosLoading,
+        activeAddress,
+        setActiveAddress
       }}
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -137,6 +144,7 @@ export const ProfileDialog = () => {
         {screen === 'select-crypto' && <SelectCryptoDialogContent />}
         {screen === 'receive' && <ReceiveDialogContent />}
         {screen === 'chain' && <ProfileChainDialogContent />}
+        {screen === 'smart-account' && <ProfileSmartAccountContent />}
       </AnimatePresence>
     </ProfileDialogContext.Provider>
   );
