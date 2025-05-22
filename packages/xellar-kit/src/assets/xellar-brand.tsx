@@ -11,6 +11,8 @@ export function XellarBrand(
   const width = size ?? defaultWidth;
   const height = width * (defaultHeight / defaultWidth);
 
+  console.log({ height });
+
   const color = props.color ?? '#949494';
 
   return (

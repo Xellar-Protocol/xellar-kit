@@ -33,6 +33,8 @@ export type AppConfig = {
   useEmailLogin: boolean;
   isRampableEnabled: boolean;
   rampableClientSecret: string;
+  useXellarBrand: boolean;
+  logoUrl: string;
 };
 
 export function useAppConfig() {

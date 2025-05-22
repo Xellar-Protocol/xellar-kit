@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useTheme } from 'styled-components';
 import { useConnect } from 'wagmi';
 
-import { KeyIcon, MailIcon } from '@/assets/mail-icon';
 import { AppleIcon, TelegramIcon, WhatsappIcon } from '@/assets/socials';
 import { SpinnerIcon } from '@/assets/spinner';
 import { XellarBrand } from '@/assets/xellar-brand';
@@ -11,6 +10,7 @@ import { StyledButton } from '@/components/ui/button';
 import { SocialItem } from '@/components/ui/social-item';
 import { TextInput } from '@/components/ui/text-input';
 import { useConnector } from '@/hooks/connectors';
+import { useAppConfig } from '@/hooks/use-app-config';
 import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
@@ -35,10 +35,11 @@ export function ConnectDialogHome() {
     googleConfig,
     whatsappConfig,
     appleConfig,
-    useEmailLogin,
+    customLogoHeight,
     closeModal
   } = useXellarContext();
   const { scheme } = useTheme();
+  const { data } = useAppConfig();
 
   const {
     push,
@@ -75,7 +76,7 @@ export function ConnectDialogHome() {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isEmail, setIsEmail] = useState(true);
+  const [isEmail] = useState(true);
 
   const { connect, connectAsync } = useConnect();
 
@@ -264,12 +265,24 @@ export function ConnectDialogHome() {
     >
       <Container $isMobile={isMobile()}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <XellarBrand
-            color={scheme === 'dark' ? 'white' : 'black'}
-            size={100}
-          />
+          {!data?.data?.useXellarBrand ? (
+            <img
+              src={data?.data?.logoUrl}
+              alt="Logo"
+              style={{
+                height: customLogoHeight,
+                width: '100%',
+                objectFit: 'contain'
+              }}
+            />
+          ) : (
+            <XellarBrand
+              color={scheme === 'dark' ? 'white' : 'black'}
+              size={100}
+            />
+          )}
         </div>
-        <Title style={{ textAlign: 'center', marginTop: 32 }}>
+        <Title style={{ textAlign: 'center', marginTop: 24 }}>
           Login or Sign Up
         </Title>
         <Description>

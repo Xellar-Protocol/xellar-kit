@@ -1,7 +1,14 @@
 import { XellarBrand } from '@/assets/xellar-brand';
+import { useAppConfig } from '@/hooks/use-app-config';
 import { styled } from '@/styles/styled';
 
 export function Footer() {
+  const { data } = useAppConfig();
+
+  if (!data?.data?.useXellarBrand) {
+    return null;
+  }
+
   return (
     <StyledFooter>
       <FooterText>Powered by</FooterText>

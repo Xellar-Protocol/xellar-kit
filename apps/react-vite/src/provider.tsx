@@ -10,7 +10,7 @@ const config = defaultConfig({
   appName: "Xellar",
   walletConnectProjectId,
   xellarAppId: import.meta.env.VITE_XELLAR_APP_ID,
-  xellarEnv: "production",
+  xellarEnv: "sandbox",
   chains: [liskSepolia, polygonMumbai, lisk],
 }) as Config;
 
