@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.2.1
+
+### Patch Changes
+
+- 8b77ba7: Fix Branding Logic
+
 ## 2.2.0
 
 ### Minor Changes
