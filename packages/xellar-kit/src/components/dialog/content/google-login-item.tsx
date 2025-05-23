@@ -50,7 +50,6 @@ export function GoogleLoginItem({ onError }: GoogleLoginItemProps) {
           createWalletResult.address.find(n => n.network === 'evm')
             ?.address as `0x${string}`
         );
-        await connectAsync({ connector });
 
         push('wallet-created');
         setDirection('forward');
