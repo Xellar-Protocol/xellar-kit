@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.2.2
+
+### Patch Changes
+
+- 49e71b7: Enhance Connection Flow in Newly Created Account
+
 ## 2.2.1
 
 ### Patch Changes
