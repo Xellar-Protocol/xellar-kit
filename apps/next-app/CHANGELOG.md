@@ -1,5 +1,12 @@
 # example-next-app
 
+## 0.1.44
+
+### Patch Changes
+
+- Updated dependencies [8b77ba7]
+  - @xellar/kit@2.2.1
+
 ## 0.1.43
 
 ### Patch Changes
