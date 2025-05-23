@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTheme } from 'styled-components';
 import { useConnect } from 'wagmi';
 
@@ -15,6 +15,7 @@ import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
 import { isMobile, isMobileDevice } from '@/utils/is-mobile';
+import { isUndefined } from '@/utils/is-undefined';
 import { useWallets } from '@/wallets/use-wallet';
 import { useBoundStore } from '@/xellar-connector/store';
 
@@ -102,6 +103,13 @@ export function ConnectDialogHome() {
   const { connect: web3connect } = useWeb3();
 
   const uri = web3connect.getUri();
+
+  const showXellarBrand = useMemo(() => {
+    if (isUndefined(data?.data?.useXellarBrand)) {
+      return true;
+    }
+    return !!data?.data?.useXellarBrand;
+  }, [data?.data?.useXellarBrand]);
 
   const handleSignIn = async () => {
     try {
@@ -265,21 +273,23 @@ export function ConnectDialogHome() {
     >
       <Container $isMobile={isMobile()}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {!data?.data?.useXellarBrand ? (
-            <img
-              src={data?.data?.logoUrl}
-              alt="Logo"
-              style={{
-                height: customLogoHeight,
-                width: '100%',
-                objectFit: 'contain'
-              }}
-            />
-          ) : (
+          {showXellarBrand ? (
             <XellarBrand
               color={scheme === 'dark' ? 'white' : 'black'}
               size={100}
             />
+          ) : (
+            data?.data?.logoUrl && (
+              <img
+                src={data?.data?.logoUrl}
+                alt="Logo"
+                style={{
+                  height: customLogoHeight,
+                  width: '100%',
+                  objectFit: 'contain'
+                }}
+              />
+            )
           )}
         </div>
         <Title style={{ textAlign: 'center', marginTop: 24 }}>

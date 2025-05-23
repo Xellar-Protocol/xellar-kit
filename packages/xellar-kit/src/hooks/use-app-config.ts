@@ -35,6 +35,7 @@ export type AppConfig = {
   rampableClientSecret: string;
   useXellarBrand: boolean;
   logoUrl: string;
+  showPoweredBy: boolean;
 };
 
 export function useAppConfig() {

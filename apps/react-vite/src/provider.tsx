@@ -20,7 +20,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <XellarKitProvider>{children}</XellarKitProvider>
+        <XellarKitProvider customLogoHeight={42}>{children}</XellarKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
