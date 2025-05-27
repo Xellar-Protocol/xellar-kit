@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.2.3
+
+### Patch Changes
+
+- 3f9f5b0: Fix Wrong Chain
+
 ## 2.2.2
 
 ### Patch Changes
