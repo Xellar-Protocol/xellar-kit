@@ -37,8 +37,11 @@ export function xellarConnector(options: XellarConnectorOptions) {
     name: 'Xellar Passport',
     async setup() {
       useBoundStore.setState({ appId, env });
-      const storedChainId =
-        useBoundStore.getState().chainId ?? config.chains[0]?.id;
+      const configChainId = await config.storage?.getItem('chainId');
+
+      const storedChainId = configChainId
+        ? Number(configChainId)
+        : config.chains[0]?.id;
 
       useBoundStore.setState({ chainId: storedChainId });
 
@@ -149,8 +152,8 @@ export function xellarConnector(options: XellarConnectorOptions) {
       }
 
       config.emitter.emit('change', { chainId });
+      await config.storage?.setItem('chainId', chainId.toString());
       useBoundStore.setState({ chainId });
-      config.storage?.setItem('chainId', chainId.toString());
 
       return chain;
     },

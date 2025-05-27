@@ -31,6 +31,7 @@ export function ProfileDialogContent() {
   });
 
   const handleDisconnect = async () => {
+    console.log('disconnecting');
     await disconnectAsync();
     closeModal();
   };
