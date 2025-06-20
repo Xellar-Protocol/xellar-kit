@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTheme } from 'styled-components';
 import { useConnect } from 'wagmi';
 
-import { KeyIcon, MailIcon } from '@/assets/mail-icon';
 import { AppleIcon, TelegramIcon, WhatsappIcon } from '@/assets/socials';
 import { SpinnerIcon } from '@/assets/spinner';
 import { XellarBrand } from '@/assets/xellar-brand';
@@ -11,10 +10,12 @@ import { StyledButton } from '@/components/ui/button';
 import { SocialItem } from '@/components/ui/social-item';
 import { TextInput } from '@/components/ui/text-input';
 import { useConnector } from '@/hooks/connectors';
+import { useAppConfig } from '@/hooks/use-app-config';
 import { useWeb3 } from '@/providers/web3-provider';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
 import { isMobile, isMobileDevice } from '@/utils/is-mobile';
+import { isUndefined } from '@/utils/is-undefined';
 import { useWallets } from '@/wallets/use-wallet';
 import { useBoundStore } from '@/xellar-connector/store';
 
@@ -35,10 +36,11 @@ export function ConnectDialogHome() {
     googleConfig,
     whatsappConfig,
     appleConfig,
-    useEmailLogin,
+    customLogoHeight,
     closeModal
   } = useXellarContext();
   const { scheme } = useTheme();
+  const { data } = useAppConfig();
 
   const {
     push,
@@ -75,7 +77,7 @@ export function ConnectDialogHome() {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isEmail, setIsEmail] = useState(true);
+  const [isEmail] = useState(true);
 
   const { connect, connectAsync } = useConnect();
 
@@ -101,6 +103,13 @@ export function ConnectDialogHome() {
   const { connect: web3connect } = useWeb3();
 
   const uri = web3connect.getUri();
+
+  const showXellarBrand = useMemo(() => {
+    if (isUndefined(data?.data?.useXellarBrand)) {
+      return true;
+    }
+    return !!data?.data?.useXellarBrand;
+  }, [data?.data?.useXellarBrand]);
 
   const handleSignIn = async () => {
     try {
@@ -158,8 +167,6 @@ export function ConnectDialogHome() {
           ?.address as `0x${string}`
       );
 
-      await connectAsync({ connector });
-
       push('wallet-created');
       setDirection('forward');
 
@@ -205,8 +212,6 @@ export function ConnectDialogHome() {
           createWalletResult.address.find(n => n.network === 'evm')
             ?.address as `0x${string}`
         );
-
-        await connectAsync({ connector });
 
         push('wallet-created');
         setDirection('forward');
@@ -264,12 +269,26 @@ export function ConnectDialogHome() {
     >
       <Container $isMobile={isMobile()}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <XellarBrand
-            color={scheme === 'dark' ? 'white' : 'black'}
-            size={100}
-          />
+          {showXellarBrand ? (
+            <XellarBrand
+              color={scheme === 'dark' ? 'white' : 'black'}
+              size={100}
+            />
+          ) : (
+            data?.data?.logoUrl && (
+              <img
+                src={data?.data?.logoUrl}
+                alt="Logo"
+                style={{
+                  height: customLogoHeight,
+                  width: '100%',
+                  objectFit: 'contain'
+                }}
+              />
+            )
+          )}
         </div>
-        <Title style={{ textAlign: 'center', marginTop: 32 }}>
+        <Title style={{ textAlign: 'center', marginTop: 24 }}>
           Login or Sign Up
         </Title>
         <Description>

@@ -1,7 +1,24 @@
+import { useMemo } from 'react';
+
 import { XellarBrand } from '@/assets/xellar-brand';
+import { useAppConfig } from '@/hooks/use-app-config';
 import { styled } from '@/styles/styled';
+import { isUndefined } from '@/utils/is-undefined';
 
 export function Footer() {
+  const { data } = useAppConfig();
+
+  const showPoweredBy = useMemo(() => {
+    if (isUndefined(data?.data?.showPoweredBy)) {
+      return true;
+    }
+    return !!data?.data?.showPoweredBy;
+  }, [data?.data?.showPoweredBy]);
+
+  if (!showPoweredBy) {
+    return null;
+  }
+
   return (
     <StyledFooter>
       <FooterText>Powered by</FooterText>

@@ -23,7 +23,6 @@ import { TransactionConfirmationDialogContainer } from '@/components/dialog/cont
 import { Dialog } from '@/components/dialog/dialog';
 import { useConnectModalStore } from '@/components/dialog/store';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
-import { useCheckAccount } from '@/hooks/check-account';
 import { AppConfig, useAppConfig } from '@/hooks/use-app-config';
 import { darkTheme, Theme } from '@/styles/theme';
 import { setupTransactionConfirmation } from '@/xellar-connector/transaction-confirmation';
@@ -40,6 +39,7 @@ const GlobalStyle = createGlobalStyle`
 interface XellarKitProviderProps {
   showConfirmationModal?: boolean;
   useSmartAccount?: boolean;
+  customLogoHeight?: number;
   theme?: Theme;
 }
 
@@ -63,7 +63,8 @@ export function XellarKitProvider({
   children,
   theme = darkTheme as Theme,
   showConfirmationModal = true,
-  useSmartAccount = false
+  useSmartAccount = false,
+  customLogoHeight = 42
 }: PropsWithChildren<XellarKitProviderProps>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
@@ -145,7 +146,8 @@ export function XellarKitProvider({
     whatsappConfig: appConfig?.data?.whatsapp,
     appleConfig: appConfig?.data?.apple,
     useEmailLogin: appConfig?.data?.useEmailLogin,
-    useSmartAccount
+    useSmartAccount,
+    customLogoHeight
   };
 
   useAccountEffect({

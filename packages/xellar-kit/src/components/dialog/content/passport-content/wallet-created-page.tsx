@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from 'motion/react';
 import React, { useState } from 'react';
+import { useConnect } from 'wagmi';
 
 import { StyledButton } from '@/components/ui/button';
+import { useConnector } from '@/hooks/connectors';
 import { useXellarContext } from '@/providers/xellar-kit';
 import { styled } from '@/styles/styled';
 
@@ -13,6 +15,10 @@ export function WalletCreatedPage() {
   const { closeModal } = useXellarContext();
   const { recoverySecret } = useConnectModalStore();
   const [isCopied, setIsCopied] = useState(false);
+
+  const connector = useConnector('xellar-passport');
+
+  const { connectAsync } = useConnect();
 
   const handleDownload = () => {
     if (!recoverySecret) {
@@ -84,7 +90,10 @@ export function WalletCreatedPage() {
           <StyledButton
             variant="outline"
             style={{ marginTop: 12, width: '100%' }}
-            onClick={closeModal}
+            onClick={async () => {
+              await connectAsync({ connector });
+              closeModal();
+            }}
           >
             Done
           </StyledButton>

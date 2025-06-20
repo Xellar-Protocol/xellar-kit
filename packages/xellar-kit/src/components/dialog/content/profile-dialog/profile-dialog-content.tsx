@@ -52,6 +52,7 @@ export function ProfileDialogContent() {
   const chain = chains.find(chain => chain.id === chainId);
 
   const handleDisconnect = async () => {
+    console.log('disconnecting');
     await disconnectAsync();
     closeModal();
   };

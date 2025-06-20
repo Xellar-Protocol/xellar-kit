@@ -155,8 +155,6 @@ export function OTPPage() {
               ?.address as `0x${string}`
           );
 
-          await connectAsync({ connector });
-
           push('wallet-created');
           setDirection('forward');
         } else {
@@ -206,8 +204,6 @@ export function OTPPage() {
             createWalletResult.address.find(n => n.network === 'evm')
               ?.address as `0x${string}`
           );
-
-          await connectAsync({ connector });
 
           push('wallet-created');
           setDirection('forward');

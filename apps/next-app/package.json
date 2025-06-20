@@ -1,8 +1,9 @@
 {
   "name": "example-next-app",
-  "version": "0.1.42",
+  "version": "0.1.46",
   "private": true,
   "scripts": {
+    "dev": "next dev -p 3010",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

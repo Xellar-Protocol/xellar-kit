@@ -1,5 +1,29 @@
 # @xellar/kit
 
+## 2.2.3
+
+### Patch Changes
+
+- 3f9f5b0: Fix Wrong Chain
+
+## 2.2.2
+
+### Patch Changes
+
+- 49e71b7: Enhance Connection Flow in Newly Created Account
+
+## 2.2.1
+
+### Patch Changes
+
+- 8b77ba7: Fix Branding Logic
+
+## 2.2.0
+
+### Minor Changes
+
+- 935e729: Can Now Display Custom Branding
+
 ## 2.1.3
 
 ### Patch Changes
