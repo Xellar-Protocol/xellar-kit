@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.3.0
+
+### Minor Changes
+
+- d563cb9: Add Account Abstraction
+
 ## 2.2.3
 
 ### Patch Changes
