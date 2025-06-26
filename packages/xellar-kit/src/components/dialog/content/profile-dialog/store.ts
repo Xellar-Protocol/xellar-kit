@@ -6,7 +6,8 @@ type ProfileDialogScreen =
   | 'select-currency'
   | 'select-crypto'
   | 'receive'
-  | 'chain';
+  | 'chain'
+  | 'smart-account';
 
 interface ProfileDialogState {
   screen: ProfileDialogScreen;

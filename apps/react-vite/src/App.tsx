@@ -2,9 +2,9 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import { ConnectButton, ConnectDialogStandAlone, useXellarAccount } from "@xellar/kit";
-import { useAccount, useChainId, useSignMessage, useSignTypedData, useWriteContract } from "wagmi";
-import { erc20Abi } from "viem";
+import { useXellarAccount, useSmartAccount, useConnectModal } from "@xellar/kit";
+import { useAccount, useChainId, useSignMessage, useSignTypedData, useSwitchChain, useWriteContract } from "wagmi";
+import { encodeFunctionData, erc20Abi } from "viem";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -12,10 +12,13 @@ function App() {
   const { signMessageAsync, isPending: isSigningMessage } = useSignMessage();
 
   const { signTypedDataAsync } = useSignTypedData();
-
+  const { signTransaction, smartAccount } = useSmartAccount();
+  const { switchChainAsync } = useSwitchChain();
+  const { open } = useConnectModal();
   const { writeContractAsync } = useWriteContract();
   const chainId = useChainId();
   const account = useAccount();
+
   const handleWriteContract = async () => {
     try {
       const hash = await writeContractAsync({
@@ -76,6 +79,29 @@ function App() {
     }
   };
 
+  const handleSmartAccountSignTransaction = async () => {
+    const callData = encodeFunctionData({
+      abi: erc20Abi,
+      functionName: "approve",
+      args: ["0xCa2D0dFC23f4f4b1ee01ed727664f807c21f4505" as `0x${string}`, 1000000000000000000n],
+    });
+
+    const selectedAccount = smartAccount?.accounts[0];
+
+    if (!selectedAccount) {
+      return;
+    }
+
+    await switchChainAsync({ chainId: selectedAccount.chainId });
+
+    await signTransaction({
+      accountId: selectedAccount.id,
+      to: "0x53844F9577C2334e541Aec7Df7174ECe5dF1fCf0" as `0x${string}`,
+      value: "0",
+      callData,
+    });
+  };
+
   return (
     <div className="w-full bg-red-500 text-center">
       <div>
@@ -94,19 +120,19 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-      {account?.address && (
+      {account?.address ? (
         <>
           <button onClick={handleSignMessage} disabled={isSigningMessage}>
             {isSigningMessage ? "Signing..." : "Sign Message"}
           </button>
           <button onClick={handleSignTypedData}>Sign Typed Data</button>
           <button onClick={handleWriteContract}>Write Contract</button>
+          <button onClick={handleSmartAccountSignTransaction}>Smart Account Sign Transaction</button>
         </>
+      ) : (
+        <button onClick={open}>Connect</button>
       )}
-      <div className="mt-4">
-        <ConnectButton />
-      </div>
-      <ConnectDialogStandAlone />
+      {/* <ConnectDialogStandAlone /> */}
     </div>
   );
 }
