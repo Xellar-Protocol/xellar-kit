@@ -21,12 +21,19 @@ export function useSmartAccount() {
       return;
     }
 
-    const result = await xellarSDK.accountAbstraction.auth.createAccount({
-      owner: {
-        id: address,
-        provider: 'wallet'
+    const result = await xellarSDK.accountAbstraction.auth.createAccount(
+      {
+        owner: {
+          id: address,
+          provider: 'wallet'
+        }
+      },
+      {
+        headers: {
+          'x-referer': 'xellar-kit'
+        }
       }
-    });
+    );
 
     return result;
   }, [address, xellarSDK]);
@@ -38,8 +45,14 @@ export function useSmartAccount() {
   });
 
   const activateAccount = async (accountId: string) => {
-    const result =
-      await xellarSDK.accountAbstraction.create.activate(accountId);
+    const result = await xellarSDK.accountAbstraction.create.activate(
+      accountId,
+      {
+        headers: {
+          'x-referer': 'xellar-kit'
+        }
+      }
+    );
 
     const hash = result.hash;
     const opId = result.userOpId;
@@ -48,19 +61,32 @@ export function useSmartAccount() {
       message: hash
     });
 
-    const submitResult = await xellarSDK.accountAbstraction.submitUserOp({
-      hash,
-      userOpId: opId,
-      signature: signature,
-      isSponsored: true
-    });
+    const submitResult = await xellarSDK.accountAbstraction.submitUserOp(
+      {
+        hash,
+        userOpId: opId,
+        signature: signature,
+        isSponsored: true
+      },
+      {
+        headers: {
+          'x-referer': 'xellar-kit'
+        }
+      }
+    );
 
     return submitResult;
   };
 
   async function signTransaction(params: EstimateSignTransactionOptions) {
-    const result =
-      await xellarSDK.accountAbstraction.create.signTransaction(params);
+    const result = await xellarSDK.accountAbstraction.create.signTransaction(
+      params,
+      {
+        headers: {
+          'x-referer': 'xellar-kit'
+        }
+      }
+    );
 
     const hash = result.hash;
     const opId = result.userOpId;
@@ -69,12 +95,19 @@ export function useSmartAccount() {
       message: hash
     });
 
-    const submitResult = await xellarSDK.accountAbstraction.submitUserOp({
-      hash,
-      userOpId: opId,
-      signature: signature,
-      isSponsored: true
-    });
+    const submitResult = await xellarSDK.accountAbstraction.submitUserOp(
+      {
+        hash,
+        userOpId: opId,
+        signature: signature,
+        isSponsored: true
+      },
+      {
+        headers: {
+          'x-referer': 'xellar-kit'
+        }
+      }
+    );
 
     return submitResult;
   }

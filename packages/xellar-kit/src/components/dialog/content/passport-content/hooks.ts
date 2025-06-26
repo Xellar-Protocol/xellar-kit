@@ -36,7 +36,8 @@ export function useXellarSDK() {
   const xellarSDK = useMemo(() => {
     return new XellarSDK({
       appId: appId ?? '',
-      env: env ?? 'sandbox'
+      env: env ?? 'sandbox',
+      clientSecret: ''
     });
   }, [appId, env]);
 
