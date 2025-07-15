@@ -6,6 +6,7 @@ import { Footer } from '@/components/ui/footer';
 import { useAppConfig } from '@/hooks/use-app-config';
 import { useWeb3 } from '@/providers/web3-provider';
 import { styled } from '@/styles/styled';
+import { isMobile } from '@/utils/is-mobile';
 
 import { useConnectModalStore } from '../store';
 import { ConnectDialogHome } from './connect-dialog-home';
@@ -79,6 +80,7 @@ export function ConnectDialogStandAlone() {
         type: 'spring',
         bounce: 0
       }}
+      $isMobile={isMobile()}
       layout
     >
       <InnerDialogContent>
@@ -89,7 +91,7 @@ export function ConnectDialogStandAlone() {
   );
 }
 
-const DialogContent = styled(motion.div)`
+const DialogContent = styled(motion.div)<{ $isMobile?: boolean }>`
   font-family:
     system-ui,
     -apple-system,
@@ -102,7 +104,7 @@ const DialogContent = styled(motion.div)`
     'Open Sans',
     'Helvetica Neue',
     sans-serif;
-  max-width: 450px;
+  max-width: ${({ $isMobile }) => ($isMobile ? '100%' : '450px')};
   width: 100%;
   background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};
   border-left: 1px solid ${({ theme }) => theme.general.border};

@@ -2,7 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import { useXellarAccount, useSmartAccount, useConnectModal } from "@xellar/kit";
+import { useXellarAccount, useSmartAccount, useConnectModal, ConnectButton } from "@xellar/kit";
 import { useAccount, useChainId, useSignMessage, useSignTypedData, useSwitchChain, useWriteContract } from "wagmi";
 import { encodeFunctionData, erc20Abi } from "viem";
 
@@ -122,6 +122,7 @@ function App() {
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
       {account?.address ? (
         <>
+          <ConnectButton />
           <button onClick={handleSignMessage} disabled={isSigningMessage}>
             {isSigningMessage ? "Signing..." : "Sign Message"}
           </button>

@@ -17,6 +17,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { ChainDialogContent } from '@/components/dialog/content/chain-dialog/chain-dialog';
 import { ConnectDialogContent } from '@/components/dialog/content/connect-dialog';
+import { NeedPermissionDialog } from '@/components/dialog/content/need-permission-dialog';
 import { ProfileDialog } from '@/components/dialog/content/profile-dialog/profile-dialog';
 import { useProfileDialogStore } from '@/components/dialog/content/profile-dialog/store';
 import { TransactionConfirmationDialogContainer } from '@/components/dialog/content/transaction-confirmation-dialog-container';
@@ -37,7 +38,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 interface XellarKitProviderProps {
-  showConfirmationModal?: boolean;
   useSmartAccount?: boolean;
   customLogoHeight?: number;
   theme?: Theme;
@@ -62,7 +62,6 @@ const XellarKitContext = createContext<XellarKitContextType>(
 export function XellarKitProvider({
   children,
   theme = darkTheme as Theme,
-  showConfirmationModal = true,
   useSmartAccount = false,
   customLogoHeight = 42
 }: PropsWithChildren<XellarKitProviderProps>) {
@@ -126,6 +125,8 @@ export function XellarKitProvider({
         return <ProfileDialog />;
       case MODAL_TYPE.TRANSACTION_CONFIRMATION:
         return <TransactionConfirmationDialogContainer />;
+      case MODAL_TYPE.NEED_PERMISSION:
+        return <NeedPermissionDialog />;
       case null:
         return null;
       default: {
@@ -164,12 +165,6 @@ export function XellarKitProvider({
     });
   }, [handleOpenModal, handleCloseModal]);
 
-  useEffect(() => {
-    useConnectModalStore.setState({
-      showConfirmationModal: showConfirmationModal
-    });
-  }, [showConfirmationModal]);
-
   const GoogleProviderWrapper = useMemo(() => {
     if (!appConfig?.data?.google?.enabled) return Fragment;
     if (!appConfig?.data?.google?.clientId) return Fragment;
@@ -198,6 +193,7 @@ export function XellarKitProvider({
         <GlobalStyle />
         <ThemeProvider theme={theme}>
           {children}
+
           <Dialog isOpen={modalOpen} onClose={handleCloseModal}>
             {modalContent}
           </Dialog>

@@ -220,9 +220,9 @@ export function ConnectDialogHome() {
         setRefreshToken(result.refreshToken);
         await wait(500);
 
-        const address = (
-          result as unknown as { addresses: AddressResponse[] }
-        ).addresses.find(n => n.network === 'evm')?.address;
+        const address = result.addresses.find(
+          n => n.network === 'evm'
+        )?.address;
 
         if (address) {
           setAddress(address as `0x${string}`);
@@ -321,7 +321,7 @@ export function ConnectDialogHome() {
                 )}
               </SocialItem>
             )} */}
-            {googleConfig?.enabled && (
+            {googleConfig?.enabled && !!googleConfig.clientId && (
               <GoogleLoginItem onError={setSocialError} />
             )}
             {telegramConfig?.enabled && (

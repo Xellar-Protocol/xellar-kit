@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import React, { PropsWithChildren } from 'react';
 
 import { styled } from '@/styles/styled';
+import { isMobile } from '@/utils/is-mobile';
 
 import { Footer } from '../ui/footer';
 
@@ -22,6 +23,7 @@ export function DialogWrapper({
         type: 'spring',
         bounce: 0
       }}
+      $isMobile={isMobile()}
       layout
       {...contentProps}
     >

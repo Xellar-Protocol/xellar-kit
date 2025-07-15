@@ -26,7 +26,7 @@ type ConfirmationPayload = TransactionPayload & MessagePayload;
 
 interface TransactionConfirmationDialogProps {
   payload: ConfirmationPayload;
-  type: 'transaction' | 'message';
+  type: 'transaction' | 'message' | 'need-permission';
   onConfirm: (setError: (error: string) => void) => Promise<void>;
   onReject: () => void;
   initialError?: string | null;

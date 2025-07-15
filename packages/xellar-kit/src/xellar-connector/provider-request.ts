@@ -1,4 +1,4 @@
-import { Network, XellarSDK } from '@xellar/sdk';
+import { Network, XellarError, XellarSDK } from '@xellar/sdk';
 import {
   Chain,
   EIP1193Parameters,
@@ -7,13 +7,14 @@ import {
   WalletRpcSchema
 } from 'viem';
 
-import { useConnectModalStore } from '@/components/dialog/store';
 import { chainMap } from '@/utils/chain-map';
+import { decodeJWT } from '@/utils/string';
 
-import { useBoundStore } from './store';
+import { useBoundStore, useXellarAccountStore, XellarAccount } from './store';
 import {
   completeTransaction,
   showMessageConfirmation,
+  showNeedPermissionConfirmation,
   showTransactionConfirmation
 } from './transaction-confirmation';
 type RPCSchema = PublicRpcSchema | WalletRpcSchema;
@@ -55,6 +56,15 @@ async function handleRefreshToken(xellarSDK: XellarSDK | undefined) {
         refreshToken: refreshTokenResult.refreshToken,
         token: refreshTokenResult.walletToken
       });
+
+      try {
+        const decodedJWT = decodeJWT(refreshTokenResult.walletToken);
+        useXellarAccountStore.setState({
+          account: decodedJWT as XellarAccount
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   } catch (error) {
     useBoundStore.getState().clearToken();
@@ -70,14 +80,24 @@ export async function handleRequest(
   { method, params }: EIP1193Parameters<RPCSchema>,
   chains: readonly [Chain, ...Chain[]]
 ) {
-  const showConfirmationModal =
-    useConnectModalStore.getState().showConfirmationModal;
+  const showConfirmationModal = true;
+
+  await handleRefreshToken(xellarSDK);
+  const isPermissionGranted =
+    useXellarAccountStore.getState().account?.isPermissionGranted;
+
+  console.log({ isPermissionGranted });
 
   switch (method) {
     case 'personal_sign': {
       const { token, refreshToken, chainId } = getStoreState();
 
       const message = hexToString(params[0]);
+
+      if (isPermissionGranted === false) {
+        showNeedPermissionConfirmation();
+        return;
+      }
 
       if (showConfirmationModal) {
         // Request confirmation before proceeding with message signing
@@ -114,6 +134,14 @@ export async function handleRequest(
 
         return result.signature;
       } catch (error) {
+        if (error instanceof XellarError) {
+          if (error.code === '407') {
+            showNeedPermissionConfirmation();
+            await handleRefreshToken(xellarSDK);
+            return;
+          }
+        }
+
         // Signal transaction error with the error message
         const errorMessage =
           error instanceof Error ? error.message : String(error);
@@ -128,6 +156,11 @@ export async function handleRequest(
     }
     case 'eth_sign': {
       const { token, refreshToken, chainId } = getStoreState();
+
+      if (isPermissionGranted === false) {
+        showNeedPermissionConfirmation();
+        return;
+      }
 
       const message = hexToString(params[1]);
       if (showConfirmationModal) {
@@ -165,6 +198,13 @@ export async function handleRequest(
 
         return result.signature;
       } catch (error) {
+        if (error instanceof XellarError) {
+          if (error.code === '407') {
+            showNeedPermissionConfirmation();
+            await handleRefreshToken(xellarSDK);
+            return;
+          }
+        }
         // Signal transaction error with the error message
         const errorMessage =
           error instanceof Error ? error.message : String(error);
@@ -180,6 +220,11 @@ export async function handleRequest(
 
     case 'eth_signTypedData_v4': {
       const { token, refreshToken, chainId } = getStoreState();
+
+      if (isPermissionGranted === false) {
+        showNeedPermissionConfirmation();
+        return;
+      }
 
       // For typed data, let's show the raw JSON as the message
       let typedDataString = '';
@@ -231,6 +276,13 @@ export async function handleRequest(
 
         return result.signature;
       } catch (error) {
+        if (error instanceof XellarError) {
+          if (error.code === '407') {
+            showNeedPermissionConfirmation();
+            await handleRefreshToken(xellarSDK);
+            return;
+          }
+        }
         // Signal transaction error with the error message
         const errorMessage =
           error instanceof Error ? error.message : String(error);
@@ -246,6 +298,11 @@ export async function handleRequest(
 
     case 'eth_signTransaction': {
       const { token, refreshToken, chainId } = getStoreState();
+
+      if (isPermissionGranted === false) {
+        showNeedPermissionConfirmation();
+        return;
+      }
 
       const request = params[0];
 
@@ -299,6 +356,13 @@ export async function handleRequest(
 
         return result.signature;
       } catch (error) {
+        if (error instanceof XellarError) {
+          if (error.code === '407') {
+            showNeedPermissionConfirmation();
+            await handleRefreshToken(xellarSDK);
+            return;
+          }
+        }
         // Signal transaction error with the error message
         const errorMessage =
           error instanceof Error ? error.message : String(error);
@@ -315,6 +379,11 @@ export async function handleRequest(
     case 'eth_sendTransaction': {
       const { token, refreshToken, chainId } = getStoreState();
       const request = params[0];
+
+      if (isPermissionGranted === false) {
+        showNeedPermissionConfirmation();
+        return;
+      }
 
       if (showConfirmationModal) {
         // Request confirmation before proceeding with transaction
@@ -366,6 +435,13 @@ export async function handleRequest(
 
         return result.txReceipt.hash;
       } catch (error) {
+        if (error instanceof XellarError) {
+          if (error.code === '407') {
+            showNeedPermissionConfirmation();
+            await handleRefreshToken(xellarSDK);
+            return;
+          }
+        }
         // Signal transaction error with the error message
         const errorMessage =
           error instanceof Error ? error.message : String(error);

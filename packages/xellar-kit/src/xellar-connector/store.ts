@@ -82,10 +82,8 @@ export interface XellarAccount {
   email: string;
   provider: string;
   uid: string;
-  address: {
-    network: string;
-    address: string;
-  }[];
+  isPermissionGranted: boolean;
+  acceptPermissionPage: string;
   mode: string;
 }
 

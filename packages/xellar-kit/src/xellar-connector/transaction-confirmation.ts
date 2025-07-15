@@ -35,6 +35,11 @@ export function showTransactionConfirmation(
     .showTransactionConfirmation(payload);
 }
 
+// Export a function to show need permission confirmation
+export function showNeedPermissionConfirmation(): void {
+  useTransactionConfirmStore.getState().showNeedPermissionConfirmation();
+}
+
 // Export a function to show message confirmation
 export function showMessageConfirmation(
   message: string,

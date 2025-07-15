@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
-    "@xellar/sdk": "4.5.1",
+    "@xellar/sdk": "4.5.2",
     "clsx": "^2.1.1",
     "input-otp": "^1.4.2",
     "js-cookie": "^3.0.5",

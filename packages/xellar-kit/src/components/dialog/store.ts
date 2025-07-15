@@ -55,7 +55,7 @@ type TransactionPayload = {
 interface TransactionConfirmationState {
   // State
   isOpen: boolean;
-  type: 'transaction' | 'message';
+  type: 'transaction' | 'message' | 'need-permission';
   payload: TransactionPayload;
   error: string | null;
   isLoading: boolean;
@@ -79,6 +79,7 @@ interface TransactionConfirmationState {
     message: string,
     chainId?: number
   ) => Promise<boolean>;
+  showNeedPermissionConfirmation: () => void;
   completeTransaction: (success: boolean, errorMessage?: string) => void;
   onConfirmAction: (setError: (error: string) => void) => Promise<void>;
   onRejectAction: () => void;
@@ -200,6 +201,34 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
 
         // Open the modal
         openModal(MODAL_TYPE.TRANSACTION_CONFIRMATION);
+      });
+    },
+
+    // Show need permission confirmation dialog
+    showNeedPermissionConfirmation: () => {
+      return new Promise<boolean>(resolve => {
+        const { openModal } = get();
+
+        if (!openModal) {
+          console.error(
+            'Modal controls not initialized! Call setModalControls first.'
+          );
+          resolve(false);
+          return;
+        }
+
+        // Set up the user confirmation promise
+        set({
+          type: 'need-permission',
+          payload: {},
+          error: null,
+          isLoading: false,
+          userConfirmResolver: resolve,
+          enableModalClose: false
+        });
+
+        // Open the modal
+        openModal(MODAL_TYPE.NEED_PERMISSION);
       });
     },
 
