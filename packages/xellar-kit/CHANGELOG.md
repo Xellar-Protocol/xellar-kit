@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.4.0
+
+### Minor Changes
+
+- 336cc69: Add Permission to Enhance Security
+
 ## 2.3.1
 
 ### Patch Changes
