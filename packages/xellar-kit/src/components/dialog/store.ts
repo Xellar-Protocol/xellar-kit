@@ -224,7 +224,7 @@ export const useTransactionConfirmStore = create<TransactionConfirmationState>(
           error: null,
           isLoading: false,
           userConfirmResolver: resolve,
-          enableModalClose: false
+          enableModalClose: true
         });
 
         // Open the modal

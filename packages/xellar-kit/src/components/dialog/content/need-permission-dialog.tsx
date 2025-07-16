@@ -93,14 +93,11 @@ const MessageContent = styled.div`
 
 const MessageBox = styled.div`
   padding: 12px;
-  border: 1px solid ${({ theme }) => theme.general.border};
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.general.modalBackgroundSecondary};
-  max-height: 150px;
   overflow: auto;
-  font-family: monospace;
   color: ${({ theme }) => theme.texts.primary};
-  font-size: 12px;
+  font-size: 16px;
+  text-align: center;
+  opacity: 0.8;
 `;
 
 const Footer = styled.div`
