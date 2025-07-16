@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.4.1
+
+### Patch Changes
+
+- d3785b5: Enhance UI and Improve UX
+
 ## 2.4.0
 
 ### Minor Changes
