@@ -286,7 +286,7 @@ export function OTPPage() {
 
           <div style={{ width: '100%', padding: '0 2px' }}>
             <StyledButton
-              variant="outline"
+              $variant="outline"
               style={{
                 marginTop: 12,
                 border: 'none',

@@ -108,7 +108,7 @@ export function ProfileSmartAccountContent() {
 
       <ActionButtons>
         <ActionButton
-          variant="outline"
+          $variant="outline"
           onClick={() => {
             setScreen('receive');
             setActiveAddress(aaAddress ?? '');
@@ -118,7 +118,7 @@ export function ProfileSmartAccountContent() {
           Receive
         </ActionButton>
         <ActionButton
-          variant="outline"
+          $variant="outline"
           onClick={() => {
             if (isLoading || !selectedCrypto || !selectedCurrency) {
               return;

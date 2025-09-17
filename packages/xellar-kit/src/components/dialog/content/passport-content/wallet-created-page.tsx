@@ -88,7 +88,7 @@ export function WalletCreatedPage() {
           </AnimatePresence>
 
           <StyledButton
-            variant="outline"
+            $variant="outline"
             style={{ marginTop: 12, width: '100%' }}
             onClick={async () => {
               await connectAsync({ connector });

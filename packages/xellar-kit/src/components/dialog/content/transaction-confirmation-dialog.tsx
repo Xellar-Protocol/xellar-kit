@@ -185,7 +185,7 @@ export function TransactionConfirmationDialog({
           onClick={handleReject}
           disabled={isLoading}
           aria-disabled={isLoading}
-          variant="outline"
+          $variant="outline"
           style={{ flex: 1 }}
         >
           {error ? 'Close' : 'Reject'}

@@ -103,7 +103,7 @@ export function ProfileDialogContent() {
 
       <ActionButtons>
         {/* <ActionButton
-          variant="outline"
+          $variant="outline"
           onClick={() => {
             // setScreen('offramp');
           }}
@@ -112,7 +112,7 @@ export function ProfileDialogContent() {
           Send
         </ActionButton> */}
         <ActionButton
-          variant="outline"
+          $variant="outline"
           onClick={() => {
             setScreen('receive');
             setActiveAddress(address ?? '');
@@ -122,7 +122,7 @@ export function ProfileDialogContent() {
           Receive
         </ActionButton>
         <ActionButton
-          variant="outline"
+          $variant="outline"
           onClick={() => {
             if (isLoading || !selectedCrypto || !selectedCurrency) {
               return;

@@ -23,7 +23,6 @@ import { useSocialLogin } from '../hooks/social-login';
 import { useConnectModalStore } from '../store';
 import { GoogleLoginItem } from './google-login-item';
 import { useXellarSDK } from './passport-content/hooks';
-import { AddressResponse } from './passport-content/otp-page';
 import { Container, Title, Wrapper } from './styled';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -458,7 +457,7 @@ export function ConnectDialogHome() {
 
               {isEmail && (
                 <TextInput
-                  invalid={`${!isValidEmail}`}
+                  $invalid={`${!isValidEmail}`}
                   placeholder="Enter your email"
                   value={email}
                   onChange={handleChangeEmail}
@@ -469,7 +468,7 @@ export function ConnectDialogHome() {
             {!isValidEmail && <ErrorText>Invalid email</ErrorText>}
             {socialError && <ErrorText>{socialError}</ErrorText>}
             <StyledButton
-              variant="primary"
+              $variant="primary"
               role="button"
               style={{ marginTop: 14, width: '100%' }}
               type="submit"
