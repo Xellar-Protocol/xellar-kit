@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.4.2
+
+### Patch Changes
+
+- a78d8e2: Fix Props Stylesheet
+
 ## 2.4.1
 
 ### Patch Changes
