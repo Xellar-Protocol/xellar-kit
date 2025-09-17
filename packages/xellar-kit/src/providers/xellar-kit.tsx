@@ -75,7 +75,7 @@ export function XellarKitProvider({
     );
   }
 
-  const { data: appConfig, isLoading, error } = useAppConfig();
+  const { data: appConfig, isLoading } = useAppConfig();
 
   // useCheckAccount();
 
@@ -176,10 +176,6 @@ export function XellarKitProvider({
     if (!appConfig?.data?.google?.clientId) return {};
     return { clientId: appConfig?.data?.google?.clientId };
   }, [appConfig?.data?.google?.enabled, appConfig?.data?.google?.clientId]);
-
-  if (error) {
-    throw error;
-  }
 
   if (!appConfig?.data.isEmbeddedWalletEnabled && !isLoading) {
     throw new Error('Embedded wallet is not enabled');

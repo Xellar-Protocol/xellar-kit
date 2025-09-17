@@ -458,7 +458,7 @@ export function ConnectDialogHome() {
 
               {isEmail && (
                 <TextInput
-                  invalid={!isValidEmail}
+                  invalid={`${!isValidEmail}`}
                   placeholder="Enter your email"
                   value={email}
                   onChange={handleChangeEmail}
