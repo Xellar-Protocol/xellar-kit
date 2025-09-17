@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.4.3
+
+### Patch Changes
+
+- ddd30e9: Fix QR Code render
+
 ## 2.4.2
 
 ### Patch Changes
