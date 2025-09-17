@@ -1,4 +1,5 @@
 import { BackIcon } from '@/assets/back-icon';
+import { SpinnerIcon } from '@/assets/spinner';
 import { QRCode } from '@/components/qr-code/qr-code';
 import { useWeb3 } from '@/providers/web3-provider';
 import { styled } from '@/styles/styled';
@@ -59,11 +60,25 @@ export function QRCodePage() {
         </Header>
 
         <PassportContainer style={{ paddingTop: 24 }}>
-          <QRCode
-            uri={qrCodeUri}
-            size={350}
-            icon={<IconWrapper>{wallet!.icon}</IconWrapper>}
-          />
+          {qrCodeUri ? (
+            <QRCode
+              uri={qrCodeUri}
+              size={350}
+              icon={<IconWrapper>{wallet!.icon}</IconWrapper>}
+            />
+          ) : (
+            <div
+              style={{
+                aspectRatio: 1,
+                width: 350,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <SpinnerIcon />
+            </div>
+          )}
 
           {error && <ErrorText>{error}</ErrorText>}
 
