@@ -3,6 +3,7 @@ export { ConnectDialogStandAlone } from './components/dialog/content/connect-dia
 export { defaultConfig } from './config/default-config';
 export { useSmartAccount } from './hooks/account-abstraction';
 export { useConnectModal } from './hooks/use-connect-modal';
+export { useSignAuthorization } from './hooks/use-sign-authorization';
 export { useXellarAccount } from './hooks/use-xellar-account';
 export { useChainModal } from './hooks/useChainModal';
 export { useProfileModal } from './hooks/useProfileModal';
