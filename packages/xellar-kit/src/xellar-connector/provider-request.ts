@@ -2,6 +2,7 @@ import { Network, XellarError, XellarSDK } from '@xellar/sdk';
 import {
   Chain,
   EIP1193Parameters,
+  hexToNumber,
   hexToString,
   PublicRpcSchema,
   WalletRpcSchema
@@ -75,6 +76,45 @@ async function handleRefreshToken(xellarSDK: XellarSDK | undefined) {
   }
 }
 
+type AuthorizationListInput = Array<{
+  address: string;
+  chainId: string;
+  nonce: string;
+  r: string;
+  s: string;
+  yParity: string;
+}>;
+
+type AuthorizationListOutput = Array<{
+  address: string;
+  chainId: number;
+  nonce: number;
+  r: string;
+  s: string;
+  v: number;
+  yParity: number;
+}>;
+
+const transformAuthorizationList = (
+  authorizationList: AuthorizationListInput
+): AuthorizationListOutput => {
+  return authorizationList.map(auth => {
+    const chainId = hexToNumber(auth.chainId as `0x${string}`);
+    const nonce = hexToNumber(auth.nonce as `0x${string}`);
+    const yParity = hexToNumber(auth.yParity as `0x${string}`);
+
+    return {
+      address: auth.address,
+      chainId,
+      nonce,
+      r: auth.r,
+      s: auth.s,
+      v: yParity + 27,
+      yParity
+    };
+  });
+};
+
 export async function handleRequest(
   xellarSDK: XellarSDK | undefined,
   { method, params }: EIP1193Parameters<RPCSchema>,
@@ -85,8 +125,6 @@ export async function handleRequest(
   await handleRefreshToken(xellarSDK);
   const isPermissionGranted =
     useXellarAccountStore.getState().account?.isPermissionGranted;
-
-  console.log({ isPermissionGranted });
 
   switch (method) {
     case 'personal_sign': {
@@ -407,6 +445,13 @@ export async function handleRequest(
         // At this point, the dialog will show a loading indicator
         // since the confirmation Promise has resolved but the
         // dialog's onConfirm Promise is still pending
+        // Transform authorization list from hex strings to proper format
+        const transformedAuthorizationList = request.authorizationList
+          ? transformAuthorizationList(
+              request.authorizationList as AuthorizationListInput
+            )
+          : undefined;
+
         const result = await xellarSDK?.wallet?.sendTransaction({
           transaction: {
             from: request.from as `0x${string}`,
@@ -414,7 +459,8 @@ export async function handleRequest(
             value: request.value,
             data: request.data ?? '0x',
             nonce: request.nonce,
-            gasPrice: request.gasPrice
+            gasPrice: request.gasPrice,
+            authorizationList: transformedAuthorizationList
           },
           network: chainMap[chainId] as Network,
           walletToken: token,
