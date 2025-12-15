@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 2.5.0
+
+### Minor Changes
+
+- 093c8e8: add useSignAuthorizationHook
+
 ## 2.4.3
 
 ### Patch Changes
