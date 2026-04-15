@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 3.0.0
+
+### Major Changes
+
+- 89fbef2: hotfix: fix unclickable overlay
+
 ## 2.5.0
 
 ### Minor Changes
