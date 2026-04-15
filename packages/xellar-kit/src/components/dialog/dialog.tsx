@@ -127,6 +127,7 @@ const Backdrop = styled(motion.div)`
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  pointer-events: auto;
 `;
 
 const variants = {
