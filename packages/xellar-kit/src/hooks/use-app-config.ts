@@ -39,13 +39,15 @@ export type AppConfig = {
   showPoweredBy: boolean;
 };
 
-export function useAppConfig() {
-  const { appId, env } = useBoundStore(
+export function useAppConfig(initialAppId?: string) {
+  const { appId: boundAppId, env } = useBoundStore(
     useShallow(state => ({
-      appId: state.appId,
+      appId: state.appId || initialAppId,
       env: state.env
     }))
   );
+
+  const appId = boundAppId || initialAppId;
 
   return useQuery<AppConfigResponse, Error, AppConfigResponse, any>({
     queryKey: ['xellar-app-config', appId, env],
