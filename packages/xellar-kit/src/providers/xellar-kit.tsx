@@ -42,6 +42,7 @@ interface XellarKitProviderProps {
   useSmartAccount?: boolean;
   customLogoHeight?: number;
   theme?: Theme;
+  initialAppId?: string;
 }
 
 interface XellarKitContextType extends XellarKitProviderProps {
@@ -64,7 +65,8 @@ export function XellarKitProvider({
   children,
   theme = darkTheme as Theme,
   useSmartAccount = false,
-  customLogoHeight = 42
+  customLogoHeight = 42,
+  initialAppId = ''
 }: PropsWithChildren<XellarKitProviderProps>) {
   if (!useContext(WagmiContext)) {
     throw new Error('XellarKitProvider must be used within a WagmiProvider');
@@ -76,7 +78,11 @@ export function XellarKitProvider({
     );
   }
 
-  const { data: appConfig, isLoading, error: appConfigError } = useAppConfig();
+  const {
+    data: appConfig,
+    isLoading,
+    error: appConfigError
+  } = useAppConfig(initialAppId);
 
   // useCheckAccount();
 
