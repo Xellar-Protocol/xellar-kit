@@ -23,6 +23,7 @@ import { useProfileDialogStore } from '@/components/dialog/content/profile-dialo
 import { TransactionConfirmationDialogContainer } from '@/components/dialog/content/transaction-confirmation-dialog-container';
 import { Dialog } from '@/components/dialog/dialog';
 import { useConnectModalStore } from '@/components/dialog/store';
+import { SetupErrorBanner } from '@/components/ui/setup-error-banner';
 import { MODAL_TYPE, ModalType } from '@/constants/modal';
 import { AppConfig, useAppConfig } from '@/hooks/use-app-config';
 import { darkTheme, Theme } from '@/styles/theme';
@@ -75,7 +76,7 @@ export function XellarKitProvider({
     );
   }
 
-  const { data: appConfig, isLoading } = useAppConfig();
+  const { data: appConfig, isLoading, error: appConfigError } = useAppConfig();
 
   // useCheckAccount();
 
@@ -177,9 +178,7 @@ export function XellarKitProvider({
     return { clientId: appConfig?.data?.google?.clientId };
   }, [appConfig?.data?.google?.enabled, appConfig?.data?.google?.clientId]);
 
-  if (!appConfig?.data.isEmbeddedWalletEnabled && !isLoading) {
-    throw new Error('Embedded wallet is not enabled');
-  }
+  const isSetupError = !appConfig?.data.isEmbeddedWalletEnabled && !isLoading;
 
   return createElement(
     XellarKitContext.Provider,
@@ -188,6 +187,11 @@ export function XellarKitProvider({
       <GoogleProviderWrapper {...(googleProviderProps as any)}>
         <GlobalStyle />
         <ThemeProvider theme={theme}>
+          {isSetupError && (
+            <SetupErrorBanner
+              error={appConfigError?.message || 'Unknown error'}
+            />
+          )}
           {children}
 
           <Dialog isOpen={modalOpen} onClose={handleCloseModal}>
