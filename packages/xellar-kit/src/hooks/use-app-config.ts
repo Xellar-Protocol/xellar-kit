@@ -64,7 +64,10 @@ export function useAppConfig() {
       });
 
       if (!result.ok) {
-        throw new Error('Failed to fetch app config');
+        const resultJson = await result.json();
+        const message = resultJson?.message || 'Failed to fetch app config';
+
+        throw new Error(message);
       }
 
       const data = await result.json();
