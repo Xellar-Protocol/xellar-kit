@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 3.1.0
+
+### Minor Changes
+
+- 2a6328e: Add Error Banner instead of crashing
+
 ## 3.0.0
 
 ### Major Changes
