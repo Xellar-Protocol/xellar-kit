@@ -1,5 +1,11 @@
 # @xellar/kit
 
+## 3.1.1
+
+### Patch Changes
+
+- 7450899: Add Initial App id
+
 ## 3.1.0
 
 ### Minor Changes
